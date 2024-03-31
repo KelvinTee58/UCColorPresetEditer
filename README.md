@@ -1,4 +1,4 @@
-# Final Camera 摄影预设编辑器(FCCameraColorPresetEditer)
+# Ultimate Camera 摄影预设编辑器(UltimateCameraColorPresetEditer)
 
 ## Project setup
 ```
