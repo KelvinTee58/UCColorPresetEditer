@@ -63,7 +63,7 @@ export default {
   .vdrWrapper {
     height: 500px;
     width: 500px;
-    border: 1px solid red;
+    border: 1px solid #00ff00;
     position: relative;
   }
 }
