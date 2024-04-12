@@ -28,6 +28,8 @@ import store from "@/store"
 app.config.globalProperties.$store = store
 app.use(pinia)
 
-
+// 配置全局api
+import api from '@/api';
+app.config.globalProperties.$api = api;
 
 app.mount("#app");

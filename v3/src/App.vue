@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import layout from "@/components/layout/headerMenu.vue";
+import Toaster from '@/components/ui/toast/Toaster.vue'
 </script>
 <
 <style lang="scss" scoped>
@@ -25,4 +26,5 @@ body {
 
 <template>
   <layout />
+  <Toaster />
 </template>

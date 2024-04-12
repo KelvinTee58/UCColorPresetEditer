@@ -9,7 +9,7 @@ const { toast } = useToast();
 // 创建axios实例
 const service = axios.create({
   baseURL: import.meta.env.VITE_APP_BASE_API,
-  timeout: 50000, // 请求超时时间：50s
+  timeout: 5000, // 请求超时时间：50s
   headers: { "Content-Type": "application/json;charset=utf-8" },
 });
 
@@ -59,17 +59,36 @@ service.interceptors.response.use(
   },
   (error) => {
     console.log("请求异常：", error);
-    const { msg } = error.response.data;
-    // 未认证
-    if (error.response.status === 401) {
-      handleError();
-    } else {
+    if(error.response){
+      // 请求成功，服务器错误
+      const { msg } = error.response.data || {};
+      // 未认证
+      if (error.response.status === 401) {
+        handleError();
+      } else {
+        toast({
+          title: "请求异常",
+          description:"网络异常，请稍后再试!",
+          variant: "destructive",
+        });
+        return Promise.reject(new Error(msg || "Error"));
+      }
+    }else if(error.request){
+      // 请求已发送，没有收到响应
       toast({
-        title: "请求错误",
-        description:"网络异常，请稍后再试!",
+        title: "请求异常",
+        description:"请求未响应，请稍后再试!",
         variant: "destructive",
       });
-      return Promise.reject(new Error(msg || "Error"));
+      return Promise.reject(new Error("Error"));
+    }else{
+      // 其他错误
+      toast({
+        title: "请求异常",
+        description:"其他错误，请稍后再试!",
+        variant: "destructive",
+      });
+      return Promise.reject(new Error("Error"));
     }
   }
 );
