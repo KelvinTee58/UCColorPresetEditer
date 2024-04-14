@@ -1,18 +1,20 @@
 import { createRouter, createWebHashHistory} from "vue-router";
 import testRouter from "./modules/test.ts";
+import indexRouter from "./modules/index.ts";
 
 // 本地静态路由
 export const constantRoutes = [
   {
     path: "/",
-    redirect: "/test"
+    redirect: "/index"
   },
   {
     // path: '/404',
     path: "/:pathMatch(.*)*", // 防止浏览器刷新时路由未找到警告提示: vue-router.mjs:35 [Vue Router warn]: No match found for location with path "/xxx"
     component: () => import("@/views/error-page/404.vue"),
   },
-  ...testRouter
+  ...testRouter,
+  ...indexRouter
 ];
 // 创建路由
 const router = createRouter({

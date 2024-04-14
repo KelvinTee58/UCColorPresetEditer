@@ -17,5 +17,5 @@ for (const key in modulesFiles) {
     modules[moduleName] = value;
   }
 }
-console.log('api modules', modules);
+// console.log('api modules', modules);
 export default modules;
