@@ -12,11 +12,11 @@ import router from "@/router/index.ts";
 app.use(router);
 
 // pinia
-import { createPinia } from 'pinia'
-const pinia = createPinia()
+import { createPinia } from "pinia";
+const pinia = createPinia();
 // pinia 插件 pinia-plugin-persistedstate 持久化数据
-import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
-pinia.use(piniaPluginPersistedstate)
+import piniaPluginPersistedstate from "pinia-plugin-persistedstate";
+pinia.use(piniaPluginPersistedstate);
 //  pinia 插件 pinia-plugin-persistedstate 全局持久化配置默认 到sessionStorage
 // import { createPersistedState } from 'pinia-plugin-persistedstate'
 // pinia.use(
@@ -24,12 +24,23 @@ pinia.use(piniaPluginPersistedstate)
 //     storage: sessionStorage,
 //   })
 // )
-import store from "@/store"
-app.config.globalProperties.$store = store
-app.use(pinia)
+import store from "@/store";
+app.config.globalProperties.$store = store;
+app.use(pinia);
 
 // 配置全局api
-import api from '@/api';
+import api from "@/api";
 app.config.globalProperties.$api = api;
+
+// 本地化
+
+import { createI18n } from "vue-i18n";
+import { en, zh } from "./locales/lang.json";
+const i18n = createI18n({
+  legacy: false,
+  locale: "en", // 默认语言
+  messages: { en, zh },
+});
+app.use(i18n);
 
 app.mount("#app");

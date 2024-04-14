@@ -1,0 +1,42 @@
+{
+  "en": {
+    "components": {
+      "layout": {
+        "headerMenu": {
+          "Light": "Light",
+          "Dark": "Dark",
+          "System": "System",
+          "en": "en",
+          "zh": "中文"
+        }
+      }
+    },
+    "views": {
+      "index": {
+        "index": {
+          "next": "next"
+        }
+      }
+    }
+  },
+  "zh": {
+    "components": {
+      "layout": {
+        "headerMenu": {
+          "Light": "日间",
+          "Dark": "夜晚",
+          "System": "系统",
+          "en": "en",
+          "zh": "中文"
+        }
+      }
+    },
+    "views": {
+      "index": {
+        "index": {
+          "next": "开始"
+        }
+      }
+    }
+  }
+}
