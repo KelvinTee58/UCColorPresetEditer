@@ -1,9 +1,9 @@
 <!--  -->
 <template>
-  <div class="min-h-screen mt-20 mb-30">
-    <div class="inline" @mouseenter="handleMouseEnter" @mouseleave="handleMouseLeave">
-      <h1 class="h1_container" v-for="index in h1Count" :key="index" :style="{ opacity: getOpacity(index) }">UC.camero</h1>
-      <Button variant="outline" class="absolute left-1/2 top-1/2 nextButton" v-show="isHover" @click="nextClick"> {{ $t("views.index.index.next") }} </Button>
+  <div class="relative min-h-screen pt-20 pb-40 overflow-x-hidden overflow-y-hidden">
+    <div class="relative" @mouseenter="handleMouseEnter" @mouseleave="handleMouseLeave" :style="{ height: getTotalTop() }">
+      <h1 class="h1_container absolute left-1/2 transform" v-for="index in h1Count" :key="index" :style="{ opacity: getOpacity(index), top: getTop(index) }">UC.camera</h1>
+      <Button variant="outline" class="absolute left-1/2 top-1/2 nextButton transform" v-show="isHover" @click="nextClick"> {{ $t("views.index.index.next") }} </Button>
     </div>
   </div>
 </template>
@@ -20,6 +20,15 @@ function getOpacity(index) {
   let Opacity = 1 - (0.9 / h1Count.value) * (index - 1);
   return isHover.value ? 0.1 : Opacity;
 }
+function getTop(index) {
+  let topValue = 7 * (index - 1) + 2;
+  return topValue + "rem";
+}
+function getTotalTop() {
+  let topValue = 7 * (h1Count.value - 1) + 2;
+  return topValue + "rem";
+}
+
 function handleMouseEnter() {
   isHover.value = true;
 }
@@ -36,15 +45,14 @@ function nextClick() {
 <style lang="scss" scoped>
 h1 {
   font-size: 15rem;
-  line-height: 1rem;
-  // letter-spacing: 0.4rem;
+  line-height: 15rem;
   display: inline-block;
+  // transform: translate(-50%, -50%);
 }
 .h1_container:hover {
   orphans: 0.1;
 }
 .nextButton {
-  transform: translate(-50%, -50%);
   width: 10rem;
   line-height: 8rem;
   border-radius: 10rem;
@@ -54,5 +62,9 @@ h1 {
   font-size: 1.2rem;
   font-weight: bolder;
 }
+.transform {
+  transform: translate(-50%, -50%);
+}
+
 //@import url(); 引入公共css类
 </style>

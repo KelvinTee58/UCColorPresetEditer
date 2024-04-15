@@ -1,12 +1,13 @@
-import { createRouter, createWebHashHistory} from "vue-router";
+import { createRouter, createWebHashHistory } from "vue-router";
 import testRouter from "./modules/test.ts";
 import indexRouter from "./modules/index.ts";
+import editerRouter from "./modules/editer.ts";
 
 // 本地静态路由
 export const constantRoutes = [
   {
     path: "/",
-    redirect: "/index"
+    redirect: "/index",
   },
   {
     // path: '/404',
@@ -14,7 +15,8 @@ export const constantRoutes = [
     component: () => import("@/views/error-page/404.vue"),
   },
   ...testRouter,
-  ...indexRouter
+  ...editerRouter,
+  ...indexRouter,
 ];
 // 创建路由
 const router = createRouter({
@@ -23,7 +25,6 @@ const router = createRouter({
 });
 
 export default router;
-
 
 // // 循环动态导入待修复import.meta.glob 逻辑
 // import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
