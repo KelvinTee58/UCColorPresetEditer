@@ -24,7 +24,8 @@
       "@/*": ["./src/*"],
       // "assets@css/*": ["src/assets/css/*"],
       // "assets@/*": ["src/assets/*"]
-    }
+    },
+    "types": ["vite/client"]
   },
   "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.vue"],
   "references": [{ "path": "./tsconfig.node.json" }]
