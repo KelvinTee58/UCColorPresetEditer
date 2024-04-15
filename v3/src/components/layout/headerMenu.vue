@@ -2,12 +2,22 @@
   <div class="bg-background">
     <header class="sticky z-40 top-0 bg-background/80 backdrop-blur-lg border-b border-border">
       <div class="container flex h-14 max-w-screen-2xl items-center justify-between navHeader">
-        <div class="logo mr-4 md:mr-2 lg:mr-6 flex items-center lg:space-x1 xl:space-x-2" @click="toHomePage">
-          <!-- <img src="@/assets/icon.svg"></img> -->
-          <logoSvg class="foreground h-[2rem] w-[2rem]"></logoSvg>
-          <span class="font-bold"> UC.camero </span>
+        <div class="left-nav flex items-center">
+          <div class="logo mr-4 md:mr-2 lg:mr-6 flex items-center lg:space-x1 xl:space-x-2" @click="toHomePage">
+            <logoSvg class="foreground h-[2rem] w-[2rem]"></logoSvg>
+            <span class="font-bold"> UC.camero </span>
+          </div>
+          <div class="navigation_menu">
+            <NavigationMenu>
+              <NavigationMenuList>
+                <NavigationMenuItem>
+                  <NavigationMenuLink href="#/editer" class="transition-colors hover:text-foreground/80 text-foreground/60"> editer </NavigationMenuLink>
+                </NavigationMenuItem>
+              </NavigationMenuList>
+            </NavigationMenu>
+          </div>
         </div>
-        <div>
+        <div class="right-nav">
           <DropdownMenu>
             <DropdownMenuTrigger as-child>
               <Button variant="ghost" class="text-sm font-medium">
@@ -36,7 +46,9 @@
         </div>
       </div>
     </header>
-    <router-view />
+    <div class="routerview">
+      <router-view />
+    </div>
   </div>
 </template>
 
@@ -46,6 +58,7 @@ import { Icon } from "@iconify/vue";
 import { Button } from "@/components/ui/button";
 import logoSvg from "@/assets/icon.svg";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger, NavigationMenuViewport } from "@/components/ui/navigation-menu";
 
 const mode = useColorMode();
 
@@ -78,7 +91,7 @@ function changeLocalLanguage(type: string) {
 }
 
 .navHeader {
-  .logo {
-  }
+  // .logo {
+  // }
 }
 </style>
