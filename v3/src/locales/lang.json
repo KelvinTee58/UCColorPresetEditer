@@ -16,6 +16,13 @@
         "index": {
           "next": "next"
         }
+      },
+      "editer": {
+        "index": {
+          "left_tab1": "LAYER",
+          "right_tab1": "COMPONENT",
+          "right_tab2": "ATTRIBUTE"
+        }
       }
     }
   },
@@ -35,6 +42,13 @@
       "index": {
         "index": {
           "next": "开始"
+        }
+      },
+      "editer": {
+        "index": {
+          "left_tab1": "图层",
+          "right_tab1": "组件",
+          "right_tab2": "属性"
         }
       }
     }

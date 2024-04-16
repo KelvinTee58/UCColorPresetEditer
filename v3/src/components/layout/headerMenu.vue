@@ -20,7 +20,7 @@
         <div class="right-nav">
           <DropdownMenu>
             <DropdownMenuTrigger as-child>
-              <Button variant="ghost" class="text-sm font-medium">
+              <Button variant="ghost" class="text-sm font-medium px-2 py-2">
                 <Icon icon="radix-icons:globe" class="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
               </Button>
             </DropdownMenuTrigger>
@@ -31,7 +31,7 @@
           </DropdownMenu>
           <DropdownMenu>
             <DropdownMenuTrigger as-child>
-              <Button variant="ghost" class="text-sm font-medium">
+              <Button variant="ghost" class="text-sm font-medium px-2 py-2">
                 <Icon icon="radix-icons:moon" v-if="mode == 'dark'" class="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
                 <Icon icon="radix-icons:sun" v-else class="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
                 <span class="sr-only">Toggle theme</span>
@@ -59,6 +59,7 @@ import { Button } from "@/components/ui/button";
 import logoSvg from "@/assets/icon.svg";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger, NavigationMenuViewport } from "@/components/ui/navigation-menu";
+import { localStorage } from '@/lib/storage';
 
 const mode = useColorMode();
 
@@ -75,6 +76,7 @@ import { useI18n } from "vue-i18n";
 const { locale } = useI18n();
 function changeLocalLanguage(type: string) {
   locale.value = type;
+  localStorage.set("language", type ?? "en");
 }
 </script>
 
