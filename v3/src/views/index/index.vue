@@ -1,6 +1,6 @@
 <!--  -->
 <template>
-  <div class="relative min-h-screen pt-20 pb-40 overflow-x-hidden overflow-y-hidden">
+  <div class="relative pt-20 pb-40 overflow-x-hidden overflow-y-hidden">
     <div class="relative" @mouseenter="handleMouseEnter" @mouseleave="handleMouseLeave" :style="{ height: getTotalTop() }">
       <h1 class="h1_container absolute left-1/2 transform" v-for="index in h1Count" :key="index" :style="{ opacity: getOpacity(index), top: getTop(index) }">UC.camera</h1>
       <Button variant="outline" class="absolute left-1/2 top-1/2 nextButton transform" v-show="isHover" @click="nextClick"> {{ $t("views.index.index.next") }} </Button>
