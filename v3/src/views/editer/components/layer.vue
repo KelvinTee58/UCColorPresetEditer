@@ -1,7 +1,7 @@
 <template>
   <div ref="draggableContainer" class="draggableContainer">
     <main v-for="item in list" :key="item.value" class="border-b">
-      <h3 class="draggable-item m-0 my-4  flex items-center justify-left relative whitespace-nowrap overflow-hidden text-ellipsis">
+      <h3 class="draggable-item m-0 my-4 flex items-center justify-left relative whitespace-nowrap overflow-hidden text-ellipsis">
         <!-- <span class="my-handle mr-2">::</span> -->
         <Move class="h-[.75rem] w-[.75rem] my-handle mr-1" />
         <span>{{ item.label }}</span>
@@ -17,7 +17,6 @@ import Sortable from "sortablejs";
 
 interface Item {
   label: string;
-  value: string; // 可能是会需要value值
   value: string; // 可能是会需要value值
 }
 interface Props {

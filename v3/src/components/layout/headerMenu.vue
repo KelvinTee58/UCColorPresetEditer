@@ -38,16 +38,26 @@
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem @click="mode = 'light'"> {{ $t("components.layout.headerMenu.Light") }} </DropdownMenuItem>
+              <!-- <DropdownMenuItem @click="mode = 'light'"> {{ $t("components.layout.headerMenu.Light") }} </DropdownMenuItem>
               <DropdownMenuItem @click="mode = 'dark'"> {{ $t("components.layout.headerMenu.Dark") }} </DropdownMenuItem>
-              <DropdownMenuItem @click="mode = 'auto'"> {{ $t("components.layout.headerMenu.System") }} </DropdownMenuItem>
+              <DropdownMenuItem @click="mode = 'auto'"> {{ $t("components.layout.headerMenu.System") }} </DropdownMenuItem> -->
+              <DropdownMenuItem @click="darkChange($event, 'light')"> {{ $t("components.layout.headerMenu.Light") }} </DropdownMenuItem>
+              <DropdownMenuItem @click="darkChange($event, 'dark')"> {{ $t("components.layout.headerMenu.Dark") }} </DropdownMenuItem>
+              <DropdownMenuItem @click="darkChange($event, 'auto')"> {{ $t("components.layout.headerMenu.System") }} </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
       </div>
     </header>
     <div class="routerview">
-      <router-view />
+      <!-- <Transition name="page" mode="out-in">
+        <router-view />
+      </Transition> -->
+      <router-view v-slot="{ Component }">
+        <transition name="page" mode="out-in">
+          <component :is="Component" />
+        </transition>
+      </router-view>
     </div>
   </div>
 </template>
@@ -58,8 +68,9 @@ import { Icon } from "@iconify/vue";
 import { Button } from "@/components/ui/button";
 import logoSvg from "@/assets/icon.svg";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger, NavigationMenuViewport } from "@/components/ui/navigation-menu";
-import { localStorage } from '@/lib/storage';
+import { NavigationMenu, NavigationMenuItem, NavigationMenuLink, NavigationMenuList } from "@/components/ui/navigation-menu";
+import { localStorage } from "@/lib/storage";
+import darkChange from "@/lib/darkChange.ts";
 
 const mode = useColorMode();
 
