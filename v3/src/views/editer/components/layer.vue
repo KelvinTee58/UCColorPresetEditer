@@ -1,100 +1,79 @@
 <template>
-  <div ref="draggableContainer" class="draggableContainer">
-    <main v-for="item in list" :key="item.value" class="border-b">
-      <h3 class="draggable-item m-0 my-4 flex items-center justify-left relative whitespace-nowrap overflow-hidden text-ellipsis">
-        <!-- <span class="my-handle mr-2">::</span> -->
-        <Move class="h-[.75rem] w-[.75rem] my-handle mr-1" />
-        <span>{{ item.label }}</span>
-      </h3>
-    </main>
+  <div class="draggableContainer">
+    <button @click="resetList">999</button>
+    <VirtualList v-model:dataSource="layerList" :dataKey="'id'" :handle="'#drag'" :animation="300" chosen-class="chooseItem" style="height: 100%" itemTag="h3" itemClass="draggable-item m-0 py-4 flex items-center justify-left relative whitespace-nowrap overflow-hidden text-ellipsis border-b chosen">
+      <template v-slot:item="{ record, index, dataKey }">
+        <!-- <h3 class="draggable-item m-0 my-4 flex items-center justify-left relative whitespace-nowrap overflow-hidden text-ellipsis"> -->
+        <Move class="h-[.75rem] w-[.75rem] my-handle mr-1 drag" id="drag" />
+        <span>{{ record.label }}</span>
+        <!-- </h3> -->
+      </template>
+    </VirtualList>
+    <!-- <main v-for="item in proxy.$store.editerTemp.useCounterStore().editerList" :key="item.value" class="border-b">
+    <h3 class="draggable-item m-0 my-4 flex items-center justify-left relative whitespace-nowrap overflow-hidden text-ellipsis">
+      <Move class="h-[.75rem] w-[.75rem] my-handle mr-1" />
+      <span>{{ item.label }}</span>
+    </h3>
+  </main> -->
   </div>
 </template>
 
 <script lang="ts" setup>
-import { Move } from "lucide-vue-next";
-import { onMounted, onUnmounted, ref } from "vue";
-import Sortable from "sortablejs";
+import { onMounted, onUnmounted, ref, watch, getCurrentInstance, computed } from "vue";
 
-interface Item {
-  label: string;
-  value: string; // 可能是会需要value值
-}
+import { Move } from "lucide-vue-next";
+import VirtualList from "vue-virtual-draglist";
+
+import { storeToRefs } from "pinia";
+
+const { proxy } = getCurrentInstance();
+
+// console.log("proxy.$store", proxy.$store.editerTemp.useCounterStore());
+// let editerList = proxy.$store.editerTemp.useCounterStore().getList();
+
 interface Props {
-  list: Array<Item>;
   options?: Sortable.Options;
 }
-const draggableContainer = ref<HTMLDivElement | null>(null);
 
 const props = defineProps<Props>();
 
-interface EmitsType {
-  (e: "update:list", value: any[]): void;
-  (e: "onChangeList", value: any[]): void;
+const editerTempStore = storeToRefs(proxy.$store.editerTemp.useCounterStore());
+// let layerList = editerTempStore.editerList.value;
+// let { editerList } = storeToRefs(proxy.$store.editerTemp.useCounterStore());
+function resetList() {
+  proxy.$store.editerTemp.useCounterStore().resetList();
 }
 
-const emit = defineEmits<EmitsType>();
-
-const sortable = ref<Sortable | null>(null);
-
-onMounted(() => {
-  initDraggable();
-});
-
-const initDraggable = () => {
-  if (!draggableContainer.value) {
-    console.warn("容器不能为空");
-    return;
-  }
-  sortable.value = Sortable.create(draggableContainer.value, {
-    handle: ".my-handle",
-    chosenClass: "chosen",
-    dragClass: "drag",
-    direction: "horizontal",
-    forceFallback: true,
-    animation: 300,
-    onUpdate(e: any) {
-      if (e.oldIndex !== undefined && e.newIndex !== undefined) {
-        // 删除拖拽的元素
-        const list = [...props.list];
-        const item = list.splice(e.oldIndex, 1)[0];
-        // 把删除的元素放到新的位置
-        list.splice(e.newIndex, 0, item);
-        emit("update:list", list);
-        emit("onChangeList", list);
-        console.log("list", list);
-      }
-    },
-    ...props.options,
-  });
-};
-
-onUnmounted(() => {
-  sortable.value?.destroy();
+const layerList = computed({
+  get() {
+    console.log("layerList get");
+    return editerTempStore.editerList.value;
+  },
+  set(val) {
+    // trigger when drag state changed if you use with `v-model:dataSource`
+    console.log("set layerList", val);
+    proxy.$store.editerTemp.useCounterStore().setList(val);
+  },
 });
 </script>
 
 <style lang="scss" scoped>
 .draggableContainer {
-  .draggable-item {
-    // border: 0 none;
-    // transition: box-shadow 0.2s;
-  }
-  //.draggable-item:hover {
-  //  background: #e9ecef;
-  //}
   .my-handle {
     cursor: move;
     cursor: -webkit-grabbing;
   }
   .drag {
     // 正在拖拽中幽灵图的样式
-    display: none;
+    // display: none;
     cursor: move;
     cursor: -webkit-grabbing;
   }
-  .chosen {
-    cursor: move;
-    cursor: -webkit-grabbing;
+  .chooseItem {
+    // color: hsl(var(--accent-foreground));
+    // // background-color: hsl(var(--accent));
+    // background-color: hsl(var(--accent));
+    box-shadow: 0px 0px 10px 0px #1984ff !important;
   }
 }
 </style>
