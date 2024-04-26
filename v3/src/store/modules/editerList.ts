@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
-import { ref, computed } from "vue";
+import { ref } from "vue";
 import { uucBlock, uucImage, uucFont } from "@/data/structure/uuc";
+// import { set } from "@vueuse/core";
 // import { computed, ref, reactive } from "vue";
 
 export const useCounterStore = defineStore(
@@ -8,7 +9,8 @@ export const useCounterStore = defineStore(
   () => {
     // const isTemporaryStorage = ref(true);
     const editerList: any = ref([]);
-    const getTemporaryStorage = computed(() => editerList.value.length > 0);
+
+    // const getTemporaryStorage = computed(() => editerList.value.length > 0);
 
     function pushList(value: any) {
       editerList.value.push(value);
@@ -16,52 +18,43 @@ export const useCounterStore = defineStore(
     function getList() {
       return editerList.value;
     }
-
-    function setList(value: array<uucBlock>) {
+    function setList(value: Array<uucBlock>) {
       editerList.value = [...value];
-      console.log("setList", value);
     }
     function resetList() {
       editerList.value = [];
     }
 
-    // const count = ref(0);
-
-    // function increment() {
-    //   count.value++;
-    // }
-
-    interface axis {
-      x: number;
-      y: number;
-    }
-
-    interface fontStyle {
-      size: number;
-      color: string;
-      family: string;
-      familyName: string;
-      style: string;
-
-      // # style
-      // normal	默认值，文本以正常字体显示
-      // italic	文本以斜体显示
-      // oblique	文本倾斜显示
-      // inherit	从父元素继承字体样式
-
-      weight: string;
-      // # weight
-      // normal	默认值，标准字体
-      // bold	粗体字体
-      // bolder	更粗的字体
-      // lighter	更细的字体
-    }
-
-    // 默认初始到页面上的位置
-    const defaultAxis: axis = { x: 10, y: 10 };
-
     // 添加到layer和添加到draggable中
     function addEditerModulesList(value: any) {
+      interface axis {
+        x: number;
+        y: number;
+      }
+
+      interface fontStyle {
+        size: number;
+        color: string;
+        family: string;
+        familyName: string;
+        style: string;
+
+        // # style
+        // normal	默认值，文本以正常字体显示
+        // italic	文本以斜体显示
+        // oblique	文本倾斜显示
+        // inherit	从父元素继承字体样式
+
+        weight: string;
+        // # weight
+        // normal	默认值，标准字体
+        // bold	粗体字体
+        // bolder	更粗的字体
+        // lighter	更细的字体
+      }
+
+      // 默认初始到页面上的位置
+      const defaultAxis: axis = { x: 10, y: 10 };
       console.log("Function called from Grandparent", editerList);
       let classContent = value.content;
       const level = editerList.value.length;
@@ -105,7 +98,7 @@ export const useCounterStore = defineStore(
       // console.log(editerList.list);
     }
 
-    return { getTemporaryStorage, editerList, resetList, setList, getList, addEditerModulesList };
+    return { editerList, resetList, setList, getList, addEditerModulesList };
   },
   {
     // 添加配置开启 / 持久化存储

@@ -1,6 +1,5 @@
 <template>
-  <div class="pb-2">
-    <!-- {{ $props }} -->
+  <div class="pb-2 flex justify-center">
     <Card class="w-[350px]">
       <CardHeader>
         <CardTitle>{{ module.name }}</CardTitle>
@@ -29,7 +28,7 @@ const props = defineProps({
   },
 });
 function AddDraggable() {
-  proxy.$store.editerTemp.useCounterStore().addEditerModulesList(props.module);
+  proxy.$store.editerList.useCounterStore().addEditerModulesList(props.module);
 }
 </script>
 

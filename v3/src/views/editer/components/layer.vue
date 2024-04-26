@@ -1,34 +1,21 @@
 <template>
-  <div class="draggableContainer">
-    <button @click="resetList">999</button>
-    <VirtualList
-      v-model:dataSource="layerList"
-      :dataKey="'id'"
-      :handle="'#drag'"
-      :animation="300"
-      chosen-class="chooseItem"
-      style="height: 100%"
-      itemTag="h3"
-      itemClass="draggable-item m-0 py-4 flex items-center justify-left relative whitespace-nowrap overflow-hidden text-ellipsis border-b chosen"
-    >
+  <div class="draggableContainer layerContainer">
+    <!-- <button @click="resetList">清空列表</button> -->
+    <VirtualList ref="virtualRef" class="layerHeight" :dataSource="layerList" :dataKey="'id'" :handle="'.drag'" :animation="100" chosenClass="chooseItem" ghostClass="chooseItem">
       <template v-slot:item="{ record, index, dataKey }">
-        <!-- <h3 class="draggable-item m-0 my-4 flex items-center justify-left relative whitespace-nowrap overflow-hidden text-ellipsis"> -->
-        <Move class="h-[.75rem] w-[.75rem] my-handle mr-1 drag" id="drag" />
-        <span>{{ record.label }}</span>
-        <!-- </h3> -->
+        <h3 @click="pickerModule(record.id)" class="draggable-item m-0 py-4 flex items-center justify-left relative whitespace-nowrap overflow-hidden text-ellipsis border-b itemColor select-none">
+          <Move class="h-[.75rem] w-[.75rem] my-handle mr-1 drag" />
+          <span class="drag" :class="{ itemActive: record.id == activeModuleId }">{{ record.label }}</span>
+        </h3>
       </template>
     </VirtualList>
-    <!-- <main v-for="item in proxy.$store.editerTemp.useCounterStore().editerList" :key="item.value" class="border-b">
-    <h3 class="draggable-item m-0 my-4 flex items-center justify-left relative whitespace-nowrap overflow-hidden text-ellipsis">
-      <Move class="h-[.75rem] w-[.75rem] my-handle mr-1" />
-      <span>{{ item.label }}</span>
-    </h3>
-  </main> -->
   </div>
 </template>
 
 <script lang="ts" setup>
 import { onMounted, onUnmounted, ref, watch, getCurrentInstance, computed } from "vue";
+
+const virtualRef = ref(null);
 
 import { Move } from "lucide-vue-next";
 import VirtualList from "vue-virtual-draglist";
@@ -37,8 +24,8 @@ import { storeToRefs } from "pinia";
 
 const { proxy } = getCurrentInstance();
 
-// console.log("proxy.$store", proxy.$store.editerTemp.useCounterStore());
-// let editerList = proxy.$store.editerTemp.useCounterStore().getList();
+// console.log("proxy.$store", proxy.$store.editerList.useCounterStore());
+// let editerList = proxy.$store.editerList.useCounterStore().getList();
 
 interface Props {
   options?: Sortable.Options;
@@ -46,23 +33,34 @@ interface Props {
 
 const props = defineProps<Props>();
 
-const editerTempStore = storeToRefs(proxy.$store.editerTemp.useCounterStore());
-// let layerList = editerTempStore.editerList.value;
-// let { editerList } = storeToRefs(proxy.$store.editerTemp.useCounterStore());
+const editerListStore = storeToRefs(proxy.$store.editerList.useCounterStore());
+// let layerList = editerListStore.editerList.value;
+// let { editerList } = storeToRefs(proxy.$store.editerList.useCounterStore());
+
+const editerViewStore = storeToRefs(proxy.$store.editerView.useCounterStore());
+
 function resetList() {
-  proxy.$store.editerTemp.useCounterStore().resetList();
+  proxy.$store.editerList.useCounterStore().resetList();
 }
 
 const layerList = computed({
   get() {
     console.log("layerList get");
-    return editerTempStore.editerList.value;
+    return editerListStore.editerList.value;
   },
   set(val) {
     // trigger when drag state changed if you use with `v-model:dataSource`
     let _list = resetLevel(val);
     console.log("set layerList", _list);
-    proxy.$store.editerTemp.useCounterStore().setList(_list);
+    proxy.$store.editerList.useCounterStore().setList(_list);
+  },
+});
+
+const activeModuleId = computed({
+  get() {
+    console.log("virtualRef", virtualRef.value);
+    if (virtualRef.value) virtualRef.value.scrollToKey(editerViewStore.activeModuleId.value);
+    return editerViewStore.activeModuleId.value;
   },
 });
 
@@ -80,6 +78,13 @@ function resetLevel(list = [], startIndex = 0, endIndex = 0) {
   }
   return _list;
 }
+
+// 选中激活的module
+function pickerModule(id: string) {
+  proxy.$store.editerView.useCounterStore().setActiveModuleId(id);
+  console.log("virtualRef", virtualRef.value);
+  virtualRef.value.scrollToKey(id);
+}
 </script>
 
 <style lang="scss" scoped>
@@ -94,11 +99,49 @@ function resetLevel(list = [], startIndex = 0, endIndex = 0) {
     cursor: move;
     cursor: -webkit-grabbing;
   }
+  .layerHeight {
+    height: calc(100vh - 7rem - 15px);
+    scrollbar-width: none; /* 对于 Firefox 隐藏滚动条 */
+  }
+  .layerHeight ::-webkit-scrollbar {
+    display: none; /* 对于 Chrome, Safari 和 Opera 隐藏滚动条 */
+  }
+
+  // /* 针对于整个页面的滚动条 */
+  // .layerHeight::-webkit-scrollbar {
+  //   width: 3px; /* 对于水平滚动条的宽度 */
+  //   height: 10px; /* 对于垂直滚动条的高度 */
+  // }
+
+  // /* 滚动条的滑块 */
+  // .layerHeight::-webkit-scrollbar-thumb {
+  //   background: hsl(var(--muted-foreground));
+  // }
+
+  // /* 滚动条的滑块hover效果 */
+  // .layerHeight::-webkit-scrollbar-thumb:hover {
+  //   background: hsl(var(--foreground)) !important;
+  // }
+}
+</style>
+<style lang="scss">
+.layerContainer {
   .chooseItem {
     // color: hsl(var(--accent-foreground));
     // // background-color: hsl(var(--accent));
-    // background-color: hsl(var(--accent));
-    box-shadow: 0px 0px 10px 0px #1984ff !important;
+    color: hsl(var(--foreground)) !important;
+    box-shadow: 0 0 5px hsl(var(--accent-foreground));
+  }
+  .itemColor {
+    color: hsl(var(--muted-foreground));
+  }
+  .itemColor:active {
+    color: hsl(var(--foreground)) !important;
+    font-weight: bold;
+  }
+  .itemActive {
+    color: hsl(var(--foreground)) !important;
+    font-weight: bold;
   }
 }
 </style>
