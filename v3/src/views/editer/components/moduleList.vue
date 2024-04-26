@@ -18,8 +18,9 @@
 <script setup>
 import moduleView from "./moduleView.vue";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { defineProps, inject } from "vue";
+import { defineProps, getCurrentInstance } from "vue";
 import { Button } from "@/components/ui/button";
+const { proxy } = getCurrentInstance();
 
 const props = defineProps({
   module: {
@@ -27,13 +28,8 @@ const props = defineProps({
     required: true,
   },
 });
-
-const addModulesToDraggable = inject("addModulesToDraggable");
 function AddDraggable() {
-  // 调用函数
-  if (addModulesToDraggable) {
-    addModulesToDraggable(props.module);
-  }
+  proxy.$store.editerTemp.useCounterStore().addEditerModulesList(props.module);
 }
 </script>
 

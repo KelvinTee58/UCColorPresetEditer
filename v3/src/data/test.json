@@ -10,8 +10,8 @@
         "type": "block",
         "content": {
           "label": "",
-          "width": "10",
-          "height": "10",
+          "width": 300,
+          "height": 300,
           "background": "#ffffff"
         }
       },
@@ -21,8 +21,8 @@
         "type": "block",
         "content": {
           "label": "",
-          "width": "10",
-          "height": "10",
+          "width": 300,
+          "height": 160,
           "background": "#ff00ff",
           "border": {
             "width": 1,
@@ -42,8 +42,8 @@
         "name": "_default_image",
         "type": "image",
         "content": {
-          "width": "10",
-          "height": "10",
+          "width": 120,
+          "height": 100,
           "background": "#000000",
           "label": "",
           "src": ""
@@ -60,8 +60,8 @@
         "name": "_default_font",
         "type": "font",
         "content": {
-          "width": "10",
-          "height": "10",
+          "width": 120,
+          "height": 30,
           "background": "#000000",
           "label": "_default_font",
           "font": {

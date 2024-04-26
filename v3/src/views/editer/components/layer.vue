@@ -1,7 +1,16 @@
 <template>
   <div class="draggableContainer">
     <button @click="resetList">999</button>
-    <VirtualList v-model:dataSource="layerList" :dataKey="'id'" :handle="'#drag'" :animation="300" chosen-class="chooseItem" style="height: 100%" itemTag="h3" itemClass="draggable-item m-0 py-4 flex items-center justify-left relative whitespace-nowrap overflow-hidden text-ellipsis border-b chosen">
+    <VirtualList
+      v-model:dataSource="layerList"
+      :dataKey="'id'"
+      :handle="'#drag'"
+      :animation="300"
+      chosen-class="chooseItem"
+      style="height: 100%"
+      itemTag="h3"
+      itemClass="draggable-item m-0 py-4 flex items-center justify-left relative whitespace-nowrap overflow-hidden text-ellipsis border-b chosen"
+    >
       <template v-slot:item="{ record, index, dataKey }">
         <!-- <h3 class="draggable-item m-0 my-4 flex items-center justify-left relative whitespace-nowrap overflow-hidden text-ellipsis"> -->
         <Move class="h-[.75rem] w-[.75rem] my-handle mr-1 drag" id="drag" />
@@ -51,10 +60,26 @@ const layerList = computed({
   },
   set(val) {
     // trigger when drag state changed if you use with `v-model:dataSource`
-    console.log("set layerList", val);
-    proxy.$store.editerTemp.useCounterStore().setList(val);
+    let _list = resetLevel(val);
+    console.log("set layerList", _list);
+    proxy.$store.editerTemp.useCounterStore().setList(_list);
   },
 });
+
+//重排数据列表的level
+function resetLevel(list = [], startIndex = 0, endIndex = 0) {
+  let _list = [...list];
+  let _sIndex = startIndex || 0;
+  let _eIndex = endIndex || _list.length;
+
+  console.log("resetLevel", _list, _sIndex, _eIndex);
+  for (let index = _sIndex; index < _eIndex; index++) {
+    // const item = _list[index];
+    _list[index].level = index;
+    console.log("level", _list[index].level);
+  }
+  return _list;
+}
 </script>
 
 <style lang="scss" scoped>
