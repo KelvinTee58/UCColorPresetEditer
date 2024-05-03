@@ -8,6 +8,8 @@ export default function toggleDark(event: MouseEvent, modeType: any = "auto") {
     mode.value = modeType;
     return;
   }
+  // window.matchMedia('(prefers-color-scheme)').addEventListener('change', modeType);
+  // console.log("window.matchMedia('(prefers-color-scheme)')", window.matchMedia("(prefers-color-scheme)"));
   console.log("transition dark mode>");
   const x = event.clientX;
   const y = event.clientY;

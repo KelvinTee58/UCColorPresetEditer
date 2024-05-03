@@ -20,7 +20,7 @@
       "editer": {
         "index": {
           "left_tab1": "LAYER",
-          "right_tab1": "COMPONENT",
+          "right_tab1": "MODULE",
           "right_tab2": "ATTRIBUTE"
         }
       }
@@ -47,7 +47,7 @@
       "editer": {
         "index": {
           "left_tab1": "图层",
-          "right_tab1": "组件",
+          "right_tab1": "模块",
           "right_tab2": "属性"
         }
       }

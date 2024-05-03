@@ -34,12 +34,10 @@
             class-name="vdr no-border"
             class-name-active="active-border"
             @dblclick="handleDoubleClick"
-            @click="pickerModule(item.id)"
+            @click="pickerModule(item)"
             :active="item.id === activeModuleId"
           >
-            <!-- {{ computedProps(item.level, 0) }} \\ {{ item.level }} -->
-            <moduleView :module="item"></moduleView>
-            <!-- <p>Keep aspect ratio in component costrained on grid [ 20, 20 ].</p> -->
+            <moduleView :module="item" :dragger="true"></moduleView>
           </vue-draggable-resizable>
         </div>
       </ResizablePanel>
@@ -71,9 +69,10 @@
           </TabsContent>
           <TabsContent :value="$t('views.editer.index.right_tab2')">
             <ScrollArea class="w-full rounded-md p-4 scrollAreaHeight">
-              Make changes to your
+              <!-- Make changes to your
               {{ $t("views.editer.index.right_tab2") }}
-              here.
+              here. -->
+              <attributeView :type="activeModuleType"></attributeView>
             </ScrollArea>
           </TabsContent>
         </Tabs>
@@ -93,6 +92,7 @@ import layer from "./components/layer.vue";
 // import layer from "./components/layerBySortable.vue";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import moduleView from "./components/moduleView.vue";
+import attributeView from "./components/attributeView.vue";
 
 import { useI18n } from "vue-i18n";
 const { t } = useI18n();
@@ -105,7 +105,7 @@ import { storeToRefs } from "pinia";
 // let editerList = proxy.$store.editerList.useCounterStore().editerList || [];
 
 const editerListStore = storeToRefs(proxy.$store.editerList.useCounterStore());
-const editerViewStore = storeToRefs(proxy.$store.editerView.useCounterStore());
+const editerViewStore = proxy.$store.editerView.useCounterStore();
 const editerList = computed({
   get() {
     console.log("layerList index get");
@@ -120,22 +120,32 @@ const editerList = computed({
 
 const activeModuleId = computed({
   get() {
-    return editerViewStore.activeModuleId.value;
+    return editerViewStore.getActiveModuleProps("id");
   },
+  set() {},
+});
+
+const activeModuleType = computed({
+  get() {
+    return editerViewStore.getActiveModuleProps("type");
+  },
+  set() {},
 });
 
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import testData from "@/data/test.json";
-const defaultValue = "BLOCK";
+// const defaultValue = "IMAGE";
+// const defaultValue = "BLOCK";
+const defaultValue = "FONT";
 
 const accordionItems = testData;
 const currentTabItem = ref(t("views.editer.index.right_tab1"));
 
-function switchToTab(key) {
+function switchToTab(key: string) {
   currentTabItem.value = t(key);
 }
 
-const computedProps = function (key, defaultValue) {
+const computedProps = function (key: any, defaultValue: any) {
   return key ? key : defaultValue;
 };
 
@@ -144,13 +154,14 @@ function handleDoubleClick() {
 }
 
 // 选中激活的module
-function pickerModule(id: string) {
-  proxy.$store.editerView.useCounterStore().setActiveModuleId(id);
+function pickerModule(value: any) {
+  proxy.$store.editerView.useCounterStore().setActiveModule(value);
 }
 </script>
-
 <style>
 @import "vue-draggable-resizable/style.css";
+</style>
+<style lang="scss">
 .editer_index {
   .tabsList {
     overflow: auto;
@@ -177,7 +188,12 @@ function pickerModule(id: string) {
     width: 100%;
   }
   .active-border {
-    box-shadow: 0 0 5px hsl(var(--accent-foreground));
+    // box-shadow: 0 0 5px hsl(var(--accent-foreground));
+    .moduleView {
+      filter: drop-shadow(0px 0px 5px hsl(var(--accent-foreground)));
+    }
+    cursor: move;
+    cursor: -webkit-grabbing;
   }
 }
 </style>

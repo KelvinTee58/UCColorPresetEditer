@@ -2,8 +2,8 @@
   <div class="draggableContainer layerContainer">
     <!-- <button @click="resetList">清空列表</button> -->
     <VirtualList ref="virtualRef" class="layerHeight" :dataSource="layerList" :dataKey="'id'" :handle="'.drag'" :animation="100" chosenClass="chooseItem" ghostClass="chooseItem">
-      <template v-slot:item="{ record, index, dataKey }">
-        <h3 @click="pickerModule(record.id)" class="draggable-item m-0 py-4 flex items-center justify-left relative whitespace-nowrap overflow-hidden text-ellipsis border-b itemColor select-none">
+      <template v-slot:item="{ record }">
+        <h3 @click="pickerModule(record)" class="draggable-item m-0 py-4 flex items-center justify-left relative whitespace-nowrap overflow-hidden text-ellipsis border-b itemColor select-none">
           <Move class="h-[.75rem] w-[.75rem] my-handle mr-1 drag" />
           <span class="drag" :class="{ itemActive: record.id == activeModuleId }">{{ record.label }}</span>
         </h3>
@@ -13,7 +13,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, onUnmounted, ref, watch, getCurrentInstance, computed } from "vue";
+import { ref, getCurrentInstance, computed } from "vue";
 
 const virtualRef = ref(null);
 
@@ -27,21 +27,16 @@ const { proxy } = getCurrentInstance();
 // console.log("proxy.$store", proxy.$store.editerList.useCounterStore());
 // let editerList = proxy.$store.editerList.useCounterStore().getList();
 
-interface Props {
-  options?: Sortable.Options;
-}
-
-const props = defineProps<Props>();
-
 const editerListStore = storeToRefs(proxy.$store.editerList.useCounterStore());
 // let layerList = editerListStore.editerList.value;
 // let { editerList } = storeToRefs(proxy.$store.editerList.useCounterStore());
 
-const editerViewStore = storeToRefs(proxy.$store.editerView.useCounterStore());
+// const editerViewStore = storeToRefs(proxy.$store.editerView.useCounterStore());
+const editerViewStore = proxy.$store.editerView.useCounterStore();
 
-function resetList() {
-  proxy.$store.editerList.useCounterStore().resetList();
-}
+// function resetList() {
+//   proxy.$store.editerList.useCounterStore().resetList();
+// }
 
 const layerList = computed({
   get() {
@@ -58,10 +53,13 @@ const layerList = computed({
 
 const activeModuleId = computed({
   get() {
-    console.log("virtualRef", virtualRef.value);
-    if (virtualRef.value) virtualRef.value.scrollToKey(editerViewStore.activeModuleId.value);
-    return editerViewStore.activeModuleId.value;
+    const id = editerViewStore.getActiveModuleProps("id");
+    if (virtualRef.value) {
+      virtualRef.value.scrollToKey(id);
+    }
+    return id;
   },
+  set() {},
 });
 
 //重排数据列表的level
@@ -80,10 +78,12 @@ function resetLevel(list = [], startIndex = 0, endIndex = 0) {
 }
 
 // 选中激活的module
-function pickerModule(id: string) {
-  proxy.$store.editerView.useCounterStore().setActiveModuleId(id);
-  console.log("virtualRef", virtualRef.value);
-  virtualRef.value.scrollToKey(id);
+function pickerModule(value: any) {
+  proxy.$store.editerView.useCounterStore().setActiveModule(value);
+  // console.log("virtualRef", virtualRef.value);
+  if (virtualRef.value) {
+    virtualRef.value.scrollToKey(value.id);
+  }
 }
 </script>
 

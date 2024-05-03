@@ -3,7 +3,7 @@
   line-height: 1.5;
   font-weight: 400;
 
-  color-scheme: light dark;
+  /* color-scheme: dark light; */
   color: rgba(255, 255, 255, 0.87);
   background-color: #242424;
 
@@ -38,7 +38,7 @@ h1 {
 button {
   border-radius: 8px;
   border: 1px solid transparent;
-  padding: 0.6em 1.2em;
+  /* padding: 0.6em 1.2em; */
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
@@ -65,17 +65,22 @@ button:focus-visible {
   text-align: center;
 }
 
+ /* 无法手动操作，根据浏览器进行 */
 @media (prefers-color-scheme: light) {
-  :root {
+  /* :root {
     color: #213547;
-    background-color: #ffffff;
+    background-color: #ff00ff;
   }
   a:hover {
     color: #747bff;
-  }
-  button {
-    /* background-color: #f9f9f9; */
-  }
+  } */
+}
+
+ /* 无法手动操作，根据浏览器进行 */
+@media (prefers-color-scheme: dark) {
+  /* :root {
+    background-color: #00ff00;
+  } */
 }
 
 ::view-transition-old(root),

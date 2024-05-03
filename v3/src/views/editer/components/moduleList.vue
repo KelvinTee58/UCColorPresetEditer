@@ -5,8 +5,10 @@
         <CardTitle>{{ module.name }}</CardTitle>
         <CardDescription v-if="module.description">{{ module.description }}</CardDescription>
       </CardHeader>
-      <CardContent>
-        <moduleView v-bind="$props"></moduleView>
+      <CardContent class="flex justify-center">
+        <div class="w-32 h-32 border rounded p-3">
+          <moduleView v-bind="$props"></moduleView>
+        </div>
       </CardContent>
       <CardFooter class="flex justify-start px-6 pb-6">
         <Button variant="outline" @click="AddDraggable"> ADD </Button>

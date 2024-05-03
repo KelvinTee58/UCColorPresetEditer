@@ -13,6 +13,11 @@ const props = defineProps({
     type: Object,
     required: true,
   },
+  dragger: {
+    type: Boolean,
+    required: false,
+    default: false,
+  },
 });
 </script>
 
