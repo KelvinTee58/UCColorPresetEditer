@@ -1,5 +1,6 @@
 import AutoFormFieldArray from './AutoFormFieldArray.vue'
 import AutoFormFieldBoolean from './AutoFormFieldBoolean.vue'
+import AutoFormFieldColor from './AutoFormFieldColor.vue'
 import AutoFormFieldDate from './AutoFormFieldDate.vue'
 import AutoFormFieldEnum from './AutoFormFieldEnum.vue'
 import AutoFormFieldFile from './AutoFormFieldFile.vue'
@@ -9,6 +10,7 @@ import AutoFormFieldObject from './AutoFormFieldObject.vue'
 
 export const INPUT_COMPONENTS = {
   date: AutoFormFieldDate,
+  color: AutoFormFieldColor,
   select: AutoFormFieldEnum,
   radio: AutoFormFieldEnum,
   checkbox: AutoFormFieldBoolean,
@@ -31,6 +33,7 @@ export const DEFAULT_ZOD_HANDLERS: {
   ZodString: 'string',
   ZodBoolean: 'checkbox',
   ZodDate: 'date',
+  ZodColor: 'color',
   ZodEnum: 'select',
   ZodNativeEnum: 'select',
   ZodNumber: 'number',

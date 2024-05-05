@@ -22,7 +22,7 @@ import VirtualList from "vue-virtual-draglist";
 
 import { storeToRefs } from "pinia";
 
-const { proxy } = getCurrentInstance();
+const { proxy } = getCurrentInstance() as any;
 
 // console.log("proxy.$store", proxy.$store.editerList.useCounterStore());
 // let editerList = proxy.$store.editerList.useCounterStore().getList();
@@ -40,13 +40,11 @@ const editerViewStore = proxy.$store.editerView.useCounterStore();
 
 const layerList = computed({
   get() {
-    console.log("layerList get");
     return editerListStore.editerList.value;
   },
   set(val) {
     // trigger when drag state changed if you use with `v-model:dataSource`
     let _list = resetLevel(val);
-    console.log("set layerList", _list);
     proxy.$store.editerList.useCounterStore().setList(_list);
   },
 });
@@ -68,11 +66,9 @@ function resetLevel(list = [], startIndex = 0, endIndex = 0) {
   let _sIndex = startIndex || 0;
   let _eIndex = endIndex || _list.length;
 
-  console.log("resetLevel", _list, _sIndex, _eIndex);
   for (let index = _sIndex; index < _eIndex; index++) {
     // const item = _list[index];
     _list[index].level = index;
-    console.log("level", _list[index].level);
   }
   return _list;
 }

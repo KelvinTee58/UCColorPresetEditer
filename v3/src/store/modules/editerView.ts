@@ -17,7 +17,6 @@ export const useCounterStore = defineStore(
     }
 
     function getActiveModuleProps(key: string) {
-      console.log("activeModule", get(activeModule.value, key, ""));
       return get(activeModule.value, key, "");
     }
 

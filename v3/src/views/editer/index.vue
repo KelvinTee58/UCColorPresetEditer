@@ -72,7 +72,7 @@
               <!-- Make changes to your
               {{ $t("views.editer.index.right_tab2") }}
               here. -->
-              <attributeView :type="activeModuleType"></attributeView>
+              <attributeView></attributeView>
             </ScrollArea>
           </TabsContent>
         </Tabs>
@@ -93,13 +93,14 @@ import layer from "./components/layer.vue";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import moduleView from "./components/moduleView.vue";
 import attributeView from "./components/attributeView.vue";
-
+import { storeToRefs } from "pinia";
 import { useI18n } from "vue-i18n";
 const { t } = useI18n();
 // console.log(t("views.editer.index.right_tab1"));
 
-const { proxy } = getCurrentInstance();
-import { storeToRefs } from "pinia";
+// const { proxy } = getCurrentInstance();
+const { proxy } = getCurrentInstance() as any;
+
 // console.log("proxy.$store2", proxy.$store.editerList.useCounterStore().editerList.length);
 // console.log("proxy.$store2", proxy.$store.editerList.useCounterStore().editerList);
 // let editerList = proxy.$store.editerList.useCounterStore().editerList || [];
@@ -108,7 +109,6 @@ const editerListStore = storeToRefs(proxy.$store.editerList.useCounterStore());
 const editerViewStore = proxy.$store.editerView.useCounterStore();
 const editerList = computed({
   get() {
-    console.log("layerList index get");
     return editerListStore.editerList.value;
   },
   set(val) {
@@ -125,12 +125,12 @@ const activeModuleId = computed({
   set() {},
 });
 
-const activeModuleType = computed({
-  get() {
-    return editerViewStore.getActiveModuleProps("type");
-  },
-  set() {},
-});
+// const activeModuleType = computed({
+//   get() {
+//     return editerViewStore.getActiveModuleProps("type");
+//   },
+//   set() {},
+// });
 
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import testData from "@/data/test.json";

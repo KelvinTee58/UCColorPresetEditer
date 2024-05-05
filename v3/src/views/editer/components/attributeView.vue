@@ -1,18 +1,38 @@
 <template>
-  <uucBlockAttribute v-bind="$props" v-if="type == 'block'"></uucBlockAttribute>
-  <uucImageAttribute v-bind="$props" v-if="type == 'image'"></uucImageAttribute>
-  <uucFontAttribute v-bind="$props" v-if="type == 'font'"></uucFontAttribute>
+  <uucBlockAttribute v-bind="$props" :module="activeModule" v-if="activeModuleType == 'block'"></uucBlockAttribute>
+  <uucImageAttribute v-bind="$props" :module="activeModule" v-if="activeModuleType == 'image'"></uucImageAttribute>
+  <uucFontAttribute v-bind="$props" :module="activeModule" v-if="activeModuleType == 'font'"></uucFontAttribute>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { uucBlockAttribute, uucImageAttribute, uucFontAttribute } from "../attribute";
-import { defineProps } from "vue";
+import { defineProps, getCurrentInstance, computed } from "vue";
+import { storeToRefs } from "pinia";
+const { proxy } = getCurrentInstance() as any;
 
 const props = defineProps({
-  type: {
-    type: String,
-    required: true,
+  // type: {
+  //   type: String,
+  //   required: true,
+  // },
+});
+
+const editerViewStoreRefs = storeToRefs(proxy.$store.editerView.useCounterStore());
+const editerViewStore = proxy.$store.editerView.useCounterStore();
+console.log("editerViewStore.activeModule", editerViewStore.activeModule);
+
+const activeModuleType = computed({
+  get() {
+    return editerViewStore.getActiveModuleProps("type");
   },
+  set() {},
+});
+
+const activeModule = computed({
+  get() {
+    return editerViewStore.activeModule;
+  },
+  set() {},
 });
 </script>
 

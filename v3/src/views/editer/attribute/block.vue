@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import * as z from "zod";
-import { h, reactive, ref } from "vue";
+import { h, reactive, ref, defineProps } from "vue";
 import { useForm } from "vee-validate";
 import { toTypedSchema } from "@vee-validate/zod";
 import { DependencyType } from "../ui/auto-form/interface";
@@ -10,13 +10,20 @@ import type { Config } from "@/components/ui/auto-form";
 import { AutoForm, AutoFormField } from "@/components/ui/auto-form";
 import Label from "@/components/ui/label/Label.vue";
 
-enum Sports {
-  Football = "Football/Soccer",
-  Basketball = "Basketball",
-  Baseball = "Baseball",
-  Hockey = "Hockey (Ice)",
-  None = "I don't like sports",
-}
+const props = defineProps({
+  module: {
+    type: Object,
+    required: true,
+  },
+});
+
+// enum Sports {
+//   Football = "Football/Soccer",
+//   Basketball = "Basketball",
+//   Baseball = "Baseball",
+//   Hockey = "Hockey (Ice)",
+//   None = "I don't like sports",
+// }
 
 enum borderStyle {
   none = "none",
@@ -104,67 +111,79 @@ const schema2 = z.object({
   }),
 });
 
-const schema = z.object({
-  username: z
-    .string({
-      required_error: "Username is required.",
-    })
-    .min(2, {
-      message: "Username must be at least 2 characters.",
-    }),
-
-  password: z
-    .string({
-      required_error: "Password is required.",
-    })
-    .min(8, {
-      message: "Password must be at least 8 characters.",
-    }),
-
-  favouriteNumber: z.coerce
-    .number({
-      invalid_type_error: "Favourite number must be a number.",
-    })
-    .min(1, {
-      message: "Favourite number must be at least 1.",
-    })
-    .max(10, {
-      message: "Favourite number must be at most 10.",
-    })
-    .default(1)
-    .optional(),
-
-  acceptTerms: z.boolean().refine((value) => value, {
-    message: "You must accept the terms and conditions.",
-    path: ["acceptTerms"],
-  }),
-
-  sendMeMails: z.boolean().optional(),
-
-  birthday: z.coerce.date().optional(),
-
-  color: z.enum(["red", "green", "blue"]).optional(),
-
-  // Another enum example
-  marshmallows: z.enum(["not many", "a few", "a lot", "too many"]),
-
-  // Native enum example
-  sports: z.nativeEnum(Sports).describe("What is your favourite sport?"),
-
-  bio: z
-    .string()
-    .min(10, {
-      message: "Bio must be at least 10 characters.",
-    })
-    .max(160, {
-      message: "Bio must not be longer than 30 characters.",
-    })
-    .optional(),
-
-  customParent: z.string().optional(),
-
-  file: z.string().optional(),
+const form = useForm({
+  validationSchema: toTypedSchema(schema2),
 });
+
+form.setValues({
+  basic: {
+    id: "foo",
+  },
+});
+
+console.log("schema2", form);
+
+// const schema = z.object({
+//   username: z
+//     .string({
+//       required_error: "Username is required.",
+//     })
+//     .min(2, {
+//       message: "Username must be at least 2 characters.",
+//     }),
+
+//   password: z
+//     .string({
+//       required_error: "Password is required.",
+//     })
+//     .min(8, {
+//       message: "Password must be at least 8 characters.",
+//     }),
+
+//   favouriteNumber: z.coerce
+//     .number({
+//       invalid_type_error: "Favourite number must be a number.",
+//     })
+//     .min(1, {
+//       message: "Favourite number must be at least 1.",
+//     })
+//     .max(10, {
+//       message: "Favourite number must be at most 10.",
+//     })
+//     .default(1)
+//     .optional(),
+
+//   acceptTerms: z.boolean().refine((value) => value, {
+//     message: "You must accept the terms and conditions.",
+//     path: ["acceptTerms"],
+//   }),
+
+//   sendMeMails: z.boolean().optional(),
+
+//   birthday: z.coerce.date().optional(),
+
+//   color: z.enum(["red", "green", "blue"]).optional(),
+
+//   // Another enum example
+//   marshmallows: z.enum(["not many", "a few", "a lot", "too many"]),
+
+//   // Native enum example
+//   sports: z.nativeEnum(Sports).describe("What is your favourite sport?"),
+
+//   bio: z
+//     .string()
+//     .min(10, {
+//       message: "Bio must be at least 10 characters.",
+//     })
+//     .max(160, {
+//       message: "Bio must not be longer than 30 characters.",
+//     })
+//     .optional(),
+
+//   customParent: z.string().optional(),
+
+//   file: z.string().optional(),
+// });
 
 function onSubmit(values: Record<string, any>) {
   toast({
@@ -176,51 +195,24 @@ function onSubmit(values: Record<string, any>) {
 
 <template>
   <AutoForm
+    :form="form"
     class="w-full space-y-6 p-3 text-left"
     :schema="schema2"
     :field-config="{
-      password: {
-        label: 'Your secure password',
-        inputProps: {
-          type: 'password',
-          placeholder: '••••••••',
+      style: {
+        background: {
+          component: 'color',
         },
-      },
-      favouriteNumber: {
-        description: 'Your favourite number between 1 and 10.',
-      },
-      acceptTerms: {
-        label: 'Accept terms and conditions.',
-        inputProps: {
-          required: true,
+        border: {
+          color: {
+            component: 'color',
+          },
         },
-      },
-
-      birthday: {
-        description: 'We need your birthday to send you a gift.',
-      },
-
-      sendMeMails: {
-        component: 'switch',
-      },
-
-      bio: {
-        component: 'textarea',
-      },
-
-      marshmallows: {
-        label: 'How many marshmallows fit in your mouth?',
-        component: 'radio',
-      },
-
-      file: {
-        label: 'Text file',
-        component: 'file',
       },
     }"
     @submit="onSubmit"
   >
-    <template #acceptTerms="slotProps">
+    <!-- <template #acceptTerms="slotProps">
       <AutoFormField v-bind="slotProps" />
       <div class="!mt-2 text-sm">I agree to the <button class="text-primary underline">terms and conditions</button>.</div>
     </template>
@@ -230,8 +222,7 @@ function onSubmit(values: Record<string, any>) {
         <AutoFormField v-bind="slotProps" class="w-full" />
         <Button type="button"> Check </Button>
       </div>
-    </template>
-
+    </template> -->
     <Button type="submit"> Submit </Button>
   </AutoForm>
 </template>

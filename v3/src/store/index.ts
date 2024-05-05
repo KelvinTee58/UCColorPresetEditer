@@ -8,9 +8,8 @@ const modules: FileModule = {};
 for (const key in modulesFiles) {
   const moduleName: string = key.replace(/(.*\/)*([^.]+).*/gi, "$2");
   const value: any = modulesFiles[key];
-  console.log('value',value)
   modules[moduleName] = value;
 }
-console.log('modules',modules)
+// console.log('modules',modules)
 
 export default modules;
