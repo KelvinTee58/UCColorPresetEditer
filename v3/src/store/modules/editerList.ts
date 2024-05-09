@@ -22,7 +22,9 @@ interface MyObject {
 export const useCounterStore = defineStore(
   "editerList",
   () => {
+    // 数据列表
     const editerList: any = ref([]);
+    // 操作记录
     const editerListRecords = ref<editerRecords[]>([]);
     function pushList(value: any) {
       editerList.value.push(value);

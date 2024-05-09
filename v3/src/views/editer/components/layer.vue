@@ -1,7 +1,7 @@
 <template>
   <div class="draggableContainer layerContainer">
     <!-- <button @click="resetList">清空列表</button> -->
-    <VirtualList ref="virtualRef" class="layerHeight" :dataSource="layerList" :dataKey="'id'" :handle="'.drag'" :animation="100" chosenClass="chooseItem" ghostClass="chooseItem">
+    <VirtualList ref="virtualRef" @drop="dropEnd" class="layerHeight" :dataSource="layerList" :dataKey="'level'" :handle="'.drag'" :animation="100" chosenClass="chooseItem" ghostClass="chooseItem">
       <template v-slot:item="{ record }">
         <ContextMenu @update:open="pickerModule(record)">
           <ContextMenuTrigger>
@@ -23,9 +23,6 @@
               <span>paste</span>
               <ContextMenuShortcut>{{ ctrlKey }}V</ContextMenuShortcut>
             </ContextMenuItem>
-            <!-- <ContextMenuItem>Billing</ContextMenuItem>
-            <ContextMenuItem>Team</ContextMenuItem>
-            <ContextMenuItem>Subscription</ContextMenuItem> -->
           </ContextMenuContent>
         </ContextMenu>
       </template>
@@ -71,6 +68,7 @@ const layerList = computed({
     return editerListStoreRefs.editerList.value;
   },
   set(val) {
+    console.log("layerList", layerList);
     // trigger when drag state changed if you use with `v-model:dataSource`
     let _list = resetLevel(val);
     proxy.$store.editerList.useCounterStore().setList(_list);
@@ -109,6 +107,11 @@ function pickerModule(value: any) {
   if (virtualRef.value) {
     virtualRef.value.scrollToKey(value.id);
   }
+}
+
+// 重新排列后的逻辑
+function dropEnd(event: any) {
+  console.log(event);
 }
 
 /**

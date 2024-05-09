@@ -37,6 +37,14 @@ https://www.shadcn-vue.com/
 https://github.com/mauricius/vue-draggable-resizable?tab=readme-ov-file
 https://mauricius.github.io/vue-draggable-resizable/#/story/stories-basic-active-story-vue
 
+#### vue-draggable-resizable2
+https://github.com/gorkys/vue-draggable-resizable-gorkys
+https://tingtas.com/vue-draggable-resizable-gorkys/?path=/story/%E5%9F%BA%E6%9C%AC--%E5%9F%BA%E6%9C%AC%E7%BB%84%E4%BB%B6
+
+#### vue-virtual-drag-list
+https://github.com/mfuu/vue3-virtual-drag-list
+https://mfuu.github.io/vue-virtual-drag-list/
+
 ### css
 
 #### tailwindcss
