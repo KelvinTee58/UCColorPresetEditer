@@ -45,7 +45,7 @@ const i18n = createI18n({
 app.use(i18n);
 
 // 拖拽组件
-import VueDraggableResizable from "vue-draggable-resizable";
-app.component("vue-draggable-resizable", VueDraggableResizable);
+// import VueDraggableResizable from "vue-draggable-resizable";
+// app.component("vue-draggable-resizable", VueDraggableResizable);
 
 app.mount("#app");

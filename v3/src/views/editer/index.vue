@@ -20,7 +20,42 @@
 
       <ResizablePanel id="handle-demo-panel-1" :default-size="55" :min-size="50" :max-size="60">
         <div class="draggerRegion">
-          <vue-draggable-resizable
+          <vdr
+            :disableUserSelect="true"
+            :lock-aspect-ratio="true"
+            :parent="true"
+            :w="computedProps(item.width, 160)"
+            :h="computedProps(item.height, 160)"
+            :x="computedProps(item.axis.x, 0)"
+            :y="computedProps(item.axis.y, 0)"
+            :z="computedProps(item.level, 0)"
+            :grid="[10, 10]"
+            v-for="item in editerList"
+            :key="item.id"
+            class-name="vdr no-border"
+            class-name-active="active-border"
+            @dblclick="handleDoubleClick"
+            @activated="pickerModule(item)"
+            @dragStop="
+              (x:number, y:number) => {
+                dragEndModule(x, y, item);
+              }
+            "
+            @resizeStop="(x:number, y:number,w:number,h:number) => {
+              onResizeStopModule(x, y,w,h,item);
+              }"
+            :active="item.id === activeModuleId"
+            :snap="true"
+            :snap-tolerance="20"
+            @refLineParams="getRefLineParams"
+          >
+            <moduleView :module="item" :dragger="true"></moduleView>
+          </vdr>
+          <!--辅助线 start-->
+          <span class="ref-line v-line" v-for="item in vdrVLine" v-show="item.display" :style="{ left: item.position, top: item.origin, height: item.lineLength }" />
+          <span class="ref-line h-line" v-for="item in vdrHLine" v-show="item.display" :style="{ top: item.position, left: item.origin, width: item.lineLength }" />
+          <!--辅助线END-->
+          <!-- <vue-draggable-resizable
             :disableUserSelect="true"
             :lock-aspect-ratio="true"
             :parent="true"
@@ -47,7 +82,7 @@
             :active="item.id === activeModuleId"
           >
             <moduleView :module="item" :dragger="true"></moduleView>
-          </vue-draggable-resizable>
+          </vue-draggable-resizable> -->
         </div>
       </ResizablePanel>
       <ResizableHandle id="handle-demo-handle-1" with-handle />
@@ -89,6 +124,9 @@
 
 <script setup lang="ts">
 import { ref, getCurrentInstance, computed, onMounted, onUnmounted } from "vue";
+
+import vdr from "vue-draggable-resizable-gorkys/src/components/vue-draggable-resizable.vue";
+import "vue-draggable-resizable-gorkys/dist/VueDraggableResizable.css";
 
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -210,6 +248,22 @@ const handleKeyEvent = (event: { ctrlKey: any; metaKey: any; key: any }) => {
   }
 };
 
+interface vdrLine {
+  display: boolean;
+  lineLength: string;
+  origin: string;
+  position: string;
+}
+const vdrVLine = ref<vdrLine[]>([]);
+const vdrHLine = ref<vdrLine[]>([]);
+
+// 辅助线回调事件
+function getRefLineParams(params: any) {
+  const { vLine, hLine } = params;
+  vdrVLine.value = vLine;
+  vdrHLine.value = hLine;
+}
+
 onMounted(() => {
   document.addEventListener("keydown", handleKeyEvent);
 });
@@ -219,7 +273,7 @@ onUnmounted(() => {
 });
 </script>
 <style>
-@import "vue-draggable-resizable/style.css";
+/* @import "vue-draggable-resizable/style.css"; */
 </style>
 <style lang="scss">
 .editer_index {
@@ -255,5 +309,16 @@ onUnmounted(() => {
     cursor: move;
     cursor: -webkit-grabbing;
   }
+  // .ref-line {
+  //   position: absolute;
+  //   background-color: rgb(255, 0, 204);
+  //   z-index: 9999;
+  // }
+  // .h-line {
+  //   height: 1px;
+  // }
+  // .v-line {
+  //   width: 1px;
+  // }
 }
 </style>
