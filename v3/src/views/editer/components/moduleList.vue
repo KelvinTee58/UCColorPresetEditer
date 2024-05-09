@@ -30,7 +30,7 @@ const props = defineProps({
   },
 });
 function AddDraggable() {
-  proxy.$store.editerList.useCounterStore().addEditerModulesList(props.module);
+  proxy.$store.editerList.useCounterStore().addModuleItem(props.module);
 }
 </script>
 

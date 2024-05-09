@@ -1,14 +1,16 @@
 <script setup lang="ts">
 import * as z from "zod";
-import { h, reactive, ref, defineProps } from "vue";
+// import { h, reactive, ref, defineProps } from "vue";
+import { h, defineProps, watch } from "vue";
 import { useForm } from "vee-validate";
 import { toTypedSchema } from "@vee-validate/zod";
-import { DependencyType } from "../ui/auto-form/interface";
+// import { DependencyType } from "../ui/auto-form/interface";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/toast";
-import type { Config } from "@/components/ui/auto-form";
-import { AutoForm, AutoFormField } from "@/components/ui/auto-form";
-import Label from "@/components/ui/label/Label.vue";
+// import type { Config } from "@/components/ui/auto-form";
+import { AutoForm } from "@/components/ui/auto-form";
+// import { AutoForm, AutoFormField } from "@/components/ui/auto-form";
+// import Label from "@/components/ui/label/Label.vue";
 
 const props = defineProps({
   module: {
@@ -115,11 +117,19 @@ const form = useForm({
   validationSchema: toTypedSchema(schema2),
 });
 
-form.setValues({
-  basic: {
-    id: "foo",
+let a = 0;
+watch(
+  () => props.module,
+  (newval) => {
+    console.log("watch", newval);
+    form.setValues({
+      basic: {
+        id: "foo" + a++,
+      },
+    });
   },
-});
+  { immediate: true, deep: true }
+);
 
 console.log("schema2", form);
 

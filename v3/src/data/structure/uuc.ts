@@ -1,4 +1,4 @@
-import { v4 as uuidv4 } from "uuid";
+import { v4 as uuidv4, validate } from "uuid";
 interface gap {
   top: number;
   right: number;
@@ -89,7 +89,7 @@ class uucBlock implements uucObject {
 
   constructor(object: uucObject) {
     // 自身属性
-    this.id = uuidv4();
+    this.id = validate(object.id) ? object.id : uuidv4();
     this.type = "block";
 
     // 配置属性

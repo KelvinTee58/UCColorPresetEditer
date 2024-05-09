@@ -7,8 +7,8 @@
         "id": "block_backgrond0001",
         "name": "_defalut_background",
         "description": "this is _defalut_background",
-        "type": "block",
         "content": {
+          "type": "block",
           "label": "",
           "width": 300,
           "height": 300,
@@ -18,8 +18,8 @@
       {
         "id": "block_backgrond0002",
         "name": "_defalut_background2",
-        "type": "block",
         "content": {
+          "type": "block",
           "label": "",
           "width": 300,
           "height": 160,
@@ -40,8 +40,8 @@
       {
         "id": "image_default0001",
         "name": "_default_image",
-        "type": "image",
         "content": {
+          "type": "image",
           "width": 120,
           "height": 100,
           "background": "#000000",
@@ -58,8 +58,8 @@
       {
         "id": "font_default0001",
         "name": "_default_font",
-        "type": "font",
         "content": {
+          "type": "font",
           "width": 120,
           "height": 30,
           "background": "#000000",

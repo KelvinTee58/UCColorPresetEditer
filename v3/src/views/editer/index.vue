@@ -17,6 +17,7 @@
         </Tabs>
       </ResizablePanel>
       <ResizableHandle id="handle-demo-handle-0" disabled />
+
       <ResizablePanel id="handle-demo-panel-1" :default-size="55" :min-size="50" :max-size="60">
         <div class="draggerRegion">
           <vue-draggable-resizable
@@ -34,7 +35,15 @@
             class-name="vdr no-border"
             class-name-active="active-border"
             @dblclick="handleDoubleClick"
-            @click="pickerModule(item)"
+            @activated="pickerModule(item)"
+            @dragStop="
+              (x:number, y:number) => {
+                dragEndModule(x, y, item);
+              }
+            "
+            @resizeStop="(x:number, y:number,w:number,h:number) => {
+              onResizeStopModule(x, y,w,h,item);
+              }"
             :active="item.id === activeModuleId"
           >
             <moduleView :module="item" :dragger="true"></moduleView>
@@ -69,9 +78,6 @@
           </TabsContent>
           <TabsContent :value="$t('views.editer.index.right_tab2')">
             <ScrollArea class="w-full rounded-md p-4 scrollAreaHeight">
-              <!-- Make changes to your
-              {{ $t("views.editer.index.right_tab2") }}
-              here. -->
               <attributeView></attributeView>
             </ScrollArea>
           </TabsContent>
@@ -82,7 +88,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, getCurrentInstance, computed } from "vue";
+import { ref, getCurrentInstance, computed, onMounted, onUnmounted } from "vue";
 
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -100,16 +106,14 @@ const { t } = useI18n();
 
 // const { proxy } = getCurrentInstance();
 const { proxy } = getCurrentInstance() as any;
+import { get } from "lodash";
 
-// console.log("proxy.$store2", proxy.$store.editerList.useCounterStore().editerList.length);
-// console.log("proxy.$store2", proxy.$store.editerList.useCounterStore().editerList);
-// let editerList = proxy.$store.editerList.useCounterStore().editerList || [];
-
-const editerListStore = storeToRefs(proxy.$store.editerList.useCounterStore());
+const editerListStoreRefs = storeToRefs(proxy.$store.editerList.useCounterStore());
+const editerListStore = proxy.$store.editerList.useCounterStore();
 const editerViewStore = proxy.$store.editerView.useCounterStore();
 const editerList = computed({
   get() {
-    return editerListStore.editerList.value;
+    return editerListStoreRefs.editerList.value;
   },
   set(val) {
     // trigger when drag state changed if you use with `v-model:dataSource`
@@ -157,6 +161,62 @@ function handleDoubleClick() {
 function pickerModule(value: any) {
   proxy.$store.editerView.useCounterStore().setActiveModule(value);
 }
+
+/**
+ * 拖动模块结束后逻辑
+ * @param x x坐标
+ * @param y y坐标
+ * @param item 修改项
+ */
+function dragEndModule(x: number, y: number, item: any) {
+  let id = get(item, "id", undefined);
+  if (id) {
+    editerListStore.setModuleItem(id, { "axis.x": x, "axis.y": y }, { type: "move", description: "移动" });
+  }
+}
+/**
+ * 变换模块结束后逻辑
+ * @param x x坐标
+ * @param y y坐标
+ * @param width 宽
+ * @param height 高
+ * @param item 修改项
+ */
+function onResizeStopModule(x: number, y: number, width: number, height: number, item: any) {
+  let id = get(item, "id", undefined);
+  if (id) {
+    editerListStore.setModuleItem(id, { "axis.x": x, "axis.y": y, width, height }, { type: "move", description: "变形" });
+  }
+}
+
+// 复制粘贴撤销逻辑
+const handleKeyEvent = (event: { ctrlKey: any; metaKey: any; key: any }) => {
+  if (event.ctrlKey || event.metaKey) {
+    switch (event.key) {
+      case "c":
+        console.log("复制 (Ctrl + C)");
+        break;
+      case "v":
+        console.log("粘贴 (Ctrl + V)");
+        break;
+      case "z":
+        console.log("撤销 (Ctrl + Z)");
+        editerListStore.cancelRecord();
+        break;
+      // 可以添加更多按键的监听
+      default:
+        break;
+    }
+  }
+};
+
+onMounted(() => {
+  document.addEventListener("keydown", handleKeyEvent);
+});
+
+onUnmounted(() => {
+  document.removeEventListener("keydown", handleKeyEvent);
+});
 </script>
 <style>
 @import "vue-draggable-resizable/style.css";

@@ -3,35 +3,63 @@
     <!-- <button @click="resetList">清空列表</button> -->
     <VirtualList ref="virtualRef" class="layerHeight" :dataSource="layerList" :dataKey="'id'" :handle="'.drag'" :animation="100" chosenClass="chooseItem" ghostClass="chooseItem">
       <template v-slot:item="{ record }">
-        <h3 @click="pickerModule(record)" class="draggable-item m-0 py-4 flex items-center justify-left relative whitespace-nowrap overflow-hidden text-ellipsis border-b itemColor select-none">
-          <Move class="h-[.75rem] w-[.75rem] my-handle mr-1 drag" />
-          <span class="drag" :class="{ itemActive: record.id == activeModuleId }">{{ record.label }}</span>
-        </h3>
+        <ContextMenu @update:open="pickerModule(record)">
+          <ContextMenuTrigger>
+            <h3 @click="pickerModule(record)" class="draggable-item m-0 py-4 flex items-center justify-left relative whitespace-nowrap overflow-hidden text-ellipsis border-b itemColor select-none">
+              <Move class="h-[.75rem] w-[.75rem] my-handle mr-1 drag" />
+              <span class="drag" :class="{ itemActive: record.id == activeModuleId }">{{ record.label }}</span>
+            </h3>
+          </ContextMenuTrigger>
+          <ContextMenuContent class="w-48">
+            <ContextMenuItem @click="deleteItem(record)">
+              <span>delete</span>
+              <ContextMenuShortcut>{{ ctrlKey }}←</ContextMenuShortcut>
+            </ContextMenuItem>
+            <ContextMenuItem>
+              <span>copy</span>
+              <ContextMenuShortcut>{{ ctrlKey }}C</ContextMenuShortcut>
+            </ContextMenuItem>
+            <ContextMenuItem>
+              <span>paste</span>
+              <ContextMenuShortcut>{{ ctrlKey }}V</ContextMenuShortcut>
+            </ContextMenuItem>
+            <!-- <ContextMenuItem>Billing</ContextMenuItem>
+            <ContextMenuItem>Team</ContextMenuItem>
+            <ContextMenuItem>Subscription</ContextMenuItem> -->
+          </ContextMenuContent>
+        </ContextMenu>
       </template>
     </VirtualList>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ref, getCurrentInstance, computed } from "vue";
+import { ref, getCurrentInstance, computed, onMounted } from "vue";
 
 const virtualRef = ref(null);
 
 import { Move } from "lucide-vue-next";
 import VirtualList from "vue-virtual-draglist";
+import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuShortcut, ContextMenuTrigger } from "@/components/ui/context-menu";
 
 import { storeToRefs } from "pinia";
-
+import { get } from "lodash";
 const { proxy } = getCurrentInstance() as any;
 
-// console.log("proxy.$store", proxy.$store.editerList.useCounterStore());
-// let editerList = proxy.$store.editerList.useCounterStore().getList();
+const ctrlKey = ref("⌘");
 
-const editerListStore = storeToRefs(proxy.$store.editerList.useCounterStore());
-// let layerList = editerListStore.editerList.value;
-// let { editerList } = storeToRefs(proxy.$store.editerList.useCounterStore());
+onMounted(() => {
+  const userAgent: any = navigator.userAgent || navigator.vendor;
 
-// const editerViewStore = storeToRefs(proxy.$store.editerView.useCounterStore());
+  if (/mac/i.test(userAgent)) {
+    ctrlKey.value = "⌘ ";
+  } else if (/win/i.test(userAgent)) {
+    ctrlKey.value = "Ctrl+";
+  }
+});
+
+const editerListStoreRefs = storeToRefs(proxy.$store.editerList.useCounterStore());
+const editerListStore = proxy.$store.editerList.useCounterStore();
 const editerViewStore = proxy.$store.editerView.useCounterStore();
 
 // function resetList() {
@@ -40,7 +68,7 @@ const editerViewStore = proxy.$store.editerView.useCounterStore();
 
 const layerList = computed({
   get() {
-    return editerListStore.editerList.value;
+    return editerListStoreRefs.editerList.value;
   },
   set(val) {
     // trigger when drag state changed if you use with `v-model:dataSource`
@@ -70,6 +98,7 @@ function resetLevel(list = [], startIndex = 0, endIndex = 0) {
     // const item = _list[index];
     _list[index].level = index;
   }
+  console.log("resetLevel", _list);
   return _list;
 }
 
@@ -80,6 +109,15 @@ function pickerModule(value: any) {
   if (virtualRef.value) {
     virtualRef.value.scrollToKey(value.id);
   }
+}
+
+/**
+ * 删除选中的项逻辑
+ * @param value
+ */
+function deleteItem(value: any) {
+  let id = get(value, "id", undefined);
+  editerListStore.removeModuleItem(id, { type: "delete", description: "移除" });
 }
 </script>
 
