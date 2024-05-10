@@ -36,15 +36,16 @@ app.config.globalProperties.$api = api;
 
 import { createI18n } from "vue-i18n";
 import { en, zh } from "./locales/lang.json";
+import { localStorage } from '@/lib/storage';
 const i18n = createI18n({
   legacy: false,
-  locale: "en", // 默认语言
+  locale: localStorage.get("language") || "en", // 默认语言
   messages: { en, zh },
 });
 app.use(i18n);
 
 // 拖拽组件
-import VueDraggableResizable from "vue-draggable-resizable";
-app.component("vue-draggable-resizable", VueDraggableResizable);
+// import VueDraggableResizable from "vue-draggable-resizable";
+// app.component("vue-draggable-resizable", VueDraggableResizable);
 
 app.mount("#app");

@@ -1,0 +1,79 @@
+{
+  "block": {
+    "moduleKey": "BLOCK",
+    "moduleName": "BLOCK",
+    "moduleList": [
+      {
+        "id": "block_backgrond0001",
+        "name": "_defalut_background",
+        "description": "this is _defalut_background",
+        "content": {
+          "type": "block",
+          "label": "",
+          "width": 300,
+          "height": 300,
+          "background": "#ffffff"
+        }
+      },
+      {
+        "id": "block_backgrond0002",
+        "name": "_defalut_background2",
+        "content": {
+          "type": "block",
+          "label": "",
+          "width": 300,
+          "height": 160,
+          "background": "#ff00ff",
+          "border": {
+            "width": 1,
+            "color": "#000000",
+            "style": "solid"
+          }
+        }
+      }
+    ]
+  },
+  "image": {
+    "moduleKey": "IMAGE",
+    "moduleName": "IMAGE",
+    "moduleList": [
+      {
+        "id": "image_default0001",
+        "name": "_default_image",
+        "content": {
+          "type": "image",
+          "width": 120,
+          "height": 100,
+          "background": "#000000",
+          "label": "",
+          "src": ""
+        }
+      }
+    ]
+  },
+  "font": {
+    "moduleKey": "FONT",
+    "moduleName": "FONT",
+    "moduleList": [
+      {
+        "id": "font_default0001",
+        "name": "_default_font",
+        "content": {
+          "type": "font",
+          "width": 120,
+          "height": 30,
+          "background": "#000000",
+          "label": "_default_font",
+          "font": {
+            "size": 10,
+            "color": "#000000",
+            "family": "",
+            "familyName": "黑体",
+            "style": "normal",
+            "weight": "bold"
+          }
+        }
+      }
+    ]
+  }
+}

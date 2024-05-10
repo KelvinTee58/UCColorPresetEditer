@@ -43,7 +43,6 @@ async function testApi(){
   res = proxy.$api.test1.time();
 }
 
-console.log("count", count);
 </script>
 <style lang="scss" scoped>
 h1{
