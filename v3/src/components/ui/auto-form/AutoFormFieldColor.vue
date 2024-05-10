@@ -45,7 +45,10 @@ const df = new DateFormatter("en-US", {
                     <Palette class="mr-2 h-4 w-4" :size="16" />
                     {{ slotProps.componentField.modelValue ? slotProps.componentField.modelValue : "Pick a Color" }}
                   </div>
-                  <div class="ml-2 h-4 w-4 border rounded-sm" :style="{ 'background-color': getBackgroundColor(slotProps.componentField.modelValue) }" :size="16"></div>
+                  <div class="ml-2 h-4 w-4 relative">
+                    <div class="t-0 l-0 h-4 w-4 border rounded-sm markBg absolute z-10" :size="16"></div>
+                    <div class="t-0 l-0 h-4 w-4 border rounded-sm absolute z-20" :size="16" :style="{ 'background-color': getBackgroundColor(slotProps.componentField.modelValue) }"></div>
+                  </div>
                 </Button>
               </PopoverTrigger>
               <PopoverContent class="w-auto p-2 colorPicker">
@@ -74,5 +77,9 @@ const df = new DateFormatter("en-US", {
   .colour-area-mask {
     border: 1px solid hsl(var(--border));
   }
+}
+.markBg {
+  background: linear-gradient(45deg, rgba(0, 0, 0, 0.18) 25%, transparent 25%, transparent 75%, rgba(0, 0, 0, 0.18) 75%, rgba(0, 0, 0, 0.18) 0px) 0px 0px / 14px 14px repeat padding-box border-box,
+    linear-gradient(45deg, rgba(0, 0, 0, 0.18) 25%, transparent 25%, transparent 75%, rgba(0, 0, 0, 0.18) 75%, rgba(0, 0, 0, 0.18) 0px) 7px 7px / 14px 14px repeat padding-box border-box, white;
 }
 </style>
