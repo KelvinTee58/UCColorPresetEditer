@@ -4,3 +4,11 @@ declare module "*.vue" {
   const vueComponent: DefineComponent<{}, {}, any>;
   export default vueComponent;
 }
+
+// 全局filters 报错解决
+export {};
+declare module "vue" {
+  interface ComponentCustomProperties {
+    $filters: any;
+  }
+}
