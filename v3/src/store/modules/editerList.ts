@@ -1,22 +1,15 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 import { uucBlock, uucImage, uucFont } from "@/data/structure/uuc";
+import { MyObject, axis, fontStyle } from "@/data/structure/uuc_interface";
 import { v4 as uuidv4 } from "uuid";
 import { forIn, get, has, set } from "lodash";
 
-// import { set } from "@vueuse/core";
-// import { computed, ref, reactive } from "vue";
-
 interface editerRecords {
   r_id: string;
-  id: string;
-  recordObject: any;
-  modifyObject: any;
-  modifyType: any;
-}
-
-interface MyObject {
-  [key: string]: unknown;
+  recordArray: Array<MyObject>;
+  modifyArray: Array<MyObject>;
+  modifyType: MyObject;
 }
 
 export const useCounterStore = defineStore(
@@ -44,32 +37,6 @@ export const useCounterStore = defineStore(
      * @param value
      */
     function addModuleItem(value: any) {
-      interface axis {
-        x: number;
-        y: number;
-      }
-
-      interface fontStyle {
-        size: number;
-        color: string;
-        family: string;
-        familyName: string;
-        style: string;
-
-        // # style
-        // normal	默认值，文本以正常字体显示
-        // italic	文本以斜体显示
-        // oblique	文本倾斜显示
-        // inherit	从父元素继承字体样式
-
-        weight: string;
-        // # weight
-        // normal	默认值，标准字体
-        // bold	粗体字体
-        // bolder	更粗的字体
-        // lighter	更细的字体
-      }
-
       // 默认初始到页面上的位置
       const defaultAxis: axis = { x: 10, y: 10 };
       let classContent = value.content;
@@ -113,24 +80,26 @@ export const useCounterStore = defineStore(
         let el = JSON.parse(JSON.stringify(newItem));
 
         // 当前的操作逻辑是创建（create）逻辑
-        pushRecord(el.id, {}, el, { type: "create", description: "创建" });
+        pushRecord([], [el], { type: "create", description: "创建" });
       }
       // console.log(editerList.list);
     }
 
-    function removeModuleItem(id: string, modifyType: any) {
+    function removeModuleItem(id_list: Array<string> | string, modifyType: any) {
+      let c_id_list = Array.isArray(id_list) ? id_list : [id_list];
       let el = JSON.parse(JSON.stringify(editerList.value));
-      let recordObject: MyObject = {};
-
-      for (let index = 0; index < el.length; index++) {
-        // 匹配到id对应的
-        if (el[index].id === id) {
-          recordObject = el[index];
-          // 记录当前的操作逻辑是删除（delete）逻辑
-          editerList.value.splice(index, 1);
-          pushRecord(String(recordObject.id), recordObject, {}, modifyType);
+      let recordArray: Array<MyObject> = [];
+      for (const idItem of c_id_list) {
+        for (let index = 0; index < el.length; index++) {
+          // 匹配到id对应的
+          if (el[index].id === idItem) {
+            recordArray.push(el[index]);
+            // 记录当前的操作逻辑是删除（delete）逻辑
+            editerList.value.splice(index, 1);
+          }
         }
       }
+      if (recordArray.length > 0) pushRecord(recordArray, [], modifyType);
     }
 
     /**
@@ -139,44 +108,55 @@ export const useCounterStore = defineStore(
      * @param modifyObject 修改信息
      * @param modifyType 记录的详细内容
      */
-    function setModuleItem(id: string, modifyObject: MyObject, modifyType: any) {
-      let el = JSON.parse(JSON.stringify(editerList.value));
-      let recordObject: MyObject = {};
-      let newObject: MyObject = {};
+    function setModuleItem(modifyArray: Array<MyObject> | MyObject, modifyType: any) {
+      let cModifyArray = Array.isArray(modifyArray) ? modifyArray : [modifyArray];
 
-      // 遍历编辑器列表逻辑
-      for (let index = 0; index < el.length; index++) {
-        // 匹配到id对应的
-        if (el[index].id === id) {
-          forIn(modifyObject, function (value, key) {
-            // console.log(value, key, has(el[index], key), el[index]);
-            let recordValue = get(el[index], key, value);
-            if (has(el[index], key) && recordValue !== value) {
-              recordObject[key] = recordValue;
-              newObject[key] = value;
-              set(editerList.value[index], key, value);
+      let el = JSON.parse(JSON.stringify(editerList.value));
+      let recordArray: Array<MyObject> = [];
+      let newArray: Array<MyObject> = [];
+      for (const modifyItem of cModifyArray) {
+        let modifyItem_id = get(modifyItem, "id", undefined);
+        if (modifyItem_id) {
+          let recordObject: MyObject = { id: modifyItem_id };
+          let newObject: MyObject = { id: modifyItem_id };
+
+          // let recordItem = filter(el, { id: modifyItem_id });
+          for (let index = 0; index < el.length; index++) {
+            if (el[index].id === modifyItem_id) {
+              forIn(modifyItem, function (value, key) {
+                let recordValue = get(el[index], key, value);
+                if (has(el[index], key) && recordValue !== value && key != "id") {
+                  recordObject[key] = recordValue;
+                  newObject[key] = value;
+                  set(editerList.value[index], key, value);
+                }
+              });
             }
-          });
+          }
+
+          if (Object.getOwnPropertyNames(recordObject).length > 2) {
+            // console.log("22", Object.getOwnPropertyNames(recordObject).length);
+            recordArray.push(recordObject);
+            newArray.push(newObject);
+          }
         }
       }
-      if (Object.getOwnPropertyNames(recordObject).length) pushRecord(id, recordObject, newObject, modifyType);
+      if (recordArray.length > 0) {
+        pushRecord(recordArray, newArray, modifyType);
+      }
     }
 
     /**
-     * 根据指定的id和key，记录新数据和旧数据
-     * @param id 指定的id
-     * @param key 指定的key
-     * @param new_value 新数据
-     * @param old_value 旧数据
-     * @param type 记录类型
-     * @param typeDescription 记录的详细内容
+     * 记录一条操作记录
+     * @param recordArray 旧数据数组
+     * @param modifyArray 新数据数组
+     * @param modifyType 修改记录的类型
      */
-    function pushRecord(id: string, recordObject: MyObject, modifyObject: MyObject, modifyType: MyObject) {
+    function pushRecord(recordArray: Array<MyObject>, modifyArray: Array<MyObject>, modifyType: MyObject) {
       let record: editerRecords = {
         r_id: uuidv4(),
-        id,
-        recordObject,
-        modifyObject,
+        recordArray,
+        modifyArray,
         modifyType,
       };
       editerListRecords.value.push(record);

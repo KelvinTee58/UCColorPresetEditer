@@ -47,7 +47,7 @@ app.use(i18n);
 // import VueDraggableResizable from "vue-draggable-resizable";
 // app.component("vue-draggable-resizable", VueDraggableResizable);
 
-import { filters } from "@/lib/filters.ts";
-app.config.globalProperties.$filters = filters;
+// import { filters } from "@/lib/filters.ts";
+// app.config.globalProperties.$filters = filters;
 
 app.mount("#app");

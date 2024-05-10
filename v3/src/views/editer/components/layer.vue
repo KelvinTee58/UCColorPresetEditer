@@ -13,15 +13,15 @@
           <ContextMenuContent class="w-48">
             <ContextMenuItem @click="deleteItem(record)">
               <span>delete</span>
-              <ContextMenuShortcut>{{ $filters.getUserAgentCtrlShortcutKey("←") }}</ContextMenuShortcut>
+              <ContextMenuShortcut>{{ filters.getUserAgentCtrlShortcutKey("←") }}</ContextMenuShortcut>
             </ContextMenuItem>
             <ContextMenuItem>
               <span>copy</span>
-              <ContextMenuShortcut>{{ $filters.getUserAgentCtrlShortcutKey("C") }}</ContextMenuShortcut>
+              <ContextMenuShortcut>{{ filters.getUserAgentCtrlShortcutKey("C") }}</ContextMenuShortcut>
             </ContextMenuItem>
             <ContextMenuItem>
               <span>paste</span>
-              <ContextMenuShortcut>{{ $filters.getUserAgentCtrlShortcutKey("V") }}</ContextMenuShortcut>
+              <ContextMenuShortcut>{{ filters.getUserAgentCtrlShortcutKey("V") }}</ContextMenuShortcut>
             </ContextMenuItem>
           </ContextMenuContent>
         </ContextMenu>
@@ -32,6 +32,7 @@
 
 <script lang="ts" setup>
 import { ref, getCurrentInstance, computed } from "vue";
+import { filters } from "@/lib/filters.ts";
 
 const virtualRef = ref(null);
 
@@ -55,11 +56,11 @@ const layerList = computed({
   get() {
     return editerListStoreRefs.editerList.value;
   },
-  set(val) {
-    console.log("layerList", layerList);
-    // trigger when drag state changed if you use with `v-model:dataSource`
-    let _list = resetLevel(val);
-    proxy.$store.editerList.useCounterStore().setList(_list);
+  set() {
+    // console.log("layerList", layerList);
+    // // trigger when drag state changed if you use with `v-model:dataSource`
+    // let _list = resetLevel(val);
+    // proxy.$store.editerList.useCounterStore().setList(_list);
   },
 });
 
@@ -108,7 +109,7 @@ function dropEnd(event: any) {
  */
 function deleteItem(value: any) {
   let id = get(value, "id", undefined);
-  editerListStore.removeModuleItem(id, { type: "delete", description: "移除" });
+  editerListStore.removeModuleItem([id], { type: "delete", description: "移除" });
 }
 </script>
 

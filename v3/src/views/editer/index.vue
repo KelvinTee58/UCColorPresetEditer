@@ -36,18 +36,19 @@
             class-name-active="active-border"
             @dblclick="handleDoubleClick"
             @activated="pickerModule(item)"
-            @dragStop="
+            @dragstop="
               (x:number, y:number) => {
                 dragEndModule(x, y, item);
               }
             "
-            @resizeStop="(x:number, y:number,w:number,h:number) => {
+            @resizestop="(x:number, y:number,w:number,h:number) => {
               onResizeStopModule(x, y,w,h,item);
               }"
             :active="item.id === activeModuleId"
             :snap="true"
             :snap-tolerance="20"
             @refLineParams="getRefLineParams"
+            @contextmenu="onContextMenu"
           >
             <moduleView :module="item" :dragger="true"></moduleView>
           </vdr>
@@ -209,7 +210,7 @@ function pickerModule(value: any) {
 function dragEndModule(x: number, y: number, item: any) {
   let id = get(item, "id", undefined);
   if (id) {
-    editerListStore.setModuleItem(id, { "axis.x": x, "axis.y": y }, { type: "move", description: "移动" });
+    editerListStore.setModuleItem({ id, "axis.x": x, "axis.y": y }, { type: "move", description: "移动" });
   }
 }
 /**
@@ -223,7 +224,8 @@ function dragEndModule(x: number, y: number, item: any) {
 function onResizeStopModule(x: number, y: number, width: number, height: number, item: any) {
   let id = get(item, "id", undefined);
   if (id) {
-    editerListStore.setModuleItem(id, { "axis.x": x, "axis.y": y, width, height }, { type: "move", description: "变形" });
+    // editerListStore.setModuleItem(id, { "axis.x": x, "axis.y": y, width, height }, { type: "move", description: "变形" });
+    editerListStore.setModuleItem({ id, "axis.x": x, "axis.y": y, width, height }, { type: "move", description: "变形" });
   }
 }
 
@@ -262,6 +264,11 @@ function getRefLineParams(params: any) {
   const { vLine, hLine } = params;
   vdrVLine.value = vLine;
   vdrHLine.value = hLine;
+}
+
+function onContextMenu(e: any) {
+  e.preventDefault();
+  console.log("e", e);
 }
 
 onMounted(() => {
