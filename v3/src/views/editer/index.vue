@@ -19,7 +19,7 @@
       <ResizableHandle id="handle-demo-handle-0" disabled />
 
       <ResizablePanel id="handle-demo-panel-1" :default-size="55" :min-size="50" :max-size="60">
-        <div class="draggerRegion">
+        <div class="draggerRegion" @wheel="handleWheel" :style="{ transform: `scale(${scale})` }">
           <vdr
             :disableUserSelect="true"
             :lock-aspect-ratio="true"
@@ -271,6 +271,21 @@ function onContextMenu(e: any) {
   console.log("e", e);
 }
 
+// 滚动逻辑
+// 待使用
+const scale = ref(1);
+function handleWheel(event: any) {
+  // 检查是否按下了Ctrl键
+  if (event.ctrlKey) {
+    // // 根据滚轮滚动的方向来缩小div
+    // if (event.deltaY < 0) {
+    //   scale.value *= 0.95; // 缩小为当前比例的95%
+    // } else {
+    //   scale.value /= 0.95; // 放大为当前比例的105%（约为1.05倍）
+    // }
+  }
+}
+
 onMounted(() => {
   document.addEventListener("keydown", handleKeyEvent);
 });
@@ -307,6 +322,9 @@ onUnmounted(() => {
     background-size: 10px 10px, 10px 10px;
     height: 100%;
     width: 100%;
+
+    // overflow: auto;
+    transition: transform 0.1s ease-in-out;
   }
   .active-border {
     // box-shadow: 0 0 5px hsl(var(--accent-foreground));
