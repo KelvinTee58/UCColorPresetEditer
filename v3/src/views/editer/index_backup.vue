@@ -1,50 +1,123 @@
 <template>
   <div class="editer_index">
-    <div class="draggerRegionWrapper h-full-container flex justify-center items-center">
-      <div
-        class="draggerRegion"
-        @contextmenu.prevent.stop="onContextMenu"
-        @wheel="handleWheel"
-        :style="{ transform: `scale(${scale})`, width: `${draggerRegionSize.width}px`, height: `${draggerRegionSize.height}px` }"
-      >
-        <vdr
-          :disableUserSelect="true"
-          :lock-aspect-ratio="true"
-          :parent="true"
-          :w="computedProps(item.width, 160)"
-          :h="computedProps(item.height, 160)"
-          :x="computedProps(item.axis.x, 0)"
-          :y="computedProps(item.axis.y, 0)"
-          :z="computedProps(item.level, 0)"
-          :grid="[10, 10]"
-          v-for="item in editerList"
-          :key="item.id"
-          class-name="vdr no-border"
-          class-name-active="active-border"
-          @dblclick="handleDoubleClick"
-          @activated="pickerModule(item)"
-          @dragstop="
+    <ResizablePanelGroup id="handle-demo-group-1" direction="horizontal" class="min-w-screen min-h-screen rounded-lg border -mt-16 pt-16">
+      <!-- <ResizablePanel id="handle-demo-panel-0" :default-size="15">
+        <Tabs :default-value="$t('views.editer.index.left_tab1')" class="h-full">
+          <TabsList class="tabsList tabsList_bg p-0">
+            <TabsTrigger :value="$t('views.editer.index.left_tab1')" class="w-24">
+              {{ $t("views.editer.index.left_tab1") }}
+            </TabsTrigger>
+          </TabsList>
+          <Separator />
+          <TabsContent :value="$t('views.editer.index.left_tab1')" class="h-full">
+            <div class="w-full rounded-md px-4 scrollAreaHeight">
+              <layer></layer>
+            </div>
+          </TabsContent>
+        </Tabs>
+      </ResizablePanel>
+      <ResizableHandle id="handle-demo-handle-0" disabled /> -->
+
+      <ResizablePanel id="handle-demo-panel-1" :default-size="55" :min-size="50" :max-size="60">
+        <div class="draggerRegion" @wheel="handleWheel" :style="{ transform: `scale(${scale})` }">
+          <vdr
+            :disableUserSelect="true"
+            :lock-aspect-ratio="true"
+            :parent="true"
+            :w="computedProps(item.width, 160)"
+            :h="computedProps(item.height, 160)"
+            :x="computedProps(item.axis.x, 0)"
+            :y="computedProps(item.axis.y, 0)"
+            :z="computedProps(item.level, 0)"
+            :grid="[10, 10]"
+            v-for="item in editerList"
+            :key="item.id"
+            class-name="vdr no-border"
+            class-name-active="active-border"
+            @dblclick="handleDoubleClick"
+            @activated="pickerModule(item)"
+            @dragstop="
               (x:number, y:number) => {
                 dragEndModule(x, y, item);
               }
             "
-          @resizestop="(x:number, y:number,w:number,h:number) => {
+            @resizestop="(x:number, y:number,w:number,h:number) => {
               onResizeStopModule(x, y,w,h,item);
               }"
-          :active="item.id === activeModuleId"
-          :snap="true"
-          :snap-tolerance="20"
-          @refLineParams="getRefLineParams"
-          @contextmenu.prevent.stop="onContextMenu2"
-        >
-          <moduleView :module="item" :dragger="true"></moduleView>
-        </vdr>
-        <!--辅助线 start-->
-        <span class="ref-line v-line" v-for="item in vdrVLine" v-show="item.display" :style="{ left: item.position, top: item.origin, height: item.lineLength }" />
-        <span class="ref-line h-line" v-for="item in vdrHLine" v-show="item.display" :style="{ top: item.position, left: item.origin, width: item.lineLength }" />
-        <!--辅助线END-->
-      </div>
-    </div>
+            :active="item.id === activeModuleId"
+            :snap="true"
+            :snap-tolerance="20"
+            @refLineParams="getRefLineParams"
+            @contextmenu="onContextMenu"
+          >
+            <moduleView :module="item" :dragger="true"></moduleView>
+          </vdr>
+          <!--辅助线 start-->
+          <span class="ref-line v-line" v-for="item in vdrVLine" v-show="item.display" :style="{ left: item.position, top: item.origin, height: item.lineLength }" />
+          <span class="ref-line h-line" v-for="item in vdrHLine" v-show="item.display" :style="{ top: item.position, left: item.origin, width: item.lineLength }" />
+          <!--辅助线END-->
+          <!-- <vue-draggable-resizable
+            :disableUserSelect="true"
+            :lock-aspect-ratio="true"
+            :parent="true"
+            :w="computedProps(item.width, 160)"
+            :h="computedProps(item.height, 160)"
+            :x="computedProps(item.axis.x, 0)"
+            :y="computedProps(item.axis.y, 0)"
+            :z="computedProps(item.level, 0)"
+            :grid="[10, 10]"
+            v-for="item in editerList"
+            :key="item.id"
+            class-name="vdr no-border"
+            class-name-active="active-border"
+            @dblclick="handleDoubleClick"
+            @activated="pickerModule(item)"
+            @dragStop="
+              (x:number, y:number) => {
+                dragEndModule(x, y, item);
+              }
+            "
+            @resizeStop="(x:number, y:number,w:number,h:number) => {
+              onResizeStopModule(x, y,w,h,item);
+              }"
+            :active="item.id === activeModuleId"
+          >
+            <moduleView :module="item" :dragger="true"></moduleView>
+          </vue-draggable-resizable> -->
+        </div>
+      </ResizablePanel>
+      <!-- <ResizableHandle id="handle-demo-handle-1" with-handle />
+      <ResizablePanel id="handle-demo-panel-2" :default-size="30" :max-size="35" :min-size="25">
+        <Tabs :modelValue="currentTabItem" class="h-full">
+          <TabsList class="tabsList tabsList_bg p-0">
+            <TabsTrigger :value="$t('views.editer.index.right_tab1')" class="w-24" @click="switchToTab('views.editer.index.right_tab1')">
+              {{ $t("views.editer.index.right_tab1") }}
+            </TabsTrigger>
+            <TabsTrigger :value="$t('views.editer.index.right_tab2')" class="w-24" @click="switchToTab('views.editer.index.right_tab2')">
+              {{ $t("views.editer.index.right_tab2") }}
+            </TabsTrigger>
+          </TabsList>
+          <Separator />
+          <TabsContent :value="$t('views.editer.index.right_tab1')">
+            <ScrollArea class="w-full rounded-md px-4 scrollAreaHeight">
+              <Accordion type="single" class="w-full" collapsible :default-value="defaultValue">
+                <AccordionItem v-for="aitem in accordionItems" :key="aitem.moduleKey" :value="aitem.moduleKey">
+                  <AccordionTrigger>{{ aitem.moduleName }}</AccordionTrigger>
+                  <AccordionContent>
+                    <moduleList v-for="mitem in aitem.moduleList" :key="mitem.id" :value="mitem.id" :module="mitem"></moduleList>
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
+            </ScrollArea>
+          </TabsContent>
+          <TabsContent :value="$t('views.editer.index.right_tab2')">
+            <ScrollArea class="w-full rounded-md p-4 scrollAreaHeight">
+              <attributeView></attributeView>
+            </ScrollArea>
+          </TabsContent>
+        </Tabs>
+      </ResizablePanel> -->
+    </ResizablePanelGroup>
   </div>
 </template>
 
@@ -53,13 +126,18 @@ import { ref, getCurrentInstance, computed, onMounted, onUnmounted } from "vue";
 
 import vdr from "vue-draggable-resizable-gorkys/src/components/vue-draggable-resizable.vue";
 import "vue-draggable-resizable-gorkys/dist/VueDraggableResizable.css";
+
+import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Separator } from "@/components/ui/separator";
 import moduleList from "./components/moduleList.vue";
 import layer from "./components/layer.vue";
+// import layer from "./components/layerBySortable.vue";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import moduleView from "./components/moduleView.vue";
 import attributeView from "./components/attributeView.vue";
 import { storeToRefs } from "pinia";
 import { useI18n } from "vue-i18n";
-
 const { t } = useI18n();
 // console.log(t("views.editer.index.right_tab1"));
 
@@ -87,8 +165,6 @@ const activeModuleId = computed({
   },
   set() {},
 });
-
-const draggerRegionSize = ref({ width: 600, height: 600 });
 
 // const activeModuleType = computed({
 //   get() {
@@ -188,10 +264,10 @@ function getRefLineParams(params: any) {
   vdrHLine.value = hLine;
 }
 
-// function onContextMenu(e: any) {
-//   e.preventDefault();
-//   console.log("e", e);
-// }
+function onContextMenu(e: any) {
+  e.preventDefault();
+  console.log("e", e);
+}
 
 // 滚动逻辑
 // 待使用
@@ -208,58 +284,6 @@ function handleWheel(event: any) {
   }
 }
 
-import "shufflemanvue3-context-menu/lib/vue3-context-menu.css";
-import "@/assets/context-menu.scss";
-
-import ContextMenu from "shufflemanvue3-context-menu";
-import { useColorMode } from "@vueuse/core";
-const mode = useColorMode();
-
-function onContextMenu(e: MouseEvent) {
-  //show our menu
-  ContextMenu.showContextMenu({
-    customClass: "w-[250px]",
-    // theme: `mac ${mode.value}`,
-    x: e.x,
-    y: e.y,
-    items: [
-      {
-        label: "A menu item",
-        onClick: () => {
-          alert("You click a menu item");
-        },
-      },
-      {
-        label: "A submenu",
-        children: [{ label: "Item1" }, { label: "Item2" }, { label: "Item3" }],
-      },
-    ],
-  });
-}
-
-function onContextMenu2(e: MouseEvent) {
-  //show our menu
-  ContextMenu.showContextMenu({
-    customClass: "w-[250px]",
-    x: e.x,
-    y: e.y,
-    items: [
-      {
-        label: "A menu item22",
-        onClick: () => {
-          alert("You click a menu item22");
-        },
-        shortcut: "Ctrl + S",
-      },
-      {
-        label: "A submenu",
-        children: [{ label: "Item12" }, { label: "Item22" }, { label: "Item32" }],
-      },
-    ],
-    // theme: `mac ${mode.value}`,
-  });
-}
-
 onMounted(() => {
   document.addEventListener("keydown", handleKeyEvent);
 });
@@ -273,10 +297,6 @@ onUnmounted(() => {
 </style>
 <style lang="scss">
 .editer_index {
-  .draggerRegionWrapper {
-    position: relative;
-    width: 100vw;
-  }
   .tabsList {
     overflow: auto;
     cursor: pointer;
@@ -295,15 +315,16 @@ onUnmounted(() => {
   }
   .draggerRegion {
     position: relative;
-    margin: auto;
     background-color: hsl(var(--background));
     // background: linear-gradient(-90deg, hsl(var(--border)) 1px, transparent 1px), linear-gradient(hsl(var(--border)) 1px, transparent 1px);
     // background-size: 10px 10px, 10px 10px;
     background-image: linear-gradient(hsl(var(--border)) 2px, transparent 0), linear-gradient(90deg, hsl(var(--border)) 2px, transparent 0), linear-gradient(hsl(var(--border)) 1px, transparent 0),
       linear-gradient(90deg, hsl(var(--border)) 1px, transparent 0);
     background-size: 50px 50px, 50px 50px, 10px 10px, 10px 10px;
-    background-position: -1px -1px;
+    background-position: -2px -2px;
     outline: 2px solid hsl(var(--border));
+    height: 100%;
+    width: 100%;
 
     // overflow: auto;
     transition: transform 0.1s ease-in-out;

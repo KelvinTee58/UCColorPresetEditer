@@ -50,4 +50,10 @@ app.use(i18n);
 // import { filters } from "@/lib/filters.ts";
 // app.config.globalProperties.$filters = filters;
 
+// // 右键逻辑
+// import "shufflemanvue3-context-menu/lib/vue3-context-menu.css";
+// import ContextMenu from "shufflemanvue3-context-menu";
+
+// app.use(ContextMenu);
+
 app.mount("#app");

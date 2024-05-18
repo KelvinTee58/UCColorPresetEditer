@@ -1,0 +1,44 @@
+:root {
+  //Backgroud
+  --mx-menu-backgroud: hsl(var(--popover)); //菜单背景颜色
+  --mx-menu-hover-backgroud: hsl(var(--accent)); //菜单条目鼠标悬浮时的背景颜色
+  --mx-menu-active-backgroud: hsl(var(--accent)); //菜单条目鼠标按下时的背景颜色
+  --mx-menu-open-backgroud: hsl(var(--accent)); //菜单条目子菜单打开时的背景颜色
+  --mx-menu-open-hover-backgroud: hsl(var(--accent)); //菜单条目子菜单打开时悬浮的背景颜色
+  --mx-menu-divider: hsl(var(--border)); //菜单分割线条目颜色
+
+  //Text
+  --mx-menu-text: hsl(var(--popover-foreground)); //菜单文字颜色
+  --mx-menu-hover-text: hsl(var(--accent-foreground)); //菜单条目鼠标悬浮时的文字颜色
+  --mx-menu-active-text: hsl(var(--accent-foreground)); //菜单条目鼠标按下时的文字颜色
+  --mx-menu-open-text: hsl(var(--accent-foreground)); //菜单条目子菜单打开时的文字颜色
+  --mx-menu-open-hover-text: hsl(var(--accent-foreground)); //菜单条目子菜单打开时悬浮的文字颜色
+  --mx-menu-disabled-text: hsla(var(--popover-foreground), 0.5); //菜单条目禁用的文字颜色
+
+  //Shadow
+  --mx-menu-shadow-color: rgba(0, 0, 0, 0.1); //菜单背景阴影颜色
+  --mx-menu-backgroud-radius: calc(var(--radius) - 2px); //菜单背景圆角大小
+
+  //Shortcut badge
+  --mx-menu-shortcut-backgroud: hsla(var(--popover-foreground), 0); //菜单条目禁用的文字颜色
+  --mx-menu-shortcut-backgroud-hover: hsla(var(--popover-foreground), 0); //菜单条目禁用的文字颜色
+  --mx-menu-shortcut-backgroud-active: hsla(var(--popover-foreground), 0); //菜单条目禁用的文字颜色
+  --mx-menu-shortcut-backgroud-open: hsla(var(--popover-foreground), 0); //菜单条目禁用的文字颜色
+  --mx-menu-shortcut-backgroud-disabled: hsla(var(--popover-foreground), 0); //菜单条目禁用的文字颜色
+  --mx-menu-shortcut-text: hsl(var(--muted-foreground)); //菜单快捷键标记的文字颜色，下方是它的四个状态
+  --mx-menu-shortcut-text-hover: hsl(var(--muted-foreground));
+  --mx-menu-shortcut-text-active: hsl(var(--muted-foreground));
+  --mx-menu-shortcut-text-open: hsl(var(--muted-foreground));
+  --mx-menu-shortcut-text-disabled: hsla(var(--popover-foreground), 0.5); //菜单条目禁用的文字颜色
+
+  //Focus border color
+  --mx-menu-focus-color: #0085f1; //菜单项键盘激活时的外框颜色
+
+  //Icon placeholder width
+  --mx-menu-placeholder-width: 2rem; //图标占位区域的宽度
+  .mx-shortcut {
+    color: hsl(var(--muted-foreground));
+    margin-left: auto;
+    letter-spacing: 0.1em;
+  }
+}

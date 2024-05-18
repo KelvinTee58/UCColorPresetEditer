@@ -21,8 +21,8 @@
         "content": {
           "type": "block",
           "label": "",
-          "width": 300,
-          "height": 160,
+          "width": 400,
+          "height": 300,
           "background": "#ff00ff",
           "border": {
             "width": 1,
