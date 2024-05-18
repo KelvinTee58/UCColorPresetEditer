@@ -1,5 +1,6 @@
 <template>
   <div class="editer_index">
+    <div class="moduleList"></div>
     <div class="draggerRegionWrapper h-full-container flex justify-center items-center">
       <div
         class="draggerRegion"

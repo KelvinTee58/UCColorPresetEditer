@@ -1,12 +1,19 @@
-import { RouteRecordRaw } from 'vue-router';
+import { RouteRecordRaw } from "vue-router";
+import { headerMenuLayout } from "@/components/layout";
 
 const routes: RouteRecordRaw[] = [
   {
     path: "/index",
-    component: () => import("@/views/index/index.vue"),
+    component: headerMenuLayout,
     meta: {
       title: "test",
-    }
+    },
+    children: [
+      {
+        path: "",
+        component: () => import("@/views/index/index.vue"),
+      },
+    ],
   },
 ];
 export default routes;

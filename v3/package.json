@@ -21,6 +21,7 @@
     "pinia": "^2.1.7",
     "pinia-plugin-persistedstate": "^3.2.1",
     "radix-vue": "^1.6.1",
+    "react-dnd-html5-backend": "^16.0.1",
     "shufflemanvue3-context-menu": "^0.0.1",
     "sortablejs": "^1.15.2",
     "tailwind-merge": "^2.2.2",
@@ -36,6 +37,7 @@
     "vue-virtual-draglist": "^3.2.3",
     "vue-zoomable": "^1.1.9",
     "vue-zoomable-ktee": "^1.1.11",
+    "vue3-dnd": "^2.1.0",
     "zod": "^3.23.6"
   },
   "devDependencies": {
