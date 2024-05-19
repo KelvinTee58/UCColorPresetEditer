@@ -1,22 +1,9 @@
 <template>
-  <div class="pb-2 flex justify-center">
-    <Card class="w-[350px]">
-      <CardHeader>
-        <CardTitle>{{ module.name }}</CardTitle>
-        <CardDescription v-if="module.description">{{ module.description }}</CardDescription>
-      </CardHeader>
-      <CardContent class="flex justify-center">
-        <div class="w-32 h-32 border rounded p-3">
-          <moduleView v-bind="$props"></moduleView>
-        </div>
-      </CardContent>
-      <CardFooter class="flex justify-start px-6 pb-6">
-        <Button variant="outline" @click="AddDraggable"> ADD </Button>
-      </CardFooter>
-    </Card>
+  <div class="w-8 h-8 m-auto cursor-move" role="Box" :ref="drag" :style="{ opacity }" :data-testid="`box-${props.module.id}`">
+    <moduleView v-bind="$props"></moduleView>
   </div>
 </template>
-<script setup>
+<script lang="ts" setup>
 import moduleView from "./moduleView.vue";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { defineProps, getCurrentInstance } from "vue";
@@ -32,6 +19,36 @@ const props = defineProps({
 function AddDraggable() {
   proxy.$store.editerList.useCounterStore().addModuleItem(props.module);
 }
+// interface DropResult {
+//   name: string;
+// }
+
+import { useDrag } from "vue3-dnd";
+import { computed, unref } from "vue";
+import { toRefs } from "@vueuse/core";
+
+const [collect, drag] = useDrag(() => ({
+  type: "box",
+  item: props.module,
+  // end: (item, monitor) => {
+  //   // const dropResult = monitor.getDropResult<DropResult>();
+  //   // if (item && dropResult) {
+  //   //   alert(`You dropped ${item.name} into ${dropResult.name}!`);
+  //   // }
+  //   console.log("item", item);
+  // },
+  options: {
+    dropEffect: "copy",
+  },
+  collect: (monitor) => ({
+    isDragging: monitor.isDragging(),
+    handlerId: monitor.getHandlerId(),
+  }),
+}));
+
+const { isDragging } = toRefs(collect);
+
+const opacity = computed(() => (unref(isDragging) ? 0.4 : 1));
 </script>
 
 <style lang="scss" scoped></style>

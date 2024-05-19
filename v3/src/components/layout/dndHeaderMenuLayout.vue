@@ -54,11 +54,11 @@
       </Transition> -->
 
       <router-view v-slot="{ Component }">
-        <transition name="page" mode="out-in">
-          <DndProvider :backend="HTML5Backend">
+        <DndProvider :backend="HTML5Backend">
+          <transition name="page" mode="out-in">
             <component :is="Component" />
-          </DndProvider>
-        </transition>
+          </transition>
+        </DndProvider>
       </router-view>
     </div>
   </div>

@@ -1,12 +1,30 @@
 <template>
   <div class="editer_index">
-    <div class="moduleList"></div>
-    <div class="draggerRegionWrapper h-full-container flex justify-center items-center">
+    <div class="moduleList">
+      <Panel class="h-5/6 w-1/6 min-w-56 absolute my-5 left-5" :label="$t('views.editer.index.left_tab1')">
+        <Accordion type="single" class="w-full" collapsible :default-value="defaultValue">
+          <AccordionItem v-for="aitem in accordionItems" :key="aitem.moduleKey" :value="aitem.moduleKey">
+            <AccordionTriggerLeft class="select-none">
+              {{ aitem.moduleName }}
+            </AccordionTriggerLeft>
+            <AccordionContent class="grid grid-cols-5 gap-x-1 gap-y-2 justify-center">
+              <moduleList v-for="mitem in aitem.moduleList" :key="mitem.id" :value="mitem.id" :module="mitem"></moduleList>
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
+      </Panel>
+    </div>
+    <div class="moduleList">
+      <Panel class="h-5/6 w-1/6 min-w-52 absolute my-5 right-5"></Panel>
+    </div>
+    <div class="draggerRegionWrapper h-full-container flex justify-center items-center z-20">
       <div
         class="draggerRegion"
         @contextmenu.prevent.stop="onContextMenu"
         @wheel="handleWheel"
         :style="{ transform: `scale(${scale})`, width: `${draggerRegionSize.width}px`, height: `${draggerRegionSize.height}px` }"
+        :ref="drop"
+        id="drop"
       >
         <vdr
           :disableUserSelect="true"
@@ -36,7 +54,11 @@
           :snap="true"
           :snap-tolerance="20"
           @refLineParams="getRefLineParams"
-          @contextmenu.prevent.stop="onContextMenu2"
+          @contextmenu.prevent.stop="
+            (event) => {
+              onObjectsContextMenu(event, item);
+            }
+          "
         >
           <moduleView :module="item" :dragger="true"></moduleView>
         </vdr>
@@ -50,16 +72,19 @@
 </template>
 
 <script setup lang="ts">
-import { ref, getCurrentInstance, computed, onMounted, onUnmounted } from "vue";
+import { ref, getCurrentInstance, computed, onMounted, onUnmounted, unref } from "vue";
 
 import vdr from "vue-draggable-resizable-gorkys/src/components/vue-draggable-resizable.vue";
 import "vue-draggable-resizable-gorkys/dist/VueDraggableResizable.css";
+import { Panel } from "@/components/ui/floatingSidePanel_kz";
 import moduleList from "./components/moduleList.vue";
-import layer from "./components/layer.vue";
+// import layer from "./components/layer.vue";
 import moduleView from "./components/moduleView.vue";
-import attributeView from "./components/attributeView.vue";
+// import attributeView from "./components/attributeView.vue";
 import { storeToRefs } from "pinia";
 import { useI18n } from "vue-i18n";
+import { filters } from "@/lib/filters.ts";
+// import { useToast } from "@/components/ui/toast/use-toast";
 
 const { t } = useI18n();
 // console.log(t("views.editer.index.right_tab1"));
@@ -98,11 +123,11 @@ const draggerRegionSize = ref({ width: 600, height: 600 });
 //   set() {},
 // });
 
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { Accordion, AccordionContent, AccordionItem, AccordionTriggerLeft, AccordionTrigger } from "@/components/ui/accordion";
 import testData from "@/data/test.json";
 // const defaultValue = "IMAGE";
-// const defaultValue = "BLOCK";
-const defaultValue = "FONT";
+const defaultValue = "BLOCK";
+// const defaultValue = "FONT";
 
 const accordionItems = testData;
 const currentTabItem = ref(t("views.editer.index.right_tab1"));
@@ -213,9 +238,6 @@ import "shufflemanvue3-context-menu/lib/vue3-context-menu.css";
 import "@/assets/context-menu.scss";
 
 import ContextMenu from "shufflemanvue3-context-menu";
-import { useColorMode } from "@vueuse/core";
-const mode = useColorMode();
-
 function onContextMenu(e: MouseEvent) {
   //show our menu
   ContextMenu.showContextMenu({
@@ -238,7 +260,7 @@ function onContextMenu(e: MouseEvent) {
   });
 }
 
-function onContextMenu2(e: MouseEvent) {
+function onObjectsContextMenu(e: MouseEvent, item: any) {
   //show our menu
   ContextMenu.showContextMenu({
     customClass: "w-[250px]",
@@ -246,20 +268,61 @@ function onContextMenu2(e: MouseEvent) {
     y: e.y,
     items: [
       {
-        label: "A menu item22",
+        label: t("views.editer.index.object_context_menu.delete"),
         onClick: () => {
-          alert("You click a menu item22");
+          // alert("You click a menu item22");
+          let id = get(item, "id", undefined);
+          editerListStore.removeModuleItem([id], { type: "delete", description: "移除" });
         },
-        shortcut: "Ctrl + S",
+        shortcut: filters.getUserAgentCtrlShortcutKey("←"),
       },
-      {
-        label: "A submenu",
-        children: [{ label: "Item12" }, { label: "Item22" }, { label: "Item32" }],
-      },
+      // {
+      //   label: "A submenu",
+      //   children: [{ label: "Item12" }, { label: "Item22" }, { label: "Item32" }],
+      // },
     ],
     // theme: `mac ${mode.value}`,
   });
 }
+
+import { useDrop } from "vue3-dnd";
+import { toRefs } from "@vueuse/core";
+
+const [collect, drop] = useDrop(() => ({
+  accept: "box",
+  drop: (item, monitor) => {
+    let m_x,
+      m_y,
+      d_x,
+      d_y = 0;
+    let drop_Rect = document.getElementById("drop").getBoundingClientRect();
+    let monitor_offset = monitor.getSourceClientOffset();
+    m_x = monitor_offset.x;
+    m_y = monitor_offset.y;
+    d_x = drop_Rect.x;
+    d_y = drop_Rect.y;
+    // 获取当前拖动dom 放置的位置
+    let drop_x = parseInt(m_x - d_x);
+    let drop_y = parseInt(m_y - d_y);
+    console.log("drop getSourceClientOffset", item.content, drop_x, drop_y);
+    if (item.id && item.content.type) {
+      editerListStore.addModuleItem(item, { x: drop_x, y: drop_y });
+    }
+
+    // console.log("drop getInitialClientOffset", monitor.getInitialClientOffset());
+    // console.log("drop getInitialSourceClientOffset", monitor.getInitialSourceClientOffset());
+    // console.log("drop getDifferenceFromInitialOffset", monitor.getDifferenceFromInitialOffset());
+    // console.log("drop getClientOffset", monitor.getClientOffset());
+  },
+  collect: (monitor) => ({
+    isOver: monitor.isOver(),
+    canDrop: monitor.canDrop(),
+  }),
+}));
+const { canDrop, isOver } = toRefs(collect);
+const isActive = computed(() => unref(canDrop) && unref(isOver));
+// const backgroundColor = computed(() => (unref(isActive) ? "darkgreen" : unref(canDrop) ? "darkkhaki" : "#222"));
+const activeColor = computed(() => (unref(isActive) ? "darkgreen" : unref(canDrop) ? "darkkhaki" : "#222"));
 
 onMounted(() => {
   document.addEventListener("keydown", handleKeyEvent);
@@ -277,6 +340,7 @@ onUnmounted(() => {
   .draggerRegionWrapper {
     position: relative;
     width: 100vw;
+    overflow: hidden;
   }
   .tabsList {
     overflow: auto;
@@ -305,7 +369,6 @@ onUnmounted(() => {
     background-size: 50px 50px, 50px 50px, 10px 10px, 10px 10px;
     background-position: -1px -1px;
     outline: 2px solid hsl(var(--border));
-
     // overflow: auto;
     transition: transform 0.1s ease-in-out;
   }

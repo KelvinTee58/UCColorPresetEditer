@@ -12,7 +12,63 @@
           "label": "",
           "width": 300,
           "height": 300,
-          "background": "#ffffff"
+          "background": "#ffffff",
+          "border": {
+            "width": 1,
+            "color": "#000000",
+            "style": "solid"
+          }
+        }
+      },
+      {
+        "id": "block_backgrond0001",
+        "name": "_defalut_background",
+        "description": "this is _defalut_background",
+        "content": {
+          "type": "block",
+          "label": "",
+          "width": 300,
+          "height": 300,
+          "background": "#ffffff",
+          "border": {
+            "width": 1,
+            "color": "#000000",
+            "style": "solid"
+          }
+        }
+      },
+      {
+        "id": "block_backgrond0001",
+        "name": "_defalut_background",
+        "description": "this is _defalut_background",
+        "content": {
+          "type": "block",
+          "label": "",
+          "width": 300,
+          "height": 300,
+          "background": "#ffffff",
+          "border": {
+            "width": 1,
+            "color": "#000000",
+            "style": "solid"
+          }
+        }
+      },
+      {
+        "id": "block_backgrond0001",
+        "name": "_defalut_background",
+        "description": "this is _defalut_background",
+        "content": {
+          "type": "block",
+          "label": "",
+          "width": 300,
+          "height": 300,
+          "background": "#ffffff",
+          "border": {
+            "width": 1,
+            "color": "#000000",
+            "style": "solid"
+          }
         }
       },
       {

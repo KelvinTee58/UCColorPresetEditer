@@ -4,6 +4,8 @@ import { uucBlock, uucImage, uucFont } from "@/data/structure/uuc";
 import { MyObject, axis, fontStyle } from "@/data/structure/uuc_interface";
 import { v4 as uuidv4 } from "uuid";
 import { forIn, get, has, set } from "lodash";
+import { useToast } from "@/components/ui/toast/use-toast";
+const { toast } = useToast();
 
 interface editerRecords {
   r_id: string;
@@ -36,9 +38,8 @@ export const useCounterStore = defineStore(
      * 添加编辑列表的一项
      * @param value
      */
-    function addModuleItem(value: any) {
+    function addModuleItem(value: any, axis: axis = { x: 10, y: 10 }) {
       // 默认初始到页面上的位置
-      const defaultAxis: axis = { x: 10, y: 10 };
       let classContent = value.content;
       const level = editerList.value.length;
       let newItem: uucBlock | undefined = undefined;
@@ -47,14 +48,14 @@ export const useCounterStore = defineStore(
         newItem = new uucBlock({
           ...classContent,
           level,
-          axis: defaultAxis,
+          axis,
           label: labelName,
         });
       } else if (classContent.type == "image") {
         newItem = new uucImage({
           ...classContent,
           level,
-          axis: defaultAxis,
+          axis,
           label: labelName,
           src: "666",
         });
@@ -70,7 +71,7 @@ export const useCounterStore = defineStore(
         newItem = new uucFont({
           ...classContent,
           level,
-          axis: defaultAxis,
+          axis,
           label: labelName,
           font: defaultFont,
         });
@@ -99,7 +100,13 @@ export const useCounterStore = defineStore(
           }
         }
       }
-      if (recordArray.length > 0) pushRecord(recordArray, [], modifyType);
+      if (recordArray.length > 0) {
+        toast({
+          title: "Remove Objects",
+          description: "Remove Objects >> id:" + id_list,
+        });
+        pushRecord(recordArray, [], modifyType);
+      }
     }
 
     /**

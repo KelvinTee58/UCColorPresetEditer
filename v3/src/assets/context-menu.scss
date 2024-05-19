@@ -40,5 +40,9 @@
     color: hsl(var(--muted-foreground));
     margin-left: auto;
     letter-spacing: 0.1em;
+    font-size: 0.75rem;
+  }
+  .mx-context-menu {
+    padding: 0.25rem;
   }
 }
