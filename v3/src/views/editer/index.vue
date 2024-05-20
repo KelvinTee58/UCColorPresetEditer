@@ -1,7 +1,7 @@
 <template>
   <div class="editer_index">
     <div class="moduleList">
-      <Panel class="h-5/6 w-1/6 min-w-56 absolute my-5 left-5" :label="$t('views.editer.index.left_tab1')">
+      <Panel class="h-5/6 w-1/6 min-w-56 max-w-80 absolute my-5 left-5" :label="$t('views.editer.index.left_tab1')">
         <Accordion type="single" class="w-full" collapsible :default-value="defaultValue">
           <AccordionItem v-for="aitem in accordionItems" :key="aitem.moduleKey" :value="aitem.moduleKey">
             <AccordionTriggerLeft class="select-none">
@@ -15,7 +15,18 @@
       </Panel>
     </div>
     <div class="moduleList">
-      <Panel class="h-5/6 w-1/6 min-w-52 absolute my-5 right-5"></Panel>
+      <Panel class="h-5/6 w-1/6 min-w-56 absolute my-5 right-5" :label="$t('views.editer.index.left_tab1')">
+        <Accordion type="single" class="w-full" collapsible :default-value="defaultValue">
+          <AccordionItem v-for="aitem in accordionItems" :key="aitem.moduleKey" :value="aitem.moduleKey">
+            <AccordionTriggerLeft class="select-none">
+              {{ aitem.moduleName }}
+            </AccordionTriggerLeft>
+            <AccordionContent class="grid grid-cols-5 gap-x-1 gap-y-2 justify-center">
+              <moduleList v-for="mitem in aitem.moduleList" :key="mitem.id" :value="mitem.id" :module="mitem"></moduleList>
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
+      </Panel>
     </div>
     <div class="draggerRegionWrapper h-full-container flex justify-center items-center z-20">
       <div
