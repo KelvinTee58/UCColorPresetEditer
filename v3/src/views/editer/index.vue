@@ -17,40 +17,6 @@
     <div class="h-5/6 w-1/6 min-w-56 max-w-80 absolute my-5 right-5">
       <tabsPanel class="h-full w-full relative" :labelList="labelList">
         <template #Style>
-          <H1>uc</H1>
-          <H1>uc</H1>
-          <H1>uc</H1>
-          <H1>uc</H1>
-          <H1>uc</H1>
-          <H1>uc</H1>
-          <H1>uc</H1>
-          <H1>uc</H1>
-          <H1>uc</H1>
-          <H1>uc</H1>
-          <H1>uc</H1>
-          <H1>uc</H1>
-          <H1>uc</H1>
-          <H1>uc</H1>
-          <H1>uc</H1>
-          <H1>uc</H1>
-          <H1>uc</H1>
-          <H1>uc</H1>
-          <H1>uc</H1>
-          <H1>uc</H1>
-          <H1>uc</H1>
-          <H1>uc</H1>
-          <H1>uc</H1>
-          <H1>uc</H1>
-          <H1>uc</H1>
-          <H1>uc</H1>
-          <H1>uc</H1>
-          <H1>uc</H1>
-          <H1>uc</H1>
-          <H1>uc</H1>
-          <H1>uc</H1>
-          <H1>uc</H1>
-          <H1>uc</H1>
-          <H1>uc</H1>
           <Accordion type="single" class="w-full" collapsible :default-value="defaultValue">
             <AccordionItem v-for="aitem in accordionItems" :key="aitem.moduleKey" :value="aitem.moduleKey">
               <AccordionTriggerLeft class="select-none">
