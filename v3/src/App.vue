@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import layout from "@/components/layout/headerMenu.vue";
-import Toaster from '@/components/ui/toast/Toaster.vue'
+// import layout from "@/components/layout/headerMenuLayout.vue";
+import Toaster from "@/components/ui/toast/Toaster.vue";
 </script>
 <
 <style lang="scss" scoped>
@@ -25,6 +25,7 @@ body {
 </style>
 
 <template>
-  <layout />
+  <!-- <layout /> -->
+  <RouterView></RouterView>
   <Toaster />
 </template>

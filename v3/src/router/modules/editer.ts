@@ -1,12 +1,19 @@
-import { RouteRecordRaw } from 'vue-router';
+import { RouteRecordRaw } from "vue-router";
+import { dndHeaderMenuLayout } from "@/components/layout";
 
 const routes: RouteRecordRaw[] = [
   {
     path: "/editer",
-    component: () => import("@/views/editer/index.vue"),
+    component: dndHeaderMenuLayout,
     meta: {
-      title: "test",
-    }
+      title: "editer",
+    },
+    children: [
+      {
+        path: "",
+        component: () => import("@/views/editer/index.vue"),
+      },
+    ],
   },
 ];
 export default routes;

@@ -13,15 +13,15 @@
           <ContextMenuContent class="w-48">
             <ContextMenuItem @click="deleteItem(record)">
               <span>delete</span>
-              <ContextMenuShortcut>{{ ctrlKey }}←</ContextMenuShortcut>
+              <ContextMenuShortcut>{{ filters.getUserAgentCtrlShortcutKey("←") }}</ContextMenuShortcut>
             </ContextMenuItem>
             <ContextMenuItem>
               <span>copy</span>
-              <ContextMenuShortcut>{{ ctrlKey }}C</ContextMenuShortcut>
+              <ContextMenuShortcut>{{ filters.getUserAgentCtrlShortcutKey("C") }}</ContextMenuShortcut>
             </ContextMenuItem>
             <ContextMenuItem>
               <span>paste</span>
-              <ContextMenuShortcut>{{ ctrlKey }}V</ContextMenuShortcut>
+              <ContextMenuShortcut>{{ filters.getUserAgentCtrlShortcutKey("V") }}</ContextMenuShortcut>
             </ContextMenuItem>
           </ContextMenuContent>
         </ContextMenu>
@@ -31,7 +31,8 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, getCurrentInstance, computed, onMounted } from "vue";
+import { ref, getCurrentInstance, computed } from "vue";
+import { filters } from "@/lib/filters.ts";
 
 const virtualRef = ref(null);
 
@@ -42,18 +43,6 @@ import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuShortcut, 
 import { storeToRefs } from "pinia";
 import { get } from "lodash";
 const { proxy } = getCurrentInstance() as any;
-
-const ctrlKey = ref("⌘");
-
-onMounted(() => {
-  const userAgent: any = navigator.userAgent || navigator.vendor;
-
-  if (/mac/i.test(userAgent)) {
-    ctrlKey.value = "⌘ ";
-  } else if (/win/i.test(userAgent)) {
-    ctrlKey.value = "Ctrl+";
-  }
-});
 
 const editerListStoreRefs = storeToRefs(proxy.$store.editerList.useCounterStore());
 const editerListStore = proxy.$store.editerList.useCounterStore();
@@ -67,11 +56,11 @@ const layerList = computed({
   get() {
     return editerListStoreRefs.editerList.value;
   },
-  set(val) {
-    console.log("layerList", layerList);
-    // trigger when drag state changed if you use with `v-model:dataSource`
-    let _list = resetLevel(val);
-    proxy.$store.editerList.useCounterStore().setList(_list);
+  set() {
+    // console.log("layerList", layerList);
+    // // trigger when drag state changed if you use with `v-model:dataSource`
+    // let _list = resetLevel(val);
+    // proxy.$store.editerList.useCounterStore().setList(_list);
   },
 });
 
@@ -120,7 +109,7 @@ function dropEnd(event: any) {
  */
 function deleteItem(value: any) {
   let id = get(value, "id", undefined);
-  editerListStore.removeModuleItem(id, { type: "delete", description: "移除" });
+  editerListStore.removeModuleItem([id], { type: "delete", description: "移除" });
 }
 </script>
 

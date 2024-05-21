@@ -19,9 +19,13 @@
       },
       "editer": {
         "index": {
-          "left_tab1": "LAYER",
+          "left_tab1": "Objects",
           "right_tab1": "MODULE",
-          "right_tab2": "ATTRIBUTE"
+          "right_tab2": "ATTRIBUTE",
+          "object_context_menu": {
+            "delete": "delete"
+          },
+          "drop_context_menu": {}
         }
       }
     }
@@ -46,9 +50,13 @@
       },
       "editer": {
         "index": {
-          "left_tab1": "图层",
+          "left_tab1": "对象",
           "right_tab1": "模块",
-          "right_tab2": "属性"
+          "right_tab2": "属性",
+          "object_context_menu": {
+            "delete": "删除"
+          },
+          "drop_context_menu": {}
         }
       }
     }

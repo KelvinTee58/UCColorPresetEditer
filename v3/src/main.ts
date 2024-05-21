@@ -33,10 +33,9 @@ import api from "@/api";
 app.config.globalProperties.$api = api;
 
 // 本地化
-
 import { createI18n } from "vue-i18n";
 import { en, zh } from "./locales/lang.json";
-import { localStorage } from '@/lib/storage';
+import { localStorage } from "@/lib/storage";
 const i18n = createI18n({
   legacy: false,
   locale: localStorage.get("language") || "en", // 默认语言
@@ -47,5 +46,14 @@ app.use(i18n);
 // 拖拽组件
 // import VueDraggableResizable from "vue-draggable-resizable";
 // app.component("vue-draggable-resizable", VueDraggableResizable);
+
+// import { filters } from "@/lib/filters.ts";
+// app.config.globalProperties.$filters = filters;
+
+// // 右键逻辑
+// import "shufflemanvue3-context-menu/lib/vue3-context-menu.css";
+// import ContextMenu from "shufflemanvue3-context-menu";
+
+// app.use(ContextMenu);
 
 app.mount("#app");
