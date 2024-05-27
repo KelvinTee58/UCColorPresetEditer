@@ -19,8 +19,8 @@ const { proxy } = getCurrentInstance() as any;
 // },
 // });
 
-// const editerViewStoreRefs = storeToRefs(proxy.$store.editerView.useCounterStore());
-const editerViewStore = proxy.$store.editerView.useCounterStore();
+// const editerViewStoreRefs = storeToRefs(proxy.$store.editerView.editerViewStore());
+const editerViewStore = proxy.$store.editerView.editerListStore();
 console.log("editerViewStore.activeModule", editerViewStore.activeModule);
 
 const activeModuleType = computed({

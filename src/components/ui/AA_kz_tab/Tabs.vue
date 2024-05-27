@@ -8,11 +8,12 @@ import { Button } from "../button";
 import { Icon } from "@iconify/vue";
 
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../dropdown-menu";
+import { List } from "lodash";
 
 interface Props {
   themeColor?: string;
-  dropdownPosition?: array<string>;
-  delayDuration: number;
+  dropdownPosition?: List<string | null>;
+  delayDuration?: number;
 }
 // TODO: extract to a separate file
 interface Tab {
@@ -30,7 +31,7 @@ interface TabVisibility {
 const props = withDefaults(defineProps<Props>(), {
   themeColor: "#3b82f6",
   delayDuration: 700,
-  dropdownPosition: [],
+  // dropdownPosition: [],
   // dropdownPosition: ["top", "left"],
   // dropdownPosition: ["top", "right"],
   // dropdownPosition: ["bottom", "left"],

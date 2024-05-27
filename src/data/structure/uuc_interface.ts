@@ -8,6 +8,7 @@ export interface gap {
   bottom: number;
   left: number;
 }
+// 边类型
 export interface border {
   width: number;
   color: string;
@@ -22,9 +23,17 @@ export interface border {
   style: string;
 }
 
+// 坐标轴
 export interface axis {
   x: number;
   y: number;
+}
+
+// 内容填充
+export type fillMode = "none" | "gradient" | "solid";
+export interface fill {
+  mode: fillMode;
+  color: string;
 }
 
 export interface fontStyle {
@@ -58,9 +67,11 @@ export interface uucObject {
   axis: axis;
 
   round?: number;
-  background?: string;
+  // background?: string;
   border?: border;
   padding?: gap;
+  angle?: number;
+  fill?: fill;
 }
 
 export interface uucFontObject extends uucObject {

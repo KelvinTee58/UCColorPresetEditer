@@ -44,12 +44,12 @@ import { storeToRefs } from "pinia";
 import { get } from "lodash";
 const { proxy } = getCurrentInstance() as any;
 
-const editerListStoreRefs = storeToRefs(proxy.$store.editerList.useCounterStore());
-const editerListStore = proxy.$store.editerList.useCounterStore();
-const editerViewStore = proxy.$store.editerView.useCounterStore();
+const editerListStoreRefs = storeToRefs(proxy.$store.editerList.editerListStore());
+const editerListStore = proxy.$store.editerList.editerListStore();
+const editerViewStore = proxy.$store.editerView.editerViewStore();
 
 // function resetList() {
-//   proxy.$store.editerList.useCounterStore().resetList();
+//   proxy.$store.editerList.editerListStore().resetList();
 // }
 
 const layerList = computed({
@@ -60,7 +60,7 @@ const layerList = computed({
     // console.log("layerList", layerList);
     // // trigger when drag state changed if you use with `v-model:dataSource`
     // let _list = resetLevel(val);
-    // proxy.$store.editerList.useCounterStore().setList(_list);
+    // proxy.$store.editerList.editerListStore().setList(_list);
   },
 });
 
@@ -91,7 +91,7 @@ function resetLevel(list = [], startIndex = 0, endIndex = 0) {
 
 // 选中激活的module
 function pickerModule(value: any) {
-  proxy.$store.editerView.useCounterStore().setActiveModule(value);
+  proxy.$store.editerView.editerViewStore().setActiveModule(value);
   // console.log("virtualRef", virtualRef.value);
   if (virtualRef.value) {
     virtualRef.value.scrollToKey(value.id);

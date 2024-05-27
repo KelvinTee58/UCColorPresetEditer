@@ -14,33 +14,18 @@
         </Accordion>
       </Panel>
     </div>
-    <div class="h-5/6 w-1/6 min-w-56 max-w-80 absolute my-5 right-5">
-      <tabsPanel class="h-full w-full relative" :labelList="labelList">
+    <div class="h-5/6 w-1/6 min-w-64 max-w-80 absolute my-5 right-5">
+      <TabsPanel class="h-full w-full relative" :labelList="labelList">
         <template #Style>
-          <Accordion type="single" class="w-full" collapsible :default-value="defaultValue">
-            <AccordionItem v-for="aitem in accordionItems" :key="aitem.moduleKey" :value="aitem.moduleKey">
-              <AccordionTriggerLeft class="select-none">
-                {{ aitem.moduleName }}
-              </AccordionTriggerLeft>
-              <AccordionContent class="grid grid-cols-5 gap-x-1 gap-y-2 justify-center">
-                <moduleList v-for="mitem in aitem.moduleList" :key="mitem.id" :value="mitem.id" :module="mitem"></moduleList>
-              </AccordionContent>
-            </AccordionItem>
-          </Accordion>
+          <attrStyle></attrStyle>
         </template>
-        <template #Style2>
-          <Accordion type="single" class="w-full" collapsible :default-value="defaultValue" #Style2>
-            <AccordionItem v-for="aitem in accordionItems" :key="aitem.moduleKey" :value="aitem.moduleKey">
-              <AccordionTriggerLeft class="select-none">
-                {{ aitem.moduleName }}
-              </AccordionTriggerLeft>
-              <AccordionContent class="grid grid-cols-5 gap-x-1 gap-y-2 justify-center">
-                <moduleList v-for="mitem in aitem.moduleList" :key="mitem.id" :value="mitem.id" :module="mitem"></moduleList>
-              </AccordionContent>
-            </AccordionItem>
-          </Accordion>
+        <template #Text>
+          <attrText></attrText>
         </template>
-      </tabsPanel>
+        <template #Arrange>
+          <attrArrange></attrArrange>
+        </template>
+      </TabsPanel>
     </div>
     <div class="draggerRegionWrapper h-full-container flex justify-center items-center z-20">
       <div
@@ -80,7 +65,8 @@
           :snap-tolerance="20"
           @refLineParams="getRefLineParams"
           @contextmenu.prevent.stop="
-            (event) => {
+            (event:any) => {
+              pickerModule(item);
               onObjectsContextMenu(event, item);
             }
           "
@@ -101,7 +87,7 @@ import { ref, getCurrentInstance, computed, onMounted, onUnmounted, unref } from
 
 import vdr from "vue-draggable-resizable-gorkys/src/components/vue-draggable-resizable.vue";
 import "vue-draggable-resizable-gorkys/dist/VueDraggableResizable.css";
-import { Panel, tabsPanel } from "@/components/ui/floatingSidePanel_kz";
+import { Panel, TabsPanel } from "@/components/ui/AA_kz_floatingSidePanel";
 import moduleList from "./components/moduleList.vue";
 // import layer from "./components/layer.vue";
 import moduleView from "./components/moduleView.vue";
@@ -109,6 +95,8 @@ import moduleView from "./components/moduleView.vue";
 import { storeToRefs } from "pinia";
 import { useI18n } from "vue-i18n";
 import { filters } from "@/lib/filters.ts";
+
+import { attrArrange, attrStyle, attrText } from "./attribute";
 // import { useToast } from "@/components/ui/toast/use-toast";
 
 const { t } = useI18n();
@@ -118,9 +106,9 @@ const { t } = useI18n();
 const { proxy } = getCurrentInstance() as any;
 import { get } from "lodash";
 
-const editerListStoreRefs = storeToRefs(proxy.$store.editerList.useCounterStore());
-const editerListStore = proxy.$store.editerList.useCounterStore();
-const editerViewStore = proxy.$store.editerView.useCounterStore();
+const editerListStoreRefs = storeToRefs(proxy.$store.editerList.editerListStore());
+const editerListStore = proxy.$store.editerList.editerListStore();
+const editerViewStore = proxy.$store.editerView.editerViewStore();
 const editerList = computed({
   get() {
     return editerListStoreRefs.editerList.value;
@@ -128,7 +116,7 @@ const editerList = computed({
   set(val) {
     // trigger when drag state changed if you use with `v-model:dataSource`
 
-    proxy.$store.editerList.useCounterStore().setList(val);
+    proxy.$store.editerList.editerListStore().setList(val);
   },
 });
 
@@ -140,7 +128,12 @@ const activeModuleId = computed({
 });
 
 const draggerRegionSize = ref({ width: 600, height: 600 });
-const labelList = ref([{ name: "Style", icon: "radix-icons:moon" }, { name: "Style2", icon: "radix-icons:dots-vertical" }, { name: "Style3" }, { name: "Style4" }]);
+// const labelList = ref([{ name: "Style", icon: "radix-icons:moon" }, { name: "Text", icon: "radix-icons:dots-vertical" }, { name: "Arrange" }, { name: "Style4" }]);
+const labelList = ref([
+  { name: "Style", icon: "radix-icons:transparency-grid" },
+  { name: "Text", icon: "radix-icons:text" },
+  { name: "Arrange", icon: "radix-icons:group" },
+]);
 
 // const activeModuleType = computed({
 //   get() {
@@ -172,7 +165,7 @@ function handleDoubleClick() {
 
 // 选中激活的module
 function pickerModule(value: any) {
-  proxy.$store.editerView.useCounterStore().setActiveModule(value);
+  proxy.$store.editerView.editerViewStore().setActiveModule(value);
 }
 
 /**
@@ -384,20 +377,33 @@ onUnmounted(() => {
   .no-border {
     border: 0px solid #00000000;
   }
+  $borderWidth: 0.5px;
   .draggerRegion {
     position: relative;
     margin: auto;
     background-color: hsl(var(--background));
-    // background: linear-gradient(-90deg, hsl(var(--border)) 1px, transparent 1px), linear-gradient(hsl(var(--border)) 1px, transparent 1px);
-    // background-size: 10px 10px, 10px 10px;
-    background-image: linear-gradient(hsl(var(--border)) 2px, transparent 0), linear-gradient(90deg, hsl(var(--border)) 2px, transparent 0), linear-gradient(hsl(var(--border)) 1px, transparent 0),
-      linear-gradient(90deg, hsl(var(--border)) 1px, transparent 0);
+    background-image: linear-gradient(hsl(var(--border)) $borderWidth * 2, transparent 0), linear-gradient(90deg, hsl(var(--border)) $borderWidth * 2, transparent 0),
+      linear-gradient(hsl(var(--border)) $borderWidth, transparent 0), linear-gradient(90deg, hsl(var(--border)) $borderWidth, transparent 0);
     background-size: 50px 50px, 50px 50px, 10px 10px, 10px 10px;
-    background-position: -1px -1px;
+    background-position: -1 * $borderWidth -1 * $borderWidth;
     outline: 2px solid hsl(var(--border));
     // overflow: auto;
     transition: transform 0.1s ease-in-out;
   }
+  // .draggerRegion {
+  //   position: relative;
+  //   margin: auto;
+  //   background-color: hsl(var(--background));
+  //   // background: linear-gradient(-90deg, hsl(var(--border)) 1px, transparent 1px), linear-gradient(hsl(var(--border)) 1px, transparent 1px);
+  //   // background-size: 10px 10px, 10px 10px;
+  //   background-image: linear-gradient(hsl(var(--border)) 2px, transparent 0), linear-gradient(90deg, hsl(var(--border)) 2px, transparent 0), linear-gradient(hsl(var(--border)) 1px, transparent 0),
+  //     linear-gradient(90deg, hsl(var(--border)) 1px, transparent 0);
+  //   background-size: 50px 50px, 50px 50px, 10px 10px, 10px 10px;
+  //   background-position: -1px -1px;
+  //   outline: 2px solid hsl(var(--border));
+  //   // overflow: auto;
+  //   transition: transform 0.1s ease-in-out;
+  // }
   .active-border {
     // box-shadow: 0 0 5px hsl(var(--accent-foreground));
     .moduleView {

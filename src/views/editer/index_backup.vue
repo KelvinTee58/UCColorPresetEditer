@@ -145,9 +145,9 @@ const { t } = useI18n();
 const { proxy } = getCurrentInstance() as any;
 import { get } from "lodash";
 
-const editerListStoreRefs = storeToRefs(proxy.$store.editerList.useCounterStore());
-const editerListStore = proxy.$store.editerList.useCounterStore();
-const editerViewStore = proxy.$store.editerView.useCounterStore();
+const editerListStoreRefs = storeToRefs(proxy.$store.editerList.editerListStore());
+const editerListStore = proxy.$store.editerList.editerListStore();
+const editerViewStore = proxy.$store.editerView.editerViewStore();
 const editerList = computed({
   get() {
     return editerListStoreRefs.editerList.value;
@@ -155,7 +155,7 @@ const editerList = computed({
   set(val) {
     // trigger when drag state changed if you use with `v-model:dataSource`
 
-    proxy.$store.editerList.useCounterStore().setList(val);
+    proxy.$store.editerList.editerListStore().setList(val);
   },
 });
 
@@ -196,7 +196,7 @@ function handleDoubleClick() {
 
 // 选中激活的module
 function pickerModule(value: any) {
-  proxy.$store.editerView.useCounterStore().setActiveModule(value);
+  proxy.$store.editerView.editerViewStore().setActiveModule(value);
 }
 
 /**

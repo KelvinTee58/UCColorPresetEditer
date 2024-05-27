@@ -12,74 +12,71 @@
           "label": "",
           "width": 300,
           "height": 300,
-          "background": "#ffffff",
+          "fill": {
+            "color": "",
+            "mode": "none"
+          },
           "border": {
             "width": 1,
-            "color": "#000000",
-            "style": "solid"
-          }
-        }
-      },
-      {
-        "id": "block_backgrond0001",
-        "name": "_defalut_background",
-        "description": "this is _defalut_background",
-        "content": {
-          "type": "block",
-          "label": "",
-          "width": 300,
-          "height": 300,
-          "background": "#ffffff",
-          "border": {
-            "width": 1,
-            "color": "#000000",
-            "style": "solid"
-          }
-        }
-      },
-      {
-        "id": "block_backgrond0001",
-        "name": "_defalut_background",
-        "description": "this is _defalut_background",
-        "content": {
-          "type": "block",
-          "label": "",
-          "width": 300,
-          "height": 300,
-          "background": "#ffffff",
-          "border": {
-            "width": 1,
-            "color": "#000000",
-            "style": "solid"
-          }
-        }
-      },
-      {
-        "id": "block_backgrond0001",
-        "name": "_defalut_background",
-        "description": "this is _defalut_background",
-        "content": {
-          "type": "block",
-          "label": "",
-          "width": 300,
-          "height": 300,
-          "background": "#ffffff",
-          "border": {
-            "width": 1,
-            "color": "#000000",
+            "color": "#0000ff",
             "style": "solid"
           }
         }
       },
       {
         "id": "block_backgrond0002",
-        "name": "_defalut_background2",
+        "name": "_defalut_background",
+        "description": "this is _defalut_background",
         "content": {
           "type": "block",
           "label": "",
-          "width": 400,
+          "width": 300,
           "height": 300,
-          "background": "#ff00ff",
+          "fill": {
+            "color": "#ffff00",
+            "mode": "solid"
+          },
+          "border": {
+            "width": 1,
+            "color": "#000000",
+            "style": "solid"
+          }
+        }
+      },
+      {
+        "id": "block_backgrond0003",
+        "name": "_defalut_background",
+        "description": "this is _defalut_background",
+        "content": {
+          "type": "block",
+          "label": "",
+          "width": 300,
+          "height": 300,
+          "fill": {
+            "color": "#ffffff",
+            "mode": "solid"
+          },
+          "border": {
+            "width": 1,
+            "color": "#000000",
+            "style": "solid"
+          }
+        }
+      },
+      {
+        "id": "block_backgrond0004",
+        "name": "_defalut_background",
+        "description": "this is _defalut_background",
+        "content": {
+          "type": "block",
+          "label": "",
+          "width": 300,
+          "height": 300,
+          "fill": {
+            "color": "linear-gradient(90deg, rgb(58, 194, 58) 0%, rgb(0, 0, 255) 100%)",
+            "mode": "gradient"
+          },
+          "round": 10,
           "border": {
             "width": 1,
             "color": "#000000",
@@ -100,7 +97,10 @@
           "type": "image",
           "width": 120,
           "height": 100,
-          "background": "#000000",
+          "fill": {
+            "color": "#ffffff",
+            "mode": "none"
+          },
           "label": "",
           "src": ""
         }
@@ -118,7 +118,10 @@
           "type": "font",
           "width": 120,
           "height": 30,
-          "background": "#000000",
+          "fill": {
+            "color": "#ffffff",
+            "mode": "none"
+          },
           "label": "_default_font",
           "font": {
             "size": 10,

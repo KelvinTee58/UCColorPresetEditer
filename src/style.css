@@ -39,7 +39,7 @@ button {
   border-radius: 8px;
   border: 1px solid transparent;
   /* padding: 0.6em 1.2em; */
-  font-size: 1em;     
+  font-size: 1em;
   font-weight: 500;
   font-family: inherit;
   /* background-color: #1a1a1a; */
@@ -49,12 +49,10 @@ button {
 /* button:hover {
   border-color: #646cff;
 } */
-/* button:focus,
+/* button:focus, */
 button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-} */
-
-
+  outline: 4px auto hsl(var(--ring));
+}
 
 .card {
   padding: 2em;
@@ -67,7 +65,7 @@ button:focus-visible {
   text-align: center;
 }
 
- /* 无法手动操作，根据浏览器进行 */
+/* 无法手动操作，根据浏览器进行 */
 @media (prefers-color-scheme: light) {
   /* :root {
     color: #213547;
@@ -78,7 +76,7 @@ button:focus-visible {
   } */
 }
 
- /* 无法手动操作，根据浏览器进行 */
+/* 无法手动操作，根据浏览器进行 */
 @media (prefers-color-scheme: dark) {
   /* :root {
     background-color: #00ff00;
@@ -95,4 +93,25 @@ button:focus-visible {
   z-index: 99;
 }
 
-
+.bg-checkerboard {
+  background:
+    linear-gradient(
+        45deg,
+        rgba(0, 0, 0, 0.18) 25%,
+        transparent 25%,
+        transparent 75%,
+        rgba(0, 0, 0, 0.18) 75%,
+        rgba(0, 0, 0, 0.18) 0px
+      )
+      0px 0px / 14px 14px repeat padding-box border-box,
+    linear-gradient(
+        45deg,
+        rgba(0, 0, 0, 0.18) 25%,
+        transparent 25%,
+        transparent 75%,
+        rgba(0, 0, 0, 0.18) 75%,
+        rgba(0, 0, 0, 0.18) 0px
+      )
+      7px 7px / 14px 14px repeat padding-box border-box,
+    white;
+}

@@ -1,16 +1,18 @@
 <script setup lang="ts">
-import { Tabs, Tab } from "../tab_kz";
+import { Tabs, Tab } from "../AA_kz_tab";
 import { cn } from "@/lib/utils";
 import { Icon } from "@iconify/vue";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { ScrollArea } from "../scroll-area";
+import { type HTMLAttributes } from "vue";
 
-interface MyObject {
-  [key: string]: unknown;
+interface LabelList {
+  name: string;
+  icon: string;
 }
 
 const props = defineProps<{
   class?: HTMLAttributes["class"];
-  labelList?: list<MyObject>;
+  labelList?: Array<LabelList>;
 }>();
 </script>
 
@@ -28,3 +30,4 @@ const props = defineProps<{
     </Tabs>
   </div>
 </template>
+../AA_kz_tab

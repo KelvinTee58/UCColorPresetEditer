@@ -17,7 +17,7 @@ const props = defineProps({
   },
 });
 function AddDraggable() {
-  proxy.$store.editerList.useCounterStore().addModuleItem(props.module);
+  proxy.$store.editerList.editerListStore().addModuleItem(props.module);
 }
 // interface DropResult {
 //   name: string;

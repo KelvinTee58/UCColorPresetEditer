@@ -18,9 +18,6 @@ module.exports = {
         ...defaultTheme.screens,
       },
     },
-    fontSize: {
-      // "smH1":[]
-    },
 
     extend: {
       height: {

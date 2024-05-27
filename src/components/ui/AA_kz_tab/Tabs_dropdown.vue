@@ -6,7 +6,7 @@ import { useElementVisibility } from "@vueuse/core";
 
 interface Props {
   themeColor?: string;
-  dropdownPosition?: array<string>;
+  dropdownPosition?: Array<String>;
   delayDuration: number;
 }
 // TODO: extract to a separate file
@@ -25,7 +25,7 @@ interface TabVisibility {
 const props = withDefaults(defineProps<Props>(), {
   themeColor: "#3b82f6",
   delayDuration: 700,
-  dropdownPosition: [],
+  // dropdownPosition: [],
   // dropdownPosition: ["top", "left"],
   // dropdownPosition: ["top", "right"],
   // dropdownPosition: ["bottom", "left"],

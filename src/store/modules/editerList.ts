@@ -14,13 +14,14 @@ interface editerRecords {
   modifyType: MyObject;
 }
 
-export const useCounterStore = defineStore(
+export const editerListStore = defineStore(
   "editerList",
   () => {
     // 数据列表
     const editerList: any = ref([]);
     // 操作记录
     const editerListRecords = ref<editerRecords[]>([]);
+
     function pushList(value: any) {
       editerList.value.push(value);
     }
@@ -116,6 +117,7 @@ export const useCounterStore = defineStore(
      * @param modifyType 记录的详细内容
      */
     function setModuleItem(modifyArray: Array<MyObject> | MyObject, modifyType: any) {
+      // console.log("setModuleItem :>> ");
       let cModifyArray = Array.isArray(modifyArray) ? modifyArray : [modifyArray];
 
       let el = JSON.parse(JSON.stringify(editerList.value));

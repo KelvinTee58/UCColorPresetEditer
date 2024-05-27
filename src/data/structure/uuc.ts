@@ -1,5 +1,5 @@
 import { v4 as uuidv4, validate } from "uuid";
-import { gap, border, axis, fontStyle, uucObject, uucFontObject, uucImageObject } from "./uuc_interface";
+import { gap, border, fill, axis, fontStyle, uucObject, uucFontObject, uucImageObject } from "./uuc_interface";
 
 class uucBlock implements uucObject {
   id: string;
@@ -11,10 +11,13 @@ class uucBlock implements uucObject {
   width: number;
   height: number;
 
+  // 可选
   round?: number;
-  background?: string;
+  // background?: string;
   border?: border;
   padding?: gap;
+  angle?: number;
+  fill?: fill;
 
   constructor(object: uucObject) {
     // 自身属性
@@ -29,10 +32,12 @@ class uucBlock implements uucObject {
     this.height = object.height ? object.height : 10;
 
     // 可选属性
+    this.angle = object.angle;
     this.round = object.round;
-    this.background = object.background;
+    // this.background = object.background;
     this.border = object.border;
     this.padding = object.padding;
+    this.fill = object.fill;
   }
 }
 

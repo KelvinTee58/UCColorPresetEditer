@@ -1,11 +1,13 @@
 <template>
-  <div class="w-full h-full select-none moduleView" :style="{ background: blcok_bg, border: blcok_border }"></div>
-  <!-- {{ blcok_border }} -->
+  <div class="w-full h-full" :class="{ 'bg-checkerboard': !props.dragger }">
+    <div class="w-full h-full select-none moduleView" :style="{ ...blcok_bg, border: blcok_border }"></div>
+  </div>
   <!-- {{ module }} -->
 </template>
 <script setup lang="ts">
 import { defineProps, computed } from "vue";
 import { get } from "lodash";
+import { MyObject } from "@/data/structure/uuc_interface";
 
 const props = defineProps({
   module: {
@@ -42,8 +44,17 @@ const blcok_border = computed({
 
 const blcok_bg = computed({
   get: () => {
+    let bg: MyObject = {};
+    let cfill = get(props, `${draggerPath.value}.fill`, "");
+    if (cfill.mode == "none") {
+      bg["background"] = "";
+    } else if (cfill.mode == "gradient") {
+      bg["background-image"] = get(props, `${draggerPath.value}.fill.color`, "");
+    } else {
+      bg["background"] = get(props, `${draggerPath.value}.fill.color`, "");
+    }
     // console.log("props.module", props.dragger, get(props, `${draggerPath.value}.background`, ""));
-    return get(props, `${draggerPath.value}.background`, "");
+    return bg;
   },
   set: () => {},
 });

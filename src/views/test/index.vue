@@ -1,4 +1,3 @@
-<!--  -->
 <template>
   <ContextMenu>
     <ContextMenuTrigger class="flex h-[150px] w-[300px] items-center justify-center rounded-md border border-dashed text-sm"> Right click here </ContextMenuTrigger>
@@ -48,6 +47,7 @@
   <button @click="increment">add</button>
   <button @click="$store.test.useCounterStore().increment">add2</button>
   <button @click="testApi">testapi</button> -->
+  <Button @click="updateData()">45</Button>
   <h1>UC.</h1>
 
   <!--使用方法与之前的一样-->
@@ -98,8 +98,9 @@ import {
   ContextMenuSubTrigger,
   ContextMenuTrigger,
 } from "@/components/ui/context-menu";
+import { Button } from "@/components/ui/button";
 
-import MyContextMenu from "@/components/ui/context-menu-kz/index.vue"; //导入上面的组件
+// import MyContextMenu from "@/components/ui/context-menu-kz/index.vue"; //导入上面的组件
 import { getCurrentInstance, ref } from "vue";
 import { storeToRefs } from "pinia";
 const { proxy } = getCurrentInstance();
@@ -127,6 +128,12 @@ function onContextMenu(e) {
 
 function alertContextMenuItemClicked(name) {
   alert(name);
+}
+
+const editerViewStore = proxy.$store.editerView.editerViewStore();
+
+function updateData() {
+  editerViewStore.editerModule();
 }
 </script>
 <style lang="scss" scoped>
