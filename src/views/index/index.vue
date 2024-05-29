@@ -4,7 +4,7 @@
     <div class="relative h-full">
       <!-- <h1 class="h1_container absolute left-1/2 transform" v-for="index in h1Count" :key="index" :style="{ opacity: getOpacity(index), top: getTop(index) }">UC.camera</h1> -->
       <div class="absolute transform left-1/2 top-1/2" @mouseenter="handleMouseEnter" @mouseleave="handleMouseLeave">
-        <h1 class="h1_size h1_container relative" v-for="index in h1Count" :key="index" :style="{ opacity: getOpacity(index) }">UC.camera</h1>
+        <h1 class="h1_size h1_container relative ts" v-for="index in h1Count" :key="index" :style="{ opacity: getOpacity(index) }">UC.camera</h1>
       </div>
       <Button variant="outline" class="absolute left-1/2 top-1/2 nextButton transform" v-show="isHover" @click="nextClick" @mouseenter="handleMouseEnter" @mouseleave="handleMouseLeave">
         {{ $t("views.index.index.next") }}
@@ -68,6 +68,10 @@ function nextClick() {
 }
 </script>
 <style lang="scss" scoped>
+.ts {
+  // transform: rotateX(74deg);
+  // background-image: radial-gradient(circle at 50% 50%, rgb(0, 0, 0) 0%, rgb(255, 255, 255) 100%);
+}
 h1 {
   display: inline-block;
 }

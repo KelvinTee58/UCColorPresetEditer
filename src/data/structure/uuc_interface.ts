@@ -8,6 +8,8 @@ export interface gap {
   bottom: number;
   left: number;
 }
+
+export type borderStyle = "none" | "dotted" | "dashed" | "solid" | "double";
 // 边类型
 export interface border {
   width: number;
@@ -15,18 +17,24 @@ export interface border {
 
   // # style
   // none	无边框
-  // hidden	隐藏边框，与 "none" 类似
+  // hidden	隐藏边框，与 "none" 类似 (不需要，废弃)
   // dotted	定义点状虚线边框
   // dashed	定义虚线边框
   // solid	定义实线边框
   // double	定义双实线边框，双实线边框的宽度等于 border-width 的值
-  style: string;
+  style: borderStyle | string;
 }
 
 // 坐标轴
 export interface axis {
   x: number;
   y: number;
+}
+
+export interface size {
+  width: number;
+  height: number;
+  "lockAspectRatio": boolean;
 }
 
 // 内容填充
@@ -62,9 +70,10 @@ export interface uucObject {
   type: string;
   label: string;
   level: number;
-  width: number;
-  height: number;
+  // width: number;
+  // height: number;
   axis: axis;
+  size: size;
 
   round?: number;
   // background?: string;

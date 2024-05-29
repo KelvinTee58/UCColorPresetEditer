@@ -1,5 +1,5 @@
 import { v4 as uuidv4, validate } from "uuid";
-import { gap, border, fill, axis, fontStyle, uucObject, uucFontObject, uucImageObject } from "./uuc_interface";
+import { gap, border, fill, size, axis, fontStyle, uucObject, uucFontObject, uucImageObject } from "./uuc_interface";
 
 class uucBlock implements uucObject {
   id: string;
@@ -8,8 +8,9 @@ class uucBlock implements uucObject {
   // gap: gap;
   level: number;
   axis: axis;
-  width: number;
-  height: number;
+  // width: number;
+  // height: number;
+  size: size;
 
   // 可选
   round?: number;
@@ -28,8 +29,14 @@ class uucBlock implements uucObject {
     this.label = object.label;
     this.level = object.level;
     this.axis = object.axis;
-    this.width = object.width ? object.width : 10;
-    this.height = object.height ? object.height : 10;
+
+    this.size = object.size;
+    // this.width = object.width ? object.width : 10;
+    // this.height = object.height ? object.height : 10;
+    this.size.width = object.size.width ? object.size.width : 10;
+    this.size.height = object.size.height ? object.size.height : 10;
+    // lockAspectRatio 默认值是true
+    this.size["lockAspectRatio"] = object.size["lockAspectRatio"] !== undefined ? object.size["lockAspectRatio"] : true;
 
     // 可选属性
     this.angle = object.angle;

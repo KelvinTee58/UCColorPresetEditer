@@ -56,4 +56,19 @@ app.use(i18n);
 
 // app.use(ContextMenu);
 
+// // 点击外部
+// app.directive("click-outside", {
+//   beforeMount(el, binding) {
+//     el.clickOutsideEvent = (event: any) => {
+//       if (el.contains && !(el === event.target || el.contains(event.target))) {
+//         binding.value(event);
+//       }
+//     };
+//     document.addEventListener("click", el.clickOutsideEvent);
+//   },
+//   unmounted(el) {
+//     document.removeEventListener("click", el.clickOutsideEvent);
+//   },
+// });
+
 app.mount("#app");

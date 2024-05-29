@@ -8,18 +8,20 @@ import { type HTMLAttributes } from "vue";
 interface LabelList {
   name: string;
   icon: string;
+  disabled?: boolean;
 }
 
 const props = defineProps<{
   class?: HTMLAttributes["class"];
   labelList?: Array<LabelList>;
+  value: string;
 }>();
 </script>
 
 <template>
   <div :class="cn('z-[40] rounded-lg border bg-card text-card-foreground shadow-sm border-border', props.class)">
-    <Tabs class="h-full w-full">
-      <Tab :value="labelItem.name" v-for="labelItem in labelList" class="select-none w-full mt-0" :style="{ height: 'calc(100% - 2.25rem)' }">
+    <Tabs class="h-full w-full" v-model="props.value">
+      <Tab :disabled="labelItem.disabled" :value="labelItem.name" v-for="labelItem in labelList" class="select-none w-full mt-0" :style="{ height: 'calc(100% - 2.25rem)' }">
         <template #icon>
           <Icon :icon="labelItem.icon" v-if="labelItem.icon" class="h-[0.9em] w-[0.9rem] mr-1" />
         </template>

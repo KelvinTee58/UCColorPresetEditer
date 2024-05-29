@@ -15,7 +15,7 @@
       </Panel>
     </div>
     <div class="h-5/6 w-1/6 min-w-64 max-w-80 absolute my-5 right-5">
-      <TabsPanel class="h-full w-full relative" :labelList="labelList">
+      <TabsPanel class="h-full w-full relative" :labelList="labelList" :value="'Arrange'">
         <template #Style>
           <attrStyle></attrStyle>
         </template>
@@ -37,6 +37,43 @@
         id="drop"
       >
         <vdr
+          :disableUserSelect="true"
+          :lock-aspect-ratio="get(item, 'size.lockAspectRatio', true)"
+          :parent="true"
+          :w="get(item, 'size.width', 160)"
+          :h="get(item, 'size.height', 160)"
+          :x="get(item, 'axis.x', 0)"
+          :y="get(item, 'axis.y', 0)"
+          :z="get(item, 'level', 0)"
+          :grid="[10, 10]"
+          v-for="item in editerList"
+          :key="item.id"
+          class-name="vdr no-border"
+          class-name-active="active-border"
+          @dblclick="handleDoubleClick"
+          @activated="pickerModule(item)"
+          @dragstop="
+              (x:number, y:number) => {
+                dragEndModule(x, y, item);
+              }
+            "
+          @resizestop="(x:number, y:number,w:number,h:number) => {
+              onResizeStopModule(x, y,w,h,item);
+              }"
+          :active="item.id === activeModuleId"
+          :snap="true"
+          :snap-tolerance="20"
+          @refLineParams="getRefLineParams"
+          @contextmenu.prevent.stop="
+            (event:any) => {
+              pickerModule(item);
+              onObjectsContextMenu(event, item);
+            }
+          "
+        >
+          <moduleView :module="item" :dragger="true"></moduleView>
+        </vdr>
+        <!-- <vdr
           :disableUserSelect="true"
           :lock-aspect-ratio="true"
           :parent="true"
@@ -72,7 +109,7 @@
           "
         >
           <moduleView :module="item" :dragger="true"></moduleView>
-        </vdr>
+        </vdr> -->
         <!--辅助线 start-->
         <span class="ref-line v-line" v-for="item in vdrVLine" v-show="item.display" :style="{ left: item.position, top: item.origin, height: item.lineLength }" />
         <span class="ref-line h-line" v-for="item in vdrHLine" v-show="item.display" :style="{ top: item.position, left: item.origin, width: item.lineLength }" />
@@ -131,7 +168,7 @@ const draggerRegionSize = ref({ width: 600, height: 600 });
 // const labelList = ref([{ name: "Style", icon: "radix-icons:moon" }, { name: "Text", icon: "radix-icons:dots-vertical" }, { name: "Arrange" }, { name: "Style4" }]);
 const labelList = ref([
   { name: "Style", icon: "radix-icons:transparency-grid" },
-  { name: "Text", icon: "radix-icons:text" },
+  { name: "Text", icon: "radix-icons:text", disabled: true },
   { name: "Arrange", icon: "radix-icons:group" },
 ]);
 

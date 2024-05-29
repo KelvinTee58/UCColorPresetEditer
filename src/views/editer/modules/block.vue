@@ -1,6 +1,6 @@
 <template>
   <div class="w-full h-full" :class="{ 'bg-checkerboard': !props.dragger }">
-    <div class="w-full h-full select-none moduleView" :style="{ ...blcok_bg, border: blcok_border }"></div>
+    <div class="w-full h-full select-none moduleView" :style="{ ...blcok_bg, border: blcok_border, 'border-radius': blcok_round }"></div>
   </div>
   <!-- {{ module }} -->
 </template>
@@ -38,6 +38,17 @@ const blcok_border = computed({
       border = _bWidth + " " + _bColor + " " + _bStyle;
     }
     return border;
+  },
+  set: () => {},
+});
+
+const blcok_round = computed({
+  get: () => {
+    if (props.dragger) {
+      return get(props, `${draggerPath.value}.round`, 0) + "px";
+    } else {
+      return "0px";
+    }
   },
   set: () => {},
 });

@@ -12,12 +12,12 @@ const colorMode = useColorMode();
 
 import { Palette } from "lucide-vue-next";
 
-export type Mode = "gradient" | "solid";
+// export type Mode = "gradient" | "solid";
 
 interface Props {
   disabled?: boolean;
   value?: string;
-  mode?: Mode; //solid or gradient default gradient
+  mode?: string; //solid or gradient default gradient
   placeholder?: string;
 
   showColorList?: boolean; //default true
@@ -82,7 +82,7 @@ defineExpose({
 </script>
 
 <template>
-  <Popover :open="popoverOpen">
+  <Popover :open="popoverOpen" :modal="true">
     <!-- <PopoverTrigger as-child :disabled="props.disabled"> -->
     <PopoverTrigger as-child>
       <Button variant="outline" @click="openPopover" :class="cn('w-full justify-between text-left font-normal', !modelValue && 'text-muted-foreground')">
@@ -96,21 +96,23 @@ defineExpose({
         </div>
       </Button>
     </PopoverTrigger>
-    <PopoverContent class="w-auto p-2 colorPicker">
-      <Vue3ColorPicker
-        :showColorList="showColorList"
-        :showEyeDrop="showEyeDrop"
-        :showAlpha="showAlpha"
-        :showInputMenu="showInputMenu"
-        :showInputSet="showInputSet"
-        v-model="pickerModelValue"
-        :mode="props.mode"
-        :theme="colorMode == 'auto' ? 'light' : colorMode"
-        :class="cn('w-full rounded-md ', props.class)"
-      />
-      <div class="flex justify-end">
-        <Button variant="secondary" class="mr-2" @click="cancel()">{{ props.cancelButtonLabel }}</Button>
-        <Button @click="updateData(pickerModelValue)">{{ props.confirmButtonLabel }}</Button>
+    <PopoverContent class="p-0 w-auto">
+      <div class="w-auto p-2 colorPicker">
+        <Vue3ColorPicker
+          :showColorList="showColorList"
+          :showEyeDrop="showEyeDrop"
+          :showAlpha="showAlpha"
+          :showInputMenu="showInputMenu"
+          :showInputSet="showInputSet"
+          v-model="pickerModelValue"
+          :mode="props.mode"
+          :theme="colorMode == 'auto' ? 'light' : colorMode"
+          :class="cn('w-full rounded-md ', props.class)"
+        />
+        <div class="flex justify-end">
+          <Button variant="secondary" class="mr-2" @click="cancel()">{{ props.cancelButtonLabel }}</Button>
+          <Button @click="updateData(pickerModelValue)">{{ props.confirmButtonLabel }}</Button>
+        </div>
       </div>
     </PopoverContent>
   </Popover>
