@@ -15,7 +15,7 @@
       </Panel>
     </div>
     <div class="h-5/6 w-1/6 min-w-64 max-w-80 absolute my-5 right-5">
-      <TabsPanel class="h-full w-full relative" :labelList="labelList" :value="'Arrange'">
+      <TabsPanel class="h-full w-full relative" :labelList="labelList" :value="TabsPanelActive">
         <template #Style>
           <attrStyle></attrStyle>
         </template>
@@ -137,6 +137,7 @@ import { attrArrange, attrStyle, attrText } from "./attribute";
 // import { useToast } from "@/components/ui/toast/use-toast";
 
 const { t } = useI18n();
+const TabsPanelActive = ref("Arrange");
 // console.log(t("views.editer.index.right_tab1"));
 
 // const { proxy } = getCurrentInstance();
@@ -229,7 +230,7 @@ function onResizeStopModule(x: number, y: number, width: number, height: number,
   let id = get(item, "id", undefined);
   if (id) {
     // editerListStore.setModuleItem(id, { "axis.x": x, "axis.y": y, width, height }, { type: "move", description: "变形" });
-    editerListStore.setModuleItem({ id, "axis.x": x, "axis.y": y, width, height }, { type: "move", description: "变形" });
+    editerListStore.setModuleItem({ id, "axis.x": x, "axis.y": y, "size.width": width, "size.height": height }, { type: "move", description: "变形" });
   }
 }
 

@@ -64,7 +64,7 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 import { Input } from "@/components/ui/input";
 import { SelectPicker } from "@/components/ui/AA_kz_colorPicker";
 // import { toast } from "@/components/ui/toast";
-import { ref, getCurrentInstance, computed } from "vue";
+import { ref, getCurrentInstance } from "vue";
 import { get } from "lodash";
 const { proxy } = getCurrentInstance() as any;
 
@@ -75,25 +75,25 @@ import propsComputed from "./js/propsComputed.ts";
 const editerViewStore = proxy.$store.editerView.editerViewStore();
 const editerListStore = proxy.$store.editerList.editerListStore();
 // const activeModule = propsComputed("fill.mode", { propsDefault: "none", setFunction: () => {} });
-const activeModule = computed({
-  get() {
-    console.log("editerViewStore :>> ", editerViewStore.activeModule);
-    return editerViewStore.activeModule;
-  },
-  set(val: any) {
-    console.log("activeModule val", val);
-  },
-});
+// const activeModule = computed({
+//   get() {
+//     console.log("editerViewStore :>> ", editerViewStore.activeModule);
+//     return editerViewStore.activeModule;
+//   },
+//   set(val: any) {
+//     console.log("activeModule val", val);
+//   },
+// });
 
 const fillTypeList = ref({ None: "none", Solid: "solid", Gradient: "gradient" });
-const fill_type = propsComputed("fill.mode", { returnType: "any", propsDefault: "none" });
+const fill_type = propsComputed("fill.mode", { propsDefault: "none" });
 
 const fillColorRef = ref();
 const fill_color = propsComputed("fill.color", { returnType: "string", propsDefault: "" });
 function updateFillModelValue(value: any) {
   let id = get(editerViewStore, "activeModule.id", "");
   if (id) {
-    editerListStore.setModuleItem({ id, "fill.color": value }, { type: "style", description: "fill.color 修改" });
+    editerListStore.setModuleItem({ id, "fill.color": value }, { type: "style", description: "fill.color-修改" });
   }
 }
 
@@ -106,7 +106,7 @@ const border_color = propsComputed("border.color", { returnType: "string", props
 function updateBorderModelValue(value: any) {
   let id = get(editerViewStore, "activeModule.id", "");
   if (id) {
-    editerListStore.setModuleItem({ id, "border.color": value }, { type: "style", description: "border.color 修改" });
+    editerListStore.setModuleItem({ id, "border.color": value }, { type: "style", description: "border.color-修改" });
   }
 }
 

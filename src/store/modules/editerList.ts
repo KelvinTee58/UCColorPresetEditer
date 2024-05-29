@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
-import { uucBlock, uucImage, uucFont } from "@/data/structure/uuc";
-import { MyObject, axis, fontStyle } from "@/data/structure/uuc_interface";
+import { UucBlock, UucImage, UucFont } from "@/data/structure/uuc";
+import { MyObject, Axis, FontStyle } from "@/data/structure/uuc_interface";
 import { v4 as uuidv4 } from "uuid";
 import { forIn, get, has, set } from "lodash";
 import { useToast } from "@/components/ui/toast/use-toast";
@@ -28,7 +28,7 @@ export const editerListStore = defineStore(
     function getList() {
       return editerList.value;
     }
-    function setList(value: Array<uucBlock>) {
+    function setList(value: Array<UucBlock>) {
       editerList.value = [...value];
     }
     function resetList() {
@@ -39,21 +39,21 @@ export const editerListStore = defineStore(
      * 添加编辑列表的一项
      * @param value
      */
-    function addModuleItem(value: any, axis: axis = { x: 10, y: 10 }) {
+    function addModuleItem(value: any, axis: Axis = { x: 10, y: 10 }) {
       // 默认初始到页面上的位置
       let classContent = value.content;
       const level = editerList.value.length;
-      let newItem: uucBlock | undefined = undefined;
+      let newItem: UucBlock | undefined = undefined;
       const labelName = classContent.label ? classContent.label : level + value.name;
       if (classContent.type == "block") {
-        newItem = new uucBlock({
+        newItem = new UucBlock({
           ...classContent,
           level,
           axis,
           label: labelName,
         });
       } else if (classContent.type == "image") {
-        newItem = new uucImage({
+        newItem = new UucImage({
           ...classContent,
           level,
           axis,
@@ -61,7 +61,7 @@ export const editerListStore = defineStore(
           src: "666",
         });
       } else if (classContent.type == "font") {
-        const defaultFont: fontStyle = {
+        const defaultFont: FontStyle = {
           size: 10,
           color: "#000000",
           family: "",
@@ -69,7 +69,7 @@ export const editerListStore = defineStore(
           style: "normal",
           weight: "normal",
         };
-        newItem = new uucFont({
+        newItem = new UucFont({
           ...classContent,
           level,
           axis,
@@ -142,7 +142,7 @@ export const editerListStore = defineStore(
               });
             }
           }
-
+          // console.log("recordObject :>> ", recordObject);
           if (Object.getOwnPropertyNames(recordObject).length > 2) {
             // console.log("22", Object.getOwnPropertyNames(recordObject).length);
             recordArray.push(recordObject);

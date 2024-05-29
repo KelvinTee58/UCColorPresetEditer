@@ -1,92 +1,104 @@
+/**
+ * 通用对象接口，键值对形式
+ */
 export interface MyObject {
   [key: string]: unknown;
 }
 
-export interface gap {
+/**
+ * 间距接口，定义了上、右、下、左四个方向的间距
+ */
+export interface Gap {
   top: number;
   right: number;
   bottom: number;
   left: number;
 }
 
-export type borderStyle = "none" | "dotted" | "dashed" | "solid" | "double";
-// 边类型
-export interface border {
+/**
+ * 边框样式类型
+ */
+export type BorderStyle = "none" | "dotted" | "dashed" | "solid" | "double";
+
+/**
+ * 边框接口，定义了边框的宽度、颜色和样式
+ */
+export interface Border {
   width: number;
   color: string;
 
-  // # style
-  // none	无边框
-  // hidden	隐藏边框，与 "none" 类似 (不需要，废弃)
-  // dotted	定义点状虚线边框
-  // dashed	定义虚线边框
-  // solid	定义实线边框
-  // double	定义双实线边框，双实线边框的宽度等于 border-width 的值
-  style: borderStyle | string;
+  style: BorderStyle | string;
 }
 
-// 坐标轴
-export interface axis {
+/**
+ * 坐标轴接口，定义了x和y坐标
+ */
+export interface Axis {
   x: number;
   y: number;
 }
 
-export interface size {
+/**
+ * 尺寸接口，定义了宽度、高度和锁定宽高比
+ */
+export interface Size {
   width: number;
   height: number;
-  "lockAspectRatio": boolean;
+  lockAspectRatio: boolean;
 }
 
-// 内容填充
-export type fillMode = "none" | "gradient" | "solid";
-export interface fill {
-  mode: fillMode;
+/**
+ * 填充模式类型
+ */
+export type FillMode = "none" | "gradient" | "solid";
+
+/**
+ * 填充接口，定义了填充模式和颜色
+ */
+export interface Fill {
+  mode: FillMode;
   color: string;
 }
 
-export interface fontStyle {
+/**
+ * 字体样式接口，定义了字体的大小、颜色、家族、样式和粗细
+ */
+export interface FontStyle {
   size: number;
   color: string;
   family: string;
   familyName: string;
   style: string;
-
-  // # style
-  // normal	默认值，文本以正常字体显示
-  // italic	文本以斜体显示
-  // oblique	文本倾斜显示
-  // inherit	从父元素继承字体样式
-
   weight: string;
-  // # weight
-  // normal	默认值，标准字体
-  // bold	粗体字体
-  // bolder	更粗的字体
-  // lighter	更细的字体
 }
 
-export interface uucObject {
+/**
+ * 基础对象接口，定义了基本属性如id、类型、标签、级别、坐标、尺寸等
+ */
+export interface UucObject {
   readonly id: string;
   type: string;
   label: string;
   level: number;
-  // width: number;
-  // height: number;
-  axis: axis;
-  size: size;
-
+  axis: Axis;
+  size: Size;
   round?: number;
-  // background?: string;
-  border?: border;
-  padding?: gap;
+  border?: Border;
+  padding?: Gap;
   angle?: number;
-  fill?: fill;
+  fill?: Fill;
 }
 
-export interface uucFontObject extends uucObject {
-  font: fontStyle;
+/**
+ * 字体对象接口，继承自基础对象接口，并添加了字体样式属性
+ */
+export interface UucFontObject extends UucObject {
+  font: FontStyle;
 }
 
-export interface uucImageObject extends uucObject {
+/**
+ * 图像对象接口，继承自基础对象接口，并添加了图像源属性
+ */
+export interface UucImageObject extends UucObject {
   src: string;
 }

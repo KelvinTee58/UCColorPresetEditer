@@ -4,7 +4,7 @@ import { get } from "lodash";
 import { MyObject } from "@/data/structure/uuc_interface";
 import { editerListStore } from "./editerList.ts";
 
-// import { uucBlock } from "@/data/structure/uuc";
+// import { UucBlock } from "@/data/structure/uuc";
 
 export const editerViewStore = defineStore(
   "editerView",

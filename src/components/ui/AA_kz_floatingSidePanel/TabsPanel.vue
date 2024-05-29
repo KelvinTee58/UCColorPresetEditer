@@ -14,7 +14,7 @@ interface LabelList {
 const props = defineProps<{
   class?: HTMLAttributes["class"];
   labelList?: Array<LabelList>;
-  value: string;
+  value?: string;
 }>();
 </script>
 
@@ -32,4 +32,3 @@ const props = defineProps<{
     </Tabs>
   </div>
 </template>
-../AA_kz_tab
