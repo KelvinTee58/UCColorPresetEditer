@@ -30,6 +30,7 @@
     <div class="draggerRegionWrapper h-full-container flex justify-center items-center z-20">
       <div
         class="draggerRegion"
+        @click="clickDraggerRegion"
         @contextmenu.prevent.stop="onContextMenu"
         @wheel="handleWheel"
         :style="{ transform: `scale(${scale})`, width: `${draggerRegionSize.width}px`, height: `${draggerRegionSize.height}px` }"
@@ -37,6 +38,8 @@
         id="drop"
       >
         <vdr
+          :resizable="!get(item, 'uuConfig.lock', true)"
+          :draggable="!get(item, 'uuConfig.lock', true)"
           :disableUserSelect="true"
           :lock-aspect-ratio="get(item, 'size.lockAspectRatio', true)"
           :parent="true"
@@ -73,43 +76,6 @@
         >
           <moduleView :module="item" :dragger="true"></moduleView>
         </vdr>
-        <!-- <vdr
-          :disableUserSelect="true"
-          :lock-aspect-ratio="true"
-          :parent="true"
-          :w="computedProps(item.width, 160)"
-          :h="computedProps(item.height, 160)"
-          :x="computedProps(item.axis.x, 0)"
-          :y="computedProps(item.axis.y, 0)"
-          :z="computedProps(item.level, 0)"
-          :grid="[10, 10]"
-          v-for="item in editerList"
-          :key="item.id"
-          class-name="vdr no-border"
-          class-name-active="active-border"
-          @dblclick="handleDoubleClick"
-          @activated="pickerModule(item)"
-          @dragstop="
-              (x:number, y:number) => {
-                dragEndModule(x, y, item);
-              }
-            "
-          @resizestop="(x:number, y:number,w:number,h:number) => {
-              onResizeStopModule(x, y,w,h,item);
-              }"
-          :active="item.id === activeModuleId"
-          :snap="true"
-          :snap-tolerance="20"
-          @refLineParams="getRefLineParams"
-          @contextmenu.prevent.stop="
-            (event:any) => {
-              pickerModule(item);
-              onObjectsContextMenu(event, item);
-            }
-          "
-        >
-          <moduleView :module="item" :dragger="true"></moduleView>
-        </vdr> -->
         <!--辅助线 start-->
         <span class="ref-line v-line" v-for="item in vdrVLine" v-show="item.display" :style="{ left: item.position, top: item.origin, height: item.lineLength }" />
         <span class="ref-line h-line" v-for="item in vdrHLine" v-show="item.display" :style="{ top: item.position, left: item.origin, width: item.lineLength }" />
@@ -134,6 +100,7 @@ import { useI18n } from "vue-i18n";
 import { filters } from "@/lib/filters.ts";
 
 import { attrArrange, attrStyle, attrText } from "./attribute";
+
 // import { useToast } from "@/components/ui/toast/use-toast";
 
 const { t } = useI18n();
@@ -173,6 +140,8 @@ const labelList = ref([
   { name: "Arrange", icon: "radix-icons:group" },
 ]);
 
+function clickDraggerRegion(event: any) {}
+
 // const activeModuleType = computed({
 //   get() {
 //     return editerViewStore.getActiveModuleProps("type");
@@ -192,10 +161,6 @@ const currentTabItem = ref(t("views.editer.index.right_tab1"));
 function switchToTab(key: string) {
   currentTabItem.value = t(key);
 }
-
-const computedProps = function (key: any, defaultValue: any) {
-  return key ? key : defaultValue;
-};
 
 function handleDoubleClick() {
   switchToTab("views.editer.index.right_tab2");
@@ -332,6 +297,25 @@ function onObjectsContextMenu(e: MouseEvent, item: any) {
           editerListStore.removeModuleItem([id], { type: "delete", description: "移除" });
         },
         shortcut: filters.getUserAgentCtrlShortcutKey("←"),
+      },
+      {
+        label: t("views.editer.index.object_context_menu.lock"),
+        onClick: () => {
+          // alert("You click a menu item22");
+          let id = get(item, "id", undefined);
+          let lock = get(item, "uuConfig.lock", false);
+          if (id) {
+            editerListStore.setModuleItem(
+              {
+                id,
+                "uuConfig.lock": !lock,
+              },
+              { type: "config", description: "uuConfig.lock-修改" }
+            );
+          }
+
+          // editerListStore.removeModuleItem([id], { type: "delete", description: "移除" });
+        },
       },
       // {
       //   label: "A submenu",

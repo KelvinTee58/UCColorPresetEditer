@@ -106,60 +106,6 @@ const selectTab = ({ tab, tabValue }: { tab?: Tab; tabValue?: any }) => {
   activeTabValueVModel.value = tab.value;
   emit("change", tab);
 };
-
-// // 位置计算
-// let dropdown = ref(null);
-// let dropdownIcon = ref(null);
-
-// function showDropdown(isShow: string) {
-//   if (dropdownStyle.value.visibility == isShow) {
-//     return;
-//   }
-//   dropdownStyle.value.visibility = isShow;
-//   let defaultPosition = props.dropdownPosition;
-//   let drop_dom = dropdown.value.getBoundingClientRect();
-//   if (isShow && defaultPosition.length == 0) {
-//     let dropIcon_dom = dropdownIcon.value.getBoundingClientRect();
-
-//     let di_top = dropIcon_dom.top;
-//     let di_left = dropIcon_dom.left;
-//     let di_bottom = window.innerHeight - dropIcon_dom.bottom;
-//     let di_right = window.innerWidth - dropIcon_dom.right;
-
-//     defaultPosition[0] = di_top > di_bottom ? "top" : "bottom";
-//     defaultPosition[1] = di_left > di_right ? "left" : "right";
-//   }
-//   if (isShow && (defaultPosition[0] == "top" || defaultPosition[1] == "left")) {
-//     dropdownStyle.value.transform = "";
-
-//     let d_w = parseInt(drop_dom.width - 20);
-//     let d_h = parseInt(drop_dom.height);
-//     // defaultPosition[0] == "top"?dropdownStyle.value.transform
-//     let ts = [];
-//     ts.push(defaultPosition[0] == "top" ? `translateY(calc(-${d_h}px - 1.2rem))` : "");
-//     ts.push(defaultPosition[1] == "left" ? `translateX(-${d_w}px)` : "");
-//     dropdownStyle.value.transform = ts.join(" ");
-//   }
-//   // console.log("dropdownStyle.value.transform  :>> ", defaultPosition, dropdownStyle.value.transform);
-// }
-
-// const timeoutId = ref(null);
-
-// const handleMouseOver = (isShow: string) => {
-//   // 设置定时器，延迟执行操作
-//   timeoutId.value = setTimeout(() => {
-//     // 这里是你想要执行的操作
-//     // console.log("操作执行了！");
-//     showDropdown(isShow);
-//   }, props.delayDuration); // 延迟2000毫秒
-// };
-
-// const clearTimeout = () => {
-//   if (timeoutId.value) {
-//     clearTimeout(timeoutId.value);
-//   }
-// };
-
 onMounted(() => {
   tabsContainerRef.value?.addEventListener("wheel", scrollHorizontally);
   if (!tabs.value.length) return;

@@ -132,19 +132,33 @@ export const editerListStore = defineStore(
           // let recordItem = filter(el, { id: modifyItem_id });
           for (let index = 0; index < el.length; index++) {
             if (el[index].id === modifyItem_id) {
-              forIn(modifyItem, function (value, key) {
+              forIn(modifyItem, function (value: any, key) {
                 let recordValue = get(el[index], key, value);
                 if (has(el[index], key) && recordValue !== value && key != "id") {
                   recordObject[key] = recordValue;
                   newObject[key] = value;
                   set(editerList.value[index], key, value);
                 }
+                // // 追加内部方法逻辑；
+                // if (has(el[index], key) && key != "id") {
+                //   // 内置对象计算
+                //   if (typeof value === "function") {
+                //     console.log("recordValue2 :>> ", recordValue, value, value(recordValue));
+                //     recordObject[key] = recordValue;
+                //     newObject[key] = value(recordValue);
+                //     set(editerList.value[index], key, value);
+                //   } else if (recordValue !== value) {
+                //     recordObject[key] = recordValue;
+                //     newObject[key] = value;
+                //     set(editerList.value[index], key, value);
+                //   }
+                //   console.log("recordValue :>> ", recordObject, newObject, typeof value === "function");
+                // }
               });
             }
           }
           // console.log("recordObject :>> ", recordObject);
-          if (Object.getOwnPropertyNames(recordObject).length > 2) {
-            // console.log("22", Object.getOwnPropertyNames(recordObject).length);
+          if (Object.getOwnPropertyNames(recordObject).length >= 2) {
             recordArray.push(recordObject);
             newArray.push(newObject);
           }

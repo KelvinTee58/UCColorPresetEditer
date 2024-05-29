@@ -23,7 +23,8 @@
           "right_tab1": "MODULE",
           "right_tab2": "ATTRIBUTE",
           "object_context_menu": {
-            "delete": "delete"
+            "delete": "Delete",
+            "lock": "Lock/Unlock"
           },
           "drop_context_menu": {}
         }
@@ -54,7 +55,8 @@
           "right_tab1": "模块",
           "right_tab2": "属性",
           "object_context_menu": {
-            "delete": "删除"
+            "delete": "删除",
+            "lock": "锁定/解锁"
           },
           "drop_context_menu": {}
         }

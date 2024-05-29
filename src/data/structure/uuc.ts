@@ -18,6 +18,9 @@ class UucBlock implements UucObject {
   angle?: number;
   fill?: Fill;
 
+  // 额外的配置信息
+  uuConfig: Object;
+
   /**
    * 构造函数，初始化块对象
    * @param object 基础对象接口实例
@@ -38,6 +41,11 @@ class UucBlock implements UucObject {
     this.padding = object.padding;
     this.angle = object.angle;
     this.fill = object.fill;
+
+    // 配置逻辑
+    this.uuConfig = {
+      lock: false,
+    };
   }
 }
 

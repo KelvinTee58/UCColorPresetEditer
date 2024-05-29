@@ -24,7 +24,7 @@
       <label for="radix-11-form-item" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Border</label>
       <div class="my-2 flex justify-between items-center">
         <Input type="number" placeholder="Border width" v-model="border_width" />
-        <label for="radix-11-form-item" class="pl-2 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">PX</label>
+        <label for="radix-11-form-item" class="pl-2 text-sm font-normal leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">PX</label>
       </div>
       <div class="my-2">
         <!-- <Select v-bind="fill_type"> -->
@@ -53,7 +53,7 @@
       <label for="radix-11-form-item" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Round</label>
       <div class="my-2 flex justify-between items-center">
         <Input type="number" placeholder="Border width" v-model="round_width" />
-        <label for="radix-11-form-item" class="pl-2 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">PX</label>
+        <label for="radix-11-form-item" class="pl-2 text-sm font-normal leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">PX</label>
       </div>
     </div>
   </div>
