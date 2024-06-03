@@ -2,7 +2,8 @@
   <div class="h-full w-full">
     <div class="vst-container relative overflow-hidden h-full">
       <div ref="scroller" class="scrollTab v-full overflow-x-scroll overflow-y-hidden block">
-        <div :style="{ width: `${wrapWidth}px` }" class="flex flex-row select-none items-center" ref="tabContainer">
+        <div :style="{ width: `${wrapWidth}px` }" class="flex flex-row select-none items-center mx-auto" ref="tabContainer">
+          <!-- <div :style="{ width: `${wrapWidth}px` }" class="flex flex-row select-none items-center" ref="tabContainer"> -->
           <div class="item select-none text-center" v-for="(item, index) in c_tabs" :key="index" :index="index" :data="{ id: item.id }" @click="item.disabled ? '' : activeTabMove(item)">
             <!-- <div class="tabBox"> -->
             <div
@@ -65,6 +66,7 @@ const activeTab = ref<any>(null);
 const wrapWidth = ref(100000);
 const c_tabs = ref<Tab[]>([]);
 const scrolling = ref(false);
+const tabMarightLeft = ref(0);
 const underlineMarkerStyle = ref({
   left: "0px",
   width: "0px",
@@ -137,8 +139,8 @@ function setArrow(index: number) {
 function activeTabMove(item: any) {
   activeTab.value = item.id;
   if (scroller.value) {
+    // console.log("item :>> ", item);
     setArrow(item.index);
-
     const left = item.left + item.width / 2 - scroller.value.offsetWidth / 2;
     // underlineMarkerStyle.value.left = item.left - scroller.value.scrollLeft + "px";
     smoothScroll(left, item);
@@ -194,7 +196,7 @@ function smoothScroll(to: any, acitveItem: any) {
         clearInterval(intervalId);
         if (scroller.value) {
           scroller.value.scrollLeft = to;
-          underlineMarkerStyle.value.left = acitveItem.left - scroller.value.scrollLeft + "px";
+          underlineMarkerStyle.value.left = tabMarightLeft.value + acitveItem.left - scroller.value.scrollLeft + "px";
           underlineMarkerStyle.value.width = acitveItem.width + "px";
         }
       } else {
@@ -203,7 +205,7 @@ function smoothScroll(to: any, acitveItem: any) {
         from += r;
         if (scroller.value) {
           scroller.value.scrollLeft = from;
-          underlineMarkerStyle.value.left = acitveItem.left - scroller.value.scrollLeft + "px";
+          underlineMarkerStyle.value.left = tabMarightLeft.value + acitveItem.left - scroller.value.scrollLeft + "px";
           underlineMarkerStyle.value.width = acitveItem.width + "px";
         }
       }
@@ -213,8 +215,17 @@ function smoothScroll(to: any, acitveItem: any) {
 
 onMounted(() => {
   calcWidth(props.tabs);
-  let findItemIndex = c_tabs.value.findIndex((tab) => tab.id === activeTab.value);
-  setArrow(findItemIndex);
+  setTimeout(() => {
+    if (tabContainer.value) {
+      const style = window.getComputedStyle(tabContainer.value);
+      tabMarightLeft.value = parseInt(style.marginLeft, 10);
+    }
+    let findItem = c_tabs.value.find((tab) => tab.id === activeTab.value);
+    if (findItem?.id) {
+      setArrow(findItem.index);
+      activeTabMove(findItem);
+    }
+  }, 20);
 });
 </script>
 

@@ -1,7 +1,7 @@
 <template>
   <div class="app">
     <div class="scrollTab">
-      <scroll-tab ref="scrollTab" @getActiveTab="getActiveTab" :tabs="labelList" :value="activeId" :showArrow="true">
+      <Tabs ref="scrollTab" @getActiveTab="getActiveTab" :tabs="labelList" :value="activeId" :showArrow="true">
         <!-- <tab-item class="item" v-for="(item, index) in tabs" :key="index" :index="index" :data="{ id: index }">
           <div class="tabBox">
             <div class="tab" :class="{ active: activeId === index }">tab {{ index }}</div>
@@ -10,23 +10,24 @@
         <template v-slot="{ activeTab }">
           {{ activeTab }}
         </template>
-      </scroll-tab>
+      </Tabs>
     </div>
   </div>
 </template>
 
 <script>
-import scrollTab from "./components/Tabs.vue";
-import tabItem from "./components/Tabitem.vue";
+import { Tabs } from "@/components/ui/AA_kz_scrollTabs";
+// import scrollTab from "./components/Tabs.vue";
+// import tabItem from "./components/Tabitem.vue";
 export default {
   name: "App",
   components: {
-    scrollTab,
-    tabItem,
+    Tabs,
+    // tabItem,
   },
   data() {
     return {
-      activeId: "Style1",
+      activeId: "Style10",
       tabs: new Array(20),
       labelList: [
         { id: "Style1", name: "Style", icon: "radix-icons:transparency-grid" },
@@ -50,7 +51,7 @@ export default {
   methods: {
     getActiveTab(data) {
       console.log(data);
-      this.activeId = data.id || 0;
+      // this.activeId = data.id || 0;
     },
   },
 };
