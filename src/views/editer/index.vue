@@ -53,7 +53,6 @@
           :key="item.id"
           class-name="vdr no-border"
           class-name-active="active-border"
-          @dblclick="handleDoubleClick"
           @activated="pickerModule(item)"
           @dragstop="
               (x:number, y:number) => {
@@ -89,31 +88,40 @@
 import { ref, getCurrentInstance, computed, onMounted, onUnmounted, unref } from "vue";
 
 import vdr from "vue-draggable-resizable-gorkys/src/components/vue-draggable-resizable.vue";
-import "vue-draggable-resizable-gorkys/dist/VueDraggableResizable.css";
 import { Panel, TabsPanel } from "@/components/ui/AA_kz_floatingSidePanel";
+import { Accordion, AccordionContent, AccordionItem, AccordionTriggerLeft } from "@/components/ui/accordion";
 import moduleList from "./components/moduleList.vue";
-// import layer from "./components/layer.vue";
 import moduleView from "./components/moduleView.vue";
-// import attributeView from "./components/attributeView.vue";
+import { attrArrange, attrStyle, attrText } from "./attribute";
+import ContextMenu from "shufflemanvue3-context-menu";
+import { useDrop } from "vue3-dnd";
+
+import "vue-draggable-resizable-gorkys/dist/VueDraggableResizable.css";
+import "shufflemanvue3-context-menu/lib/vue3-context-menu.css";
+import "@/assets/context-menu.scss";
+
+import { get } from "lodash";
 import { storeToRefs } from "pinia";
 import { useI18n } from "vue-i18n";
 import { filters } from "@/lib/filters.ts";
-
-import { attrArrange, attrStyle, attrText } from "./attribute";
-
-// import { useToast } from "@/components/ui/toast/use-toast";
-
 const { t } = useI18n();
 const TabsPanelActive = ref("Arrange");
-// console.log(t("views.editer.index.right_tab1"));
-
-// const { proxy } = getCurrentInstance();
 const { proxy } = getCurrentInstance() as any;
-import { get } from "lodash";
+import { toRefs } from "@vueuse/core";
+
+interface vdrLine {
+  display: boolean;
+  lineLength: string;
+  origin: string;
+  position: string;
+}
+const vdrVLine = ref<vdrLine[]>([]);
+const vdrHLine = ref<vdrLine[]>([]);
 
 const editerListStoreRefs = storeToRefs(proxy.$store.editerList.editerListStore());
 const editerListStore = proxy.$store.editerList.editerListStore();
 const editerViewStore = proxy.$store.editerView.editerViewStore();
+
 const editerList = computed({
   get() {
     return editerListStoreRefs.editerList.value;
@@ -132,6 +140,7 @@ const activeModuleId = computed({
   set() {},
 });
 
+// test start
 const draggerRegionSize = ref({ width: 600, height: 600 });
 // const labelList = ref([{ name: "Style", icon: "radix-icons:moon" }, { name: "Text", icon: "radix-icons:dots-vertical" }, { name: "Arrange" }, { name: "Style4" }]);
 const labelList = ref([
@@ -140,31 +149,15 @@ const labelList = ref([
   { name: "Arrange", icon: "radix-icons:group" },
 ]);
 
-function clickDraggerRegion(event: any) {}
-
-// const activeModuleType = computed({
-//   get() {
-//     return editerViewStore.getActiveModuleProps("type");
-//   },
-//   set() {},
-// });
-
-import { Accordion, AccordionContent, AccordionItem, AccordionTriggerLeft, AccordionTrigger } from "@/components/ui/accordion";
 import testData from "@/data/test.json";
 // const defaultValue = "IMAGE";
 const defaultValue = "BLOCK";
 // const defaultValue = "FONT";
 
 const accordionItems = testData;
-const currentTabItem = ref(t("views.editer.index.right_tab1"));
 
-function switchToTab(key: string) {
-  currentTabItem.value = t(key);
-}
-
-function handleDoubleClick() {
-  switchToTab("views.editer.index.right_tab2");
-}
+//test end
+function clickDraggerRegion(event: any) {}
 
 // 选中激活的module
 function pickerModule(value: any) {
@@ -220,26 +213,12 @@ const handleKeyEvent = (event: { ctrlKey: any; metaKey: any; key: any }) => {
   }
 };
 
-interface vdrLine {
-  display: boolean;
-  lineLength: string;
-  origin: string;
-  position: string;
-}
-const vdrVLine = ref<vdrLine[]>([]);
-const vdrHLine = ref<vdrLine[]>([]);
-
 // 辅助线回调事件
 function getRefLineParams(params: any) {
   const { vLine, hLine } = params;
   vdrVLine.value = vLine;
   vdrHLine.value = hLine;
 }
-
-// function onContextMenu(e: any) {
-//   e.preventDefault();
-//   console.log("e", e);
-// }
 
 // 滚动逻辑
 // 待使用
@@ -256,10 +235,6 @@ function handleWheel(event: any) {
   }
 }
 
-import "shufflemanvue3-context-menu/lib/vue3-context-menu.css";
-import "@/assets/context-menu.scss";
-
-import ContextMenu from "shufflemanvue3-context-menu";
 function onContextMenu(e: MouseEvent) {
   //show our menu
   ContextMenu.showContextMenu({
@@ -325,10 +300,6 @@ function onObjectsContextMenu(e: MouseEvent, item: any) {
     // theme: `mac ${mode.value}`,
   });
 }
-
-import { useDrop } from "vue3-dnd";
-import { toRefs } from "@vueuse/core";
-
 const [collect, drop] = useDrop(() => ({
   accept: "box",
   drop: (item, monitor) => {

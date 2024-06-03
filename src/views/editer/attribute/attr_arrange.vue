@@ -137,6 +137,6 @@ function clickUnlock() {
 <
 <style lang="scss" scoped>
 .lock-bg {
-  background: rgba($color: #fff, $alpha: 0.7);
+  background-color: hsla(var(--background075));
 }
 </style>

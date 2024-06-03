@@ -130,7 +130,7 @@ onUnmounted(() => {
           v-for="(tab, index) in tabs"
           :key="index"
           :id="tab.id"
-          class="relative flex items-center px-3 py-2 rounded-sm cursor-pointer min-w-max text-inherit"
+          class="relative flex items-center px-3 py-2 rounded-sm cursor-pointer min-w-max text-inherit cursor-default"
           :class="{
             'opacity-50 !cursor-default': tab.disabled,
             tabActive: activeTab.id === tab.id,

@@ -43,32 +43,4 @@ const i18n = createI18n({
 });
 app.use(i18n);
 
-// 拖拽组件
-// import VueDraggableResizable from "vue-draggable-resizable";
-// app.component("vue-draggable-resizable", VueDraggableResizable);
-
-// import { filters } from "@/lib/filters.ts";
-// app.config.globalProperties.$filters = filters;
-
-// // 右键逻辑
-// import "shufflemanvue3-context-menu/lib/vue3-context-menu.css";
-// import ContextMenu from "shufflemanvue3-context-menu";
-
-// app.use(ContextMenu);
-
-// // 点击外部
-// app.directive("click-outside", {
-//   beforeMount(el, binding) {
-//     el.clickOutsideEvent = (event: any) => {
-//       if (el.contains && !(el === event.target || el.contains(event.target))) {
-//         binding.value(event);
-//       }
-//     };
-//     document.addEventListener("click", el.clickOutsideEvent);
-//   },
-//   unmounted(el) {
-//     document.removeEventListener("click", el.clickOutsideEvent);
-//   },
-// });
-
 app.mount("#app");
