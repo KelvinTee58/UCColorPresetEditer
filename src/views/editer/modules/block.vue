@@ -5,7 +5,7 @@
   <!-- {{ module }} -->
 </template>
 <script setup lang="ts">
-import { defineProps, computed } from "vue";
+import { computed } from "vue";
 import { get } from "lodash";
 import { MyObject } from "@/data/structure/uuc_interface";
 

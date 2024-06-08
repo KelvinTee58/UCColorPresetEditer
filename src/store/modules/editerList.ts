@@ -64,8 +64,10 @@ export const editerListStore = defineStore(
         const defaultFont: FontStyle = {
           size: 10,
           color: "#000000",
-          family: "",
-          familyName: "黑体",
+          family: {
+            name: "SimHei",
+            url: "",
+          },
           style: "normal",
           weight: "normal",
         };

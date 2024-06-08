@@ -1,10 +1,10 @@
 <template>
   <div class="attribute_size text-left">
-    <div class="_style_lock border-b border-border px-4 py-3 flex justify-center items-center w-full h-full absolute lock-bg z-10" v-show="lock">
+    <div class="_style_lock border-b border-border px-2 py-2 flex justify-center items-center w-full h-full absolute lock-bg z-10" v-show="lock">
       <!-- <Button @click="clickUnlock" class="z-20 opacity-100"> {{ $t("views.editer.index.object_context_menu.lock") }} </Button> -->
       <Button variant="outline" @click="clickUnlock" class="z-20 opacity-100"> {{ $t("views.editer.index.object_context_menu.lock") }} </Button>
     </div>
-    <div class="_style_fill border-b border-border px-4 py-3">
+    <div class="_style_fill border-b border-border px-2 py-2">
       <div class="flex justify-between items-center min-h-10">
         <label for="radix-11-form-item" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Size</label>
         <LockKeyhole class="w-3" v-show="lock" />
@@ -24,7 +24,7 @@
         <Checkbox :checked="size_lockAspectRatio" @click="updateLockAspectRatioValue" :disabled="lock" />
       </div>
     </div>
-    <div class="_style_position border-b border-border px-4 py-3">
+    <div class="_style_position border-b border-border px-2 py-2">
       <div class="flex justify-between items-center min-h-10">
         <label for="radix-11-form-item" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Position</label>
         <LockKeyhole class="w-4" v-show="lock" />
@@ -40,7 +40,7 @@
         <label for="radix-11-form-item" class="pl-2 text-sm font-normal leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">PX</label>
       </div>
     </div>
-    <div class="_style_angle border-b border-border px-4 py-3">
+    <div class="_style_angle border-b border-border px-2 py-2">
       <div class="flex justify-between items-center min-h-10">
         <label for="radix-11-form-item" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Angle</label>
         <LockKeyhole class="w-4" v-show="lock" />
@@ -50,7 +50,7 @@
         <label for="radix-11-form-item" class="pl-2 text-sm font-normal leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">deg</label>
       </div>
     </div>
-    <!-- <div class="_style_fill border-b border-border px-4 py-3"></div> -->
+    <!-- <div class="_style_fill border-b border-border px-2 py-2"></div> -->
   </div>
 </template>
 <script setup lang="ts">
@@ -70,7 +70,7 @@ const editerViewStore = proxy.$store.editerView.editerViewStore();
 const editerListStore = proxy.$store.editerList.editerListStore();
 
 const widthOption = {
-  eturnType: "number",
+  returnType: "number",
   propsDefault: 100,
   setFunction: (val: number) => {
     const size = cloneDeep(get(editerViewStore, "activeModule.size", {}));
@@ -87,7 +87,7 @@ const widthOption = {
 };
 
 const heightOption = {
-  eturnType: "number",
+  returnType: "number",
   propsDefault: 100,
   setFunction: (val: number) => {
     const size = cloneDeep(get(editerViewStore, "activeModule.size", {}));

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import * as z from "zod";
-// import { h, reactive, ref, defineProps } from "vue";
-import { h, defineProps, watch } from "vue";
+// import { h, reactive, ref} from "vue";
+import { h, watch } from "vue";
 import { useForm } from "vee-validate";
 import { toTypedSchema } from "@vee-validate/zod";
 // import { DependencyType } from "../ui/auto-form/interface";

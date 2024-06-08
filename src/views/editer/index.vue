@@ -1,7 +1,7 @@
 <template>
   <div class="editer_index">
     <div class="h-5/6 w-1/6 min-w-56 max-w-80 absolute my-5 left-5">
-      <Panel class="h-full w-full relative" :label="$t('views.editer.index.left_tab1')">
+      <!-- <Panel class="h-full w-full relative" :label="$t('views.editer.index.left_tab1')">
         <Accordion type="single" class="w-full" collapsible :default-value="defaultValue">
           <AccordionItem class="border-border" v-for="aitem in accordionItems" :key="aitem.moduleKey" :value="aitem.moduleKey">
             <AccordionTriggerLeft class="select-none">
@@ -12,10 +12,24 @@
             </AccordionContent>
           </AccordionItem>
         </Accordion>
-      </Panel>
+      </Panel> -->
+      <Tabs ref="scrollTab" :tabs="labelListLeft" :value="activeTabLeft">
+        <template v-slot="{ activeTab }">
+          <Accordion type="single" class="w-full" collapsible :default-value="defaultValue">
+            <AccordionItem class="border-border" v-for="aitem in accordionItems" :key="aitem.moduleKey" :value="aitem.moduleKey">
+              <AccordionTriggerLeft class="select-none">
+                {{ aitem.moduleName }}
+              </AccordionTriggerLeft>
+              <AccordionContent class="grid grid-cols-5 gap-x-1 gap-y-2 justify-center">
+                <moduleList v-for="mitem in aitem.moduleList" :key="mitem.id" :value="mitem.id" :module="mitem"></moduleList>
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
+        </template>
+      </Tabs>
     </div>
     <div class="h-5/6 w-1/6 min-w-64 max-w-80 absolute my-5 right-5">
-      <TabsPanel class="h-full w-full relative" :labelList="labelList" :value="TabsPanelActive">
+      <!-- <TabsPanel class="h-full w-full relative" :labelList="labelList" :value="TabsPanelActive">
         <template #Style>
           <attrStyle></attrStyle>
         </template>
@@ -25,7 +39,16 @@
         <template #Arrange>
           <attrArrange></attrArrange>
         </template>
-      </TabsPanel>
+      </TabsPanel> -->
+      <Tabs ref="scrollTab" :tabs="labelListRight" :value="activeTabRight" :showArrow="true" :showUnderLine="true">
+        <template v-slot="{ activeTab }">
+          <ScrollArea class="w-full">
+            <attrStyle v-show="activeTab == 'Style'"></attrStyle>
+            <attrText v-show="activeTab == 'Text'"></attrText>
+            <attrArrange v-show="activeTab == 'Arrange'"></attrArrange>
+          </ScrollArea>
+        </template>
+      </Tabs>
     </div>
     <div class="draggerRegionWrapper h-full-container flex justify-center items-center z-20">
       <div
@@ -95,6 +118,8 @@ import moduleView from "./components/moduleView.vue";
 import { attrArrange, attrStyle, attrText } from "./attribute";
 import ContextMenu from "shufflemanvue3-context-menu";
 import { useDrop } from "vue3-dnd";
+import { Tabs } from "@/components/ui/AA_kz_scrollTabs";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 import "vue-draggable-resizable-gorkys/dist/VueDraggableResizable.css";
 import "shufflemanvue3-context-menu/lib/vue3-context-menu.css";
@@ -105,7 +130,7 @@ import { storeToRefs } from "pinia";
 import { useI18n } from "vue-i18n";
 import { filters } from "@/lib/filters.ts";
 const { t } = useI18n();
-const TabsPanelActive = ref("Arrange");
+// const TabsPanelActive = ref("Text");
 const { proxy } = getCurrentInstance() as any;
 import { toRefs } from "@vueuse/core";
 
@@ -143,10 +168,14 @@ const activeModuleId = computed({
 // test start
 const draggerRegionSize = ref({ width: 600, height: 600 });
 // const labelList = ref([{ name: "Style", icon: "radix-icons:moon" }, { name: "Text", icon: "radix-icons:dots-vertical" }, { name: "Arrange" }, { name: "Style4" }]);
-const labelList = ref([
-  { name: "Style", icon: "radix-icons:transparency-grid" },
-  { name: "Text", icon: "radix-icons:text", disabled: true },
-  { name: "Arrange", icon: "radix-icons:group" },
+
+const activeTabLeft = ref("Object");
+const activeTabRight = ref("Text");
+const labelListLeft = ref([{ id: "Object", name: "Object" }]);
+const labelListRight = ref([
+  { id: "Style", name: "Style", icon: "radix-icons:transparency-grid" },
+  { id: "Text", name: "Text", icon: "radix-icons:text" },
+  { id: "Arrange", name: "Arrange", icon: "radix-icons:group" },
 ]);
 
 import testData from "@/data/test.json";

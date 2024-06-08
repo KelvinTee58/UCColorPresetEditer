@@ -6,7 +6,7 @@
 
 <script setup>
 import { uucBlockModule, uucImageModule, uucFontModule } from "../modules";
-import { defineProps, computed } from "vue";
+import { computed } from "vue";
 import { get } from "lodash";
 
 const props = defineProps({

@@ -7,7 +7,7 @@
 
 <script setup lang="ts">
 import { uucBlockAttribute, uucImageAttribute, uucFontAttribute } from "../attribute";
-// import { defineProps, getCurrentInstance, computed } from "vue";
+// import {  getCurrentInstance, computed } from "vue";
 import { getCurrentInstance, computed } from "vue";
 // import { storeToRefs } from "pinia";
 const { proxy } = getCurrentInstance() as any;

@@ -1,6 +1,6 @@
 <template>
   <div class="attribute_style text-left">
-    <div class="_style_fill border-b border-border px-4 py-3">
+    <div class="_style_fill border-b border-border px-2 py-2">
       <label for="radix-11-form-item" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Fill</label>
       <div class="my-2">
         <!-- <Select v-bind="fill_type"> -->
@@ -20,7 +20,7 @@
         <SelectPicker ref="fillColorRef" :value="fill_color" @update:value="updateFillModelValue" :mode="fill_type" placeholder="Fill Color" class="mb-2"></SelectPicker>
       </div>
     </div>
-    <div class="_style_line border-b border-border px-4 py-3">
+    <div class="_style_line border-b border-border px-2 py-2">
       <label for="radix-11-form-item" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Border</label>
       <div class="my-2 flex justify-between items-center">
         <Input type="number" placeholder="Border width" v-model="border_width" />
@@ -46,10 +46,10 @@
       </div>
       <div class="my-2">
         <!-- <SelectPicker @update:modelValue="updateFillModelValue" :mode="" class="mb-2"></SelectPicker> -->
-        <SelectPicker ref="borderColorRef" :value="border_color" @update:value="updateBorderModelValue" mode="solid" placeholder="Border Color" class="mb-2"></SelectPicker>
+        <SelectPicker PopoverContentSide="left" ref="borderColorRef" :value="border_color" @update:value="updateBorderModelValue" mode="solid" placeholder="Border Color" class="mb-2"></SelectPicker>
       </div>
     </div>
-    <div class="_style_round border-b border-border px-4 py-3">
+    <div class="_style_round border-b border-border px-2 py-2">
       <label for="radix-11-form-item" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Round</label>
       <div class="my-2 flex justify-between items-center">
         <Input type="number" placeholder="Border width" v-model="round_width" />

@@ -61,13 +61,20 @@ export interface Fill {
 }
 
 /**
+ * 字体家族接口
+ */
+export interface FontFamily {
+  name: string;
+  url?: string;
+}
+
+/**
  * 字体样式接口，定义了字体的大小、颜色、家族、样式和粗细
  */
 export interface FontStyle {
   size: number;
   color: string;
-  family: string;
-  familyName: string;
+  family: FontFamily;
   style: string;
   weight: string;
 }

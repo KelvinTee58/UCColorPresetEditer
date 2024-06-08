@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { type HTMLAttributes, ref, defineExpose } from "vue";
+import { type HTMLAttributes, ref } from "vue";
 import { useVModel } from "@vueuse/core";
 
 import { Vue3ColorPicker } from "@cyhnkckali/vue3-color-picker";
@@ -28,6 +28,7 @@ interface Props {
   class?: HTMLAttributes["class"];
   cancelButtonLabel?: string;
   confirmButtonLabel?: string;
+  PopoverContentSide?: string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -40,6 +41,8 @@ const props = withDefaults(defineProps<Props>(), {
   cancelButtonLabel: "Cancel",
   confirmButtonLabel: "Confirm",
   placeholder: "Pick a Color",
+
+  PopoverContentSide: "bottom",
 });
 
 const emits = defineEmits<{
@@ -96,7 +99,7 @@ defineExpose({
         </div>
       </Button>
     </PopoverTrigger>
-    <PopoverContent class="p-0 w-auto">
+    <PopoverContent class="p-0 w-auto" :side="PopoverContentSide">
       <div class="w-auto p-2 colorPicker">
         <Vue3ColorPicker
           :showColorList="showColorList"

@@ -6,7 +6,7 @@
 <script lang="ts" setup>
 import moduleView from "./moduleView.vue";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { defineProps, getCurrentInstance } from "vue";
+import { getCurrentInstance } from "vue";
 import { Button } from "@/components/ui/button";
 const { proxy } = getCurrentInstance();
 

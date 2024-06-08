@@ -1,5 +1,5 @@
 <template>
-  <div class="h-full w-full">
+  <div class="z-[40] rounded-lg border bg-card text-card-foreground shadow-sm border-border h-full w-full relative">
     <div class="vst-container relative overflow-hidden h-full">
       <div ref="scroller" class="scrollTab v-full overflow-x-scroll overflow-y-hidden block">
         <div :style="{ width: `${wrapWidth}px` }" class="flex flex-row select-none items-center mx-auto" ref="tabContainer">
@@ -24,12 +24,12 @@
           }"
           class="underline-marker absolute bottom-0 w-full left-0 top-[-2] h-0.5 rounded origin-left duration-2500 foregroundBg ease-in-out transition-[left] hover:tabActive active:tabActive bg-black"
         ></div>
-        <div class="absolute top-0 left-0 arrowBg left-background pr-3 py-2" @click="clickArrow('left')" v-show="showArrow && isArrow.left">
-          <Icon icon="radix-icons:chevron-left" class="h-8 w-8" />
+        <div class="absolute top-0 left-0 arrowBg left-background pr-3 py-2 flex items-center h-12" @click="clickArrow('left')" v-show="showArrow && isArrow.left">
+          <Icon icon="radix-icons:chevron-left" class="h-4 w-4" />
         </div>
 
-        <div class="absolute top-0 right-0 arrowBg right-background pl-3 py-2" @click="clickArrow('right')" v-show="showArrow && isArrow.right">
-          <Icon icon="radix-icons:chevron-right" class="h-8 w-8" />
+        <div class="absolute top-0 right-0 arrowBg right-background pl-3 py-2 flex items-center h-12" @click="clickArrow('right')" v-show="showArrow && isArrow.right">
+          <Icon icon="radix-icons:chevron-right" class="h-4 w-4" />
         </div>
       </div>
     </div>
@@ -86,7 +86,7 @@ const tabContainer = ref<HTMLDivElement | null>(null);
 watch(
   () => props.tabs,
   (value: any) => {
-    calcWidth(value);
+    init(value);
   },
   { deep: true }
 );
@@ -97,7 +97,24 @@ watch(
   },
   { immediate: true, deep: true }
 );
-
+function init(tabs: any) {
+  calcWidth(tabs);
+  setTimeout(() => {
+    if (tabContainer.value) {
+      const style = window.getComputedStyle(tabContainer.value);
+      tabMarightLeft.value = parseInt(style.marginLeft, 10);
+    }
+    let findItem = c_tabs.value.find((tab) => tab.id === activeTab.value);
+    if (findItem?.id) {
+      setArrow(findItem.index);
+      activeTabMove(findItem);
+    } else {
+      let firstTabs = c_tabs.value[0];
+      setArrow(firstTabs.index);
+      activeTabMove(firstTabs);
+    }
+  }, 20);
+}
 function clickArrow(side: string) {
   let findItem = c_tabs.value.find((tab) => tab.id === activeTab.value);
   if (findItem && "index" in findItem) {
@@ -214,18 +231,7 @@ function smoothScroll(to: any, acitveItem: any) {
 }
 
 onMounted(() => {
-  calcWidth(props.tabs);
-  setTimeout(() => {
-    if (tabContainer.value) {
-      const style = window.getComputedStyle(tabContainer.value);
-      tabMarightLeft.value = parseInt(style.marginLeft, 10);
-    }
-    let findItem = c_tabs.value.find((tab) => tab.id === activeTab.value);
-    if (findItem?.id) {
-      setArrow(findItem.index);
-      activeTabMove(findItem);
-    }
-  }, 20);
+  init(props.tabs);
 });
 </script>
 

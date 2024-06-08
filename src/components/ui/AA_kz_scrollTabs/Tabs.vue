@@ -1,13 +1,13 @@
 <template>
-  <div class="h-full w-full">
-    <div class="vst-container relative overflow-hidden h-full">
+  <div class="tabs-container z-[40] rounded-lg border bg-card text-card-foreground shadow-sm border-border h-full w-full relative">
+    <div class="relative overflow-hidden border-border border-b">
       <div ref="scroller" class="scrollTab v-full overflow-x-scroll overflow-y-hidden block">
         <div :style="{ width: `${wrapWidth}px` }" class="flex flex-row select-none items-center mx-auto" ref="tabContainer">
           <!-- <div :style="{ width: `${wrapWidth}px` }" class="flex flex-row select-none items-center" ref="tabContainer"> -->
           <div class="item select-none text-center" v-for="(item, index) in c_tabs" :key="index" :index="index" :data="{ id: item.id }" @click="item.disabled ? '' : activeTabMove(item)">
             <!-- <div class="tabBox"> -->
             <div
-              class="tabBox relative flex items-center mx-3 my-2 rounded-sm cursor-pointer min-w-max text-inherit tabActive h-8 leading-8"
+              class="tabBox relative flex items-center mx-3 my-1 rounded-sm cursor-pointer min-w-max text-inherit tabActive h-8 leading-8"
               :class="{
                 'opacity-50 !cursor-default': item.disabled,
               }"
@@ -18,30 +18,35 @@
           </div>
         </div>
         <div
+          v-show="showUnderLine"
           :style="{
             width: underlineMarkerStyle.width,
             left: underlineMarkerStyle.left,
           }"
           class="underline-marker absolute bottom-0 w-full left-0 top-[-2] h-0.5 rounded origin-left duration-2500 foregroundBg ease-in-out transition-[left] hover:tabActive active:tabActive bg-black"
         ></div>
-        <div class="absolute top-0 left-0 arrowBg left-background pr-3 py-2" @click="clickArrow('left')" v-show="showArrow && isArrow.left">
-          <Icon icon="radix-icons:chevron-left" class="h-8 w-8" />
+        <div class="absolute top-0 left-0 arrowBg left-background pr-3 py-2 flex items-center h-10" @click="clickArrow('left')" v-show="showArrow && isArrow.left">
+          <Icon icon="radix-icons:chevron-left" class="h-4 w-4" />
         </div>
 
-        <div class="absolute top-0 right-0 arrowBg right-background pl-3 py-2" @click="clickArrow('right')" v-show="showArrow && isArrow.right">
-          <Icon icon="radix-icons:chevron-right" class="h-8 w-8" />
+        <div class="absolute top-0 right-0 arrowBg right-background pl-3 py-2 flex items-center h-10" @click="clickArrow('right')" v-show="showArrow && isArrow.right">
+          <Icon icon="radix-icons:chevron-right" class="h-4 w-4" />
         </div>
       </div>
     </div>
-    <div class="content h-full w-full">
+    <div class="content scrollHeight w-full p-1">
       <!-- Tabs Content -->
-      <slot :activeTab="activeTab"></slot>
+      <!-- <slot :activeTab="activeTab"></slot> -->
+      <ScrollArea class="w-full h-full">
+        <slot :activeTab="activeTab"></slot>
+      </ScrollArea>
     </div>
   </div>
 </template>
 <script setup lang="ts">
 import { ref, watch, nextTick, onMounted } from "vue";
 import { Icon } from "@iconify/vue";
+import { ScrollArea } from "../scroll-area";
 
 interface Tab {
   id?: number | string;
@@ -58,7 +63,8 @@ const props = defineProps<{
   tabs?: Array<Tab>;
   value: string;
   disabled?: boolean;
-  showArrow: boolean;
+  showArrow?: boolean;
+  showUnderLine?: boolean;
 }>();
 
 const activeTab = ref<any>(null);
@@ -86,7 +92,7 @@ const tabContainer = ref<HTMLDivElement | null>(null);
 watch(
   () => props.tabs,
   (value: any) => {
-    calcWidth(value);
+    init(value);
   },
   { deep: true }
 );
@@ -97,7 +103,24 @@ watch(
   },
   { immediate: true, deep: true }
 );
-
+function init(tabs: any) {
+  calcWidth(tabs);
+  setTimeout(() => {
+    if (tabContainer.value) {
+      const style = window.getComputedStyle(tabContainer.value);
+      tabMarightLeft.value = parseInt(style.marginLeft, 10);
+    }
+    let findItem = c_tabs.value.find((tab) => tab.id === activeTab.value);
+    if (findItem?.id) {
+      setArrow(findItem.index);
+      activeTabMove(findItem);
+    } else {
+      let firstTabs = c_tabs.value[0];
+      setArrow(firstTabs.index);
+      activeTabMove(firstTabs);
+    }
+  }, 20);
+}
 function clickArrow(side: string) {
   let findItem = c_tabs.value.find((tab) => tab.id === activeTab.value);
   if (findItem && "index" in findItem) {
@@ -214,23 +237,12 @@ function smoothScroll(to: any, acitveItem: any) {
 }
 
 onMounted(() => {
-  calcWidth(props.tabs);
-  setTimeout(() => {
-    if (tabContainer.value) {
-      const style = window.getComputedStyle(tabContainer.value);
-      tabMarightLeft.value = parseInt(style.marginLeft, 10);
-    }
-    let findItem = c_tabs.value.find((tab) => tab.id === activeTab.value);
-    if (findItem?.id) {
-      setArrow(findItem.index);
-      activeTabMove(findItem);
-    }
-  }, 20);
+  init(props.tabs);
 });
 </script>
 
 <style lang="scss" scoped>
-.vst-container {
+.tabs-container {
   .scrollTab {
     -webkit-overflow-scrolling: touch;
     &::-webkit-scrollbar {
@@ -243,7 +255,9 @@ onMounted(() => {
   // .arrowBg {
   //   background-color: hsla(var(--background075));
   // }
-
+  .scrollHeight {
+    height: calc(100% - 2.5rem);
+  }
   .left-background {
     background: linear-gradient(to left, rgba(0, 0, 0, 0) 0%, hsla(var(--background075)) 20%, hsl(var(--background)) 100%);
   }
