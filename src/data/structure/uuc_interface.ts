@@ -64,6 +64,7 @@ export interface Fill {
  * 字体家族接口
  */
 export interface FontFamily {
+  label?: string;
   name: string;
   url?: string;
 }
