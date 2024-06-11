@@ -24,6 +24,13 @@ const routes: RouteRecordRaw[] = [
         },
         component: () => import("@/views/test/tabs.vue"),
       },
+      {
+        path: "/test/Rotate",
+        meta: {
+          title: "tab",
+        },
+        component: () => import("@/views/test/Rotate.vue"),
+      },
     ],
   },
 ];

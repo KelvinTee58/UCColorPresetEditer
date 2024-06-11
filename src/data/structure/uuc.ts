@@ -39,7 +39,7 @@ class UucBlock implements UucObject {
     this.round = object.round;
     this.border = object.border;
     this.padding = object.padding;
-    this.angle = object.angle;
+    this.angle = object.angle ?? 0;
     this.fill = object.fill;
 
     // 配置逻辑

@@ -1,21 +1,9 @@
 <template>
   <div class="editer_index">
     <div class="h-5/6 w-1/6 min-w-56 max-w-80 absolute my-5 left-5">
-      <!-- <Panel class="h-full w-full relative" :label="$t('views.editer.index.left_tab1')">
-        <Accordion type="single" class="w-full" collapsible :default-value="defaultValue">
-          <AccordionItem class="border-border" v-for="aitem in accordionItems" :key="aitem.moduleKey" :value="aitem.moduleKey">
-            <AccordionTriggerLeft class="select-none">
-              {{ aitem.moduleName }}
-            </AccordionTriggerLeft>
-            <AccordionContent class="grid grid-cols-5 gap-x-1 gap-y-2 justify-center">
-              <moduleList v-for="mitem in aitem.moduleList" :key="mitem.id" :value="mitem.id" :module="mitem"></moduleList>
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
-      </Panel> -->
       <Tabs ref="scrollTab" :tabs="labelListLeft" :value="activeTabLeft">
         <template v-slot="{ activeTab }">
-          <Accordion type="single" class="w-full" collapsible :default-value="defaultValue">
+          <Accordion type="single" class="w-full" collapsible :default-value="defaultValue" v-show="activeTab == 'Object'">
             <AccordionItem class="border-border" v-for="aitem in accordionItems" :key="aitem.moduleKey" :value="aitem.moduleKey">
               <AccordionTriggerLeft class="select-none">
                 {{ aitem.moduleName }}
@@ -29,18 +17,10 @@
       </Tabs>
     </div>
     <div class="h-5/6 w-1/6 min-w-64 max-w-80 absolute my-5 right-5">
-      <!-- <TabsPanel class="h-full w-full relative" :labelList="labelList" :value="TabsPanelActive">
-        <template #Style>
-          <attrStyle></attrStyle>
-        </template>
-        <template #Text>
-          <attrText></attrText>
-        </template>
-        <template #Arrange>
-          <attrArrange></attrArrange>
-        </template>
-      </TabsPanel> -->
       <Tabs ref="scrollTab" :tabs="labelListRight" :value="activeTabRight" :showArrow="true" :showUnderLine="true">
+        <template #Style_icon>
+          <Paintbrush class="h-[1.2rem] w-[1.2rem] pr-1"></Paintbrush>
+        </template>
         <template v-slot="{ activeTab }">
           <ScrollArea class="w-full">
             <attrStyle v-show="activeTab == 'Style'"></attrStyle>
@@ -53,7 +33,7 @@
     <div class="draggerRegionWrapper h-full-container flex justify-center items-center z-20">
       <div
         class="draggerRegion"
-        @click="clickDraggerRegion"
+        @mousedown.prevent.stop="clickDraggerRegion"
         @contextmenu.prevent.stop="onContextMenu"
         @wheel="handleWheel"
         :style="{ transform: `scale(${scale})`, width: `${draggerRegionSize.width}px`, height: `${draggerRegionSize.height}px` }"
@@ -71,12 +51,13 @@
           :x="get(item, 'axis.x', 0)"
           :y="get(item, 'axis.y', 0)"
           :z="get(item, 'level', 0)"
+          :angle="get(item, 'angle', 0)"
           :grid="[10, 10]"
           v-for="item in editerList"
           :key="item.id"
           class-name="vdr no-border"
           class-name-active="active-border"
-          @activated="pickerModule(item)"
+          @mousedown.prevent.stop="pickerModule(item)"
           @dragstop="
               (x:number, y:number) => {
                 dragEndModule(x, y, item);
@@ -91,12 +72,16 @@
           @refLineParams="getRefLineParams"
           @contextmenu.prevent.stop="
             (event:any) => {
-              pickerModule(item);
               onObjectsContextMenu(event, item);
             }
           "
+          :isRotateHandlerShow="!get(item, 'uuConfig.lock', true)"
+          @rotated="
+            (angle:number)=>{
+              rotateModule(angle,item)
+            }"
         >
-          <moduleView :module="item" :dragger="true"></moduleView>
+          <moduleView :module="item" :dragger="true" :key="item.id"></moduleView>
         </vdr>
         <!--辅助线 start-->
         <span class="ref-line v-line" v-for="item in vdrVLine" v-show="item.display" :style="{ left: item.position, top: item.origin, height: item.lineLength }" />
@@ -110,8 +95,7 @@
 <script setup lang="ts">
 import { ref, getCurrentInstance, computed, onMounted, onUnmounted, unref } from "vue";
 
-import vdr from "vue-draggable-resizable-gorkys/src/components/vue-draggable-resizable.vue";
-import { Panel, TabsPanel } from "@/components/ui/AA_kz_floatingSidePanel";
+import vdr from "vue-draggable-resizable-uuc/src/components/vue-draggable-resizable.vue";
 import { Accordion, AccordionContent, AccordionItem, AccordionTriggerLeft } from "@/components/ui/accordion";
 import moduleList from "./components/moduleList.vue";
 import moduleView from "./components/moduleView.vue";
@@ -120,8 +104,10 @@ import ContextMenu from "shufflemanvue3-context-menu";
 import { useDrop } from "vue3-dnd";
 import { Tabs } from "@/components/ui/AA_kz_scrollTabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Paintbrush } from "lucide-vue-next";
+import { Axis } from "@/data/structure/uuc_interface";
 
-import "vue-draggable-resizable-gorkys/dist/VueDraggableResizable.css";
+import "vue-draggable-resizable-uuc/dist/VueDraggableResizable.css";
 import "shufflemanvue3-context-menu/lib/vue3-context-menu.css";
 import "@/assets/context-menu.scss";
 
@@ -167,8 +153,6 @@ const activeModuleId = computed({
 
 // test start
 const draggerRegionSize = ref({ width: 600, height: 600 });
-// const labelList = ref([{ name: "Style", icon: "radix-icons:moon" }, { name: "Text", icon: "radix-icons:dots-vertical" }, { name: "Arrange" }, { name: "Style4" }]);
-
 const activeTabLeft = ref("Object");
 const activeTabRight = ref("Text");
 const labelListLeft = ref([{ id: "Object", name: "Object" }]);
@@ -177,7 +161,6 @@ const labelListRight = ref([
   { id: "Text", name: "Text", icon: "radix-icons:text" },
   { id: "Arrange", name: "Arrange", icon: "radix-icons:group" },
 ]);
-
 import testData from "@/data/test.json";
 // const defaultValue = "IMAGE";
 const defaultValue = "BLOCK";
@@ -186,10 +169,18 @@ const defaultValue = "BLOCK";
 const accordionItems = testData;
 
 //test end
-function clickDraggerRegion(event: any) {}
+function clickDraggerRegion(event: any) {
+  console.log("clickDraggerRegion :>> ");
+  labelListRight.value = [{ id: "Region", name: "Region", icon: "radix-icons:transparency-grid" }];
+}
 
 // 选中激活的module
 function pickerModule(value: any) {
+  labelListRight.value = [
+    { id: "Style", name: "Style", icon: "radix-icons:transparency-grid" },
+    { id: "Text", name: "Text", icon: "radix-icons:text" },
+    { id: "Arrange", name: "Arrange", icon: "radix-icons:group" },
+  ];
   proxy.$store.editerView.editerViewStore().setActiveModule(value);
 }
 
@@ -218,6 +209,14 @@ function onResizeStopModule(x: number, y: number, width: number, height: number,
   if (id) {
     // editerListStore.setModuleItem(id, { "axis.x": x, "axis.y": y, width, height }, { type: "move", description: "变形" });
     editerListStore.setModuleItem({ id, "axis.x": x, "axis.y": y, "size.width": width, "size.height": height }, { type: "move", description: "变形" });
+  }
+}
+
+function rotateModule(angle: any, item: any) {
+  let angleF = parseFloat(angle);
+  let id = get(item, "id", undefined);
+  if (id) {
+    editerListStore.setModuleItem({ id, angle: angleF }, { type: "style", description: "angle-修改" });
   }
 }
 
@@ -329,22 +328,36 @@ function onObjectsContextMenu(e: MouseEvent, item: any) {
     // theme: `mac ${mode.value}`,
   });
 }
+
+function getDropOffset(axis: Axis) {
+  let { x, y } = axis;
+  let d_x = 0,
+    d_y = 0,
+    drop_x = 0,
+    drop_y = 0;
+
+  let drop_Rect = document.getElementById("drop").getBoundingClientRect();
+  if (drop_Rect) {
+    d_x = drop_Rect.x;
+    d_y = drop_Rect.y;
+
+    drop_x = parseInt(x - d_x);
+    drop_y = parseInt(y - d_y);
+  }
+
+  return { x: drop_x, y: drop_y };
+}
+
 const [collect, drop] = useDrop(() => ({
   accept: "box",
   drop: (item, monitor) => {
     let m_x = 0,
-      m_y = 0,
-      d_x = 0,
-      d_y = 0;
-    let drop_Rect = document.getElementById("drop").getBoundingClientRect();
+      m_y = 0;
     let monitor_offset = monitor.getSourceClientOffset();
     m_x = monitor_offset.x;
     m_y = monitor_offset.y;
-    d_x = drop_Rect.x;
-    d_y = drop_Rect.y;
-    // 获取当前拖动dom 放置的位置
-    let drop_x = parseInt(m_x - d_x);
-    let drop_y = parseInt(m_y - d_y);
+
+    const { x: drop_x, y: drop_y } = getDropOffset({ x: m_x, y: m_y });
     console.log("drop getSourceClientOffset", item.content, drop_x, drop_y);
     if (item.id && item.content.type) {
       editerListStore.addModuleItem(item, { x: drop_x, y: drop_y });
@@ -399,6 +412,9 @@ onUnmounted(() => {
   .no-border {
     border: 0px solid #00000000;
   }
+  .vdr {
+    transform-origin: center center;
+  }
   $borderWidth: 0.5px;
   .draggerRegion {
     position: relative;
@@ -411,6 +427,19 @@ onUnmounted(() => {
     outline: 2px solid hsl(var(--border));
     // overflow: auto;
     transition: transform 0.1s ease-in-out;
+  }
+
+  @keyframes rotate {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  .vadrdiv {
+    animation: rotate 2s linear infinite;
   }
   // .draggerRegion {
   //   position: relative;
